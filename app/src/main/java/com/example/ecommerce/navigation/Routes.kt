@@ -1,0 +1,14 @@
+package com.example.ecommerce.navigation
+
+const val SPLASH_URL = "splash"
+const val SIGNUP_URL = "signup"
+const val LOGIN_URL = "login"
+const val HOME_URL = "home"
+const val CART_URL = "cart"
+const val CHECKOUT_URL = "checkout"
+const val PROFILE_URL = "profile"
+const val PRODUCTS_URL = "products"
+const val PRODUCTDETAILS_URL = "productdetails"
+const val PAYMENT_URL = "payment"
+const val ORDERDETAILS_URL = "orderdetails"
+const val ORDERCONFIRMATION_URL = "orderconfirmation"
