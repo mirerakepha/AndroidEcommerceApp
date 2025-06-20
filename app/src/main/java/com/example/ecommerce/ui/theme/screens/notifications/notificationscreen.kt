@@ -1,4 +1,4 @@
-package com.example.ecommerce.ui.theme.screens.orderdetails
+package com.example.ecommerce.ui.theme.screens.notifications
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,7 +13,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.ecommerce.ui.theme.Orange3
 
 @Composable
-fun OrderdetailsScreen(navController: NavController) {
+fun NotificationScreen(navController: NavController) {
+
 
     Column(
         modifier = Modifier
@@ -36,6 +37,6 @@ fun OrderdetailsScreen(navController: NavController) {
 
 @Preview(showBackground = true)
 @Composable
-fun OrderdetailsScreenPreview() {
-    OrderdetailsScreen(navController = rememberNavController())
+fun NotificationScreenPreview() {
+    NotificationScreen(navController = rememberNavController())
 }

@@ -6,8 +6,20 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.ecommerce.ui.theme.screens.cart.CartScreen
+import com.example.ecommerce.ui.theme.screens.checkout.CheckoutScreen
+import com.example.ecommerce.ui.theme.screens.home.HomeScreen
 import com.example.ecommerce.ui.theme.screens.login.LoginScreen
-import com.example.ecommerce.ui.theme.screens.login.login
+import com.example.ecommerce.ui.theme.screens.notifications.NotificationScreen
+import com.example.ecommerce.ui.theme.screens.orderconfirmation.OrderconfirmationScreen
+import com.example.ecommerce.ui.theme.screens.orderdetails.OrderdetailsScreen
+import com.example.ecommerce.ui.theme.screens.payment.PaymentScreen
+import com.example.ecommerce.ui.theme.screens.productdetails.ProductdetailsScreen
+import com.example.ecommerce.ui.theme.screens.products.ProductScreen
+import com.example.ecommerce.ui.theme.screens.profile.ProfileScreen
+import com.example.ecommerce.ui.theme.screens.settings.SettingScreen
+import com.example.ecommerce.ui.theme.screens.signup.SignupScreen
+
 import com.example.ecommerce.ui.theme.screens.splash.SplashScreen
 
 @Composable
@@ -24,41 +36,43 @@ fun AppNavHost(
             LoginScreen(navController = navController)
         }
         composable(SIGNUP_URL){
-            signupscreen(navController = navController)
+            SignupScreen(navController = navController)
         }
         composable(SPLASH_URL){
             SplashScreen(navController = navController)
         }
-
-
+        composable(SETTINGS_URL){
+            SettingScreen(navController = navController)
+        }
         composable(ORDERDETAILS_URL){
-            orderdetailsscreen(navController = navController)
+            OrderdetailsScreen(navController = navController)
         }
-
         composable(ORDERCONFIRMATION_URL){
-            orderconfirmationscreen(navController = navController)
+            OrderconfirmationScreen(navController = navController)
         }
-
         composable(PAYMENT_URL){
-            paymentscreen(navController = navController)
+            PaymentScreen(navController = navController)
         }
         composable(PROFILE_URL){
-            profilescreen(navController = navController)
+            ProfileScreen(navController = navController)
         }
         composable(CART_URL){
-            cartscreen(navController = navController)
+            CartScreen(navController = navController)
         }
         composable(HOME_URL){
-            homescreen(navController = navController)
+            HomeScreen(navController = navController)
         }
         composable(CHECKOUT_URL){
-            checkoutscreen(navController = navController)
+            CheckoutScreen(navController = navController)
         }
         composable(PRODUCTS_URL){
-            productscreen(navController = navController)
+            ProductScreen(navController = navController)
         }
         composable(PRODUCTDETAILS_URL){
-            productdetailsscreen(navController = navController)
+            ProductdetailsScreen(navController = navController)
+        }
+        composable(NOTIFICATIONS_URL){
+            NotificationScreen(navController = navController)
         }
 
     }

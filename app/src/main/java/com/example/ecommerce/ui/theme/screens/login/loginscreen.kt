@@ -1,7 +1,6 @@
 package com.example.ecommerce.ui.theme.screens.login
 
 import androidx.compose.foundation.Image
-import androidx.compose.R
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -44,6 +43,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.ecommerce.R
 import com.example.ecommerce.navigation.SIGNUP_URL
+import com.example.ecommerce.ui.theme.Orange3
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,13 +60,16 @@ fun LoginScreen(navController:NavHostController){
     ) {
 
 
-        Row {
-            Image(painter = painterResource(id = R.drawable.img) ,
+        Column {
+            Image(painter = painterResource(id = R.drawable.shopping) ,
                 contentDescription = "",
                 modifier = Modifier.size(100.dp))
 
+            Spacer(modifier = Modifier.height(10.dp))
+
+
             Text(
-                text = "rit",
+                text = "Las Noches",
                 fontSize = 40.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Magenta,
@@ -74,6 +77,7 @@ fun LoginScreen(navController:NavHostController){
 
             )
         }
+
 
         Text(
             text = "Your hostel companion",
@@ -93,19 +97,6 @@ fun LoginScreen(navController:NavHostController){
 
         )
 
-        Text(
-            text = "Get your hostel here!",
-            fontSize = 15.sp,
-            fontWeight = FontWeight.Bold,
-            fontFamily = FontFamily.SansSerif
-
-        )
-
-
-
-
-
-
         Spacer(modifier = Modifier.height(30.dp))
 
         var email by remember { mutableStateOf("") }
@@ -118,7 +109,7 @@ fun LoginScreen(navController:NavHostController){
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email
             ),
-            trailingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "", tint = Color.Gray)}
+            trailingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "", tint = Orange3)}
         )
 
         Spacer(modifier = Modifier.height(30.dp))
@@ -129,7 +120,7 @@ fun LoginScreen(navController:NavHostController){
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password
             ),
-            trailingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "", tint = Color.Gray)}
+            trailingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "", tint = Orange3)}
         )
 
         Spacer(modifier = Modifier.height(30.dp))
@@ -139,7 +130,7 @@ fun LoginScreen(navController:NavHostController){
         Button(onClick = {
             authViewModel.login(email, password)
         },
-            colors = ButtonDefaults.buttonColors(Color.Magenta),
+            colors = ButtonDefaults.buttonColors(Orange3),
             shape = RoundedCornerShape(3.dp),
             modifier = Modifier
                 .fillMaxWidth()
@@ -149,9 +140,10 @@ fun LoginScreen(navController:NavHostController){
         Spacer(modifier = Modifier.height(10.dp))
 
         Text(
-            text = "If you don't have an account? Create an account ",
+            text = "Don't have an account? Create account ",
             fontSize = 15                                                                                                                                                                                                                                                                                                                                                               .sp,
             textAlign = TextAlign.Center,
+            color = Orange3,
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable {
