@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.ecommerce.data.AuthViewModel
 import com.example.ecommerce.navigation.LOGIN_URL
 
 @OptIn(ExperimentalMaterial3Api::class)

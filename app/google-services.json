@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "433755577207",
+    "project_id": "rxz-fzf",
+    "storage_bucket": "rxz-fzf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:433755577207:android:433779ac9af8da2cf11f72",
+        "android_client_info": {
+          "package_name": "com.example.ecommerce"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3zKaybULjsmZgt-9hvPN7nysYDzLJM34"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

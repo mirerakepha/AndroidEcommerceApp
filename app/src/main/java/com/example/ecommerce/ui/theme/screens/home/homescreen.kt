@@ -1,17 +1,23 @@
 package com.example.ecommerce.ui.theme.screens.home
+import android.R.attr.enabled
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Face
@@ -20,6 +26,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Face
@@ -37,13 +44,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -51,7 +62,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -61,9 +74,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.ecommerce.R
 import com.example.ecommerce.navigation.CART_URL
 import com.example.ecommerce.navigation.NOTIFICATIONS_URL
+import com.example.ecommerce.navigation.PRODUCTDETAILS_URL
 import com.example.ecommerce.navigation.SETTINGS_URL
+import com.example.ecommerce.ui.theme.Orange3
 
 
 data class Screen(val title: String, val icon: Int)
@@ -118,8 +134,7 @@ fun HomeScreen(navController:NavHostController){
 
 
         floatingActionButton = {
-            FloatingActionButton(onClick = {
-            }) {
+            FloatingActionButton(onClick = {CART_URL}) {
                 IconButton(onClick = {
                     navController.navigate(CART_URL)
 
@@ -149,214 +164,440 @@ fun HomeScreen(navController:NavHostController){
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
+            ) {
 
+                val mContext = LocalContext.current
+                var search by remember { mutableStateOf("") }
 
-                Row {
-                    Image(painter = painterResource(id = R.drawable.img) ,
-                        contentDescription = "",
-                        modifier = Modifier.size(100.dp))
-
-                    Text(
-                        text = "rit",
-                        fontSize = 60.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Magenta,
-                        fontFamily = FontFamily.Cursive
-
-                    )
-                }
-
-                Text(
-                    text = "Your hostel companion",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.SansSerif
-
-                )
-
-
+     //S E A R C H       B A R
+                OutlinedTextField(value = search,
+                    onValueChange = { search = it },
+                    placeholder = { Text(text = "What's your destination?")},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 10.dp, end = 10.dp),
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "search"
+                        )
+                    })
                 Spacer(modifier = Modifier.height(10.dp))
+        //E N D   O F   S E A R C H   B A R
 
-                Text(
-                    text = "Let's manage your Hostel Things",
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.SansSerif
-
-                )
+        //T O P   R O W WITH CLICKABLE TEXT
 
 
-                Text(
-                    text = "Quick Access",
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.SansSerif
-
-                )
 
 
-                Row {
+        //E N D   O F   T O P   R O W
+              Spacer(modifier = Modifier.height(10.dp))
 
-                    Card (
-                        modifier = Modifier
-                            .clickable {
-                                navController.navigate(ADDCOMPLAINT_URL)
-                            }
-                            .height(300.dp)
-                            .width(150.dp)){
-                        Spacer(modifier = Modifier.height(30.dp))
+            //full page with cards
+            Column (modifier = Modifier.verticalScroll(rememberScrollState())){
+                //R O W   1
+                Row(modifier = Modifier.padding(start = 5.dp)
+                    .horizontalScroll(rememberScrollState())) {
 
+
+                    //C A R D   1
+                    Card {
                         Column {
-                            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
-                                Image(painter = painterResource(id = R.drawable.img_3) ,
+                            Box(modifier = Modifier
+                                .height(150.dp)
+                                .width(180.dp),
+                                contentAlignment = Alignment.Center){
+                                Image(
+                                    painter = painterResource(id = R.drawable.cockpit),
                                     contentDescription = "",
-                                    modifier = Modifier.size(100.dp))
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .fillMaxWidth()
+                                        .size(400.dp)
+                                        .clickable {
+                                            navController.navigate(PRODUCTDETAILS_URL)
+                                        }
+                                )
 
                             }
-                            Spacer(modifier = Modifier.height(30.dp))
-
-                            Text(
-                                text = "Post a",
-                                fontSize = 15.sp,
-                                fontFamily = FontFamily.SansSerif,
-                                modifier = Modifier
-                                    .fillMaxWidth(),
+                            Text(text = "Cockpit",
                                 textAlign = TextAlign.Center,
-
-                                )
-                            Text(
-                                text = "Complaint",
-                                fontSize = 20.sp,
-                                fontFamily = FontFamily.SansSerif,
+                                fontSize = 30.sp,
                                 fontWeight = FontWeight.Bold,
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                textAlign = TextAlign.Center,
+                                color = Orange3
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
 
+                    //C A R D   2
+                    Card {
+                        Column {
+                            Box(modifier = Modifier
+                                .height(150.dp)
+                                .width(180.dp),
+                                contentAlignment = Alignment.Center){
+                                Image(
+                                    painter = painterResource(id = R.drawable.gamechair),
+                                    contentDescription = "",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .fillMaxWidth()
+                                        .size(400.dp)
+                                        .clickable {
+                                            navController.navigate(PRODUCTDETAILS_URL)
+                                        }
                                 )
 
+                            }
+                            Text(text = "Gaming Chair",
+                                textAlign = TextAlign.Center,
+                                fontSize = 30.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3
+                            )
                         }
-
-
-
-
                     }
-                    Spacer(modifier = Modifier.width(30.dp))
-                    Spacer(modifier = Modifier.height(30.dp))
+                    Spacer(modifier = Modifier.width(10.dp))
 
-
-                    Column {
-
-
-
-                        Card (
-                            modifier = Modifier
-                                .clickable {
-                                    navController.navigate(VIEWCOMPLAINT_URL)
-                                }
-                                .height(120.dp)
-                                .width(150.dp),
-                            colors = CardDefaults.cardColors(Pink)){
-                            Spacer(modifier = Modifier.height(30.dp))
-
-                            Row {
-                                Spacer(modifier = Modifier.width(5.dp))
-
-                                Image(painter = painterResource(id = R.drawable.img_5) ,
+                    //C A R D   4
+                    Card {
+                        Column {
+                            Box(modifier = Modifier
+                                .height(150.dp)
+                                .width(180.dp),
+                                contentAlignment = Alignment.Center){
+                                Image(
+                                    painter = painterResource(id = R.drawable.headphones),
                                     contentDescription = "",
-                                    modifier = Modifier.size(80.dp))
-
-                                Spacer(modifier = Modifier.width(5.dp))
-
-                                Column {
-                                    Text(
-                                        text = "History",
-                                        fontSize = 15.sp,
-                                        fontFamily = FontFamily.SansSerif,
-                                        modifier = Modifier
-                                            .fillMaxWidth(),
-                                        textAlign = TextAlign.Center,
-
-                                        )
-                                    Text(
-                                        text = "complaints",
-                                        fontSize = 11.sp,
-                                        fontFamily = FontFamily.SansSerif,
-                                        fontWeight = FontWeight.Bold,
-                                        modifier = Modifier
-                                            .fillMaxWidth(),
-                                        textAlign = TextAlign.Center,
-
-                                        )
-                                }
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .fillMaxWidth()
+                                        .size(400.dp)
+                                        .clickable {
+                                            navController.navigate(PRODUCTDETAILS_URL)
+                                        }
+                                )
 
                             }
-
-
-
-
+                            Text(text = "Gaming Headphones",
+                                textAlign = TextAlign.Center,
+                                fontSize = 30.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3
+                            )
                         }
-
-
-                        Spacer(modifier = Modifier.height(30.dp))
-
-
-
-                        Card (
-                            modifier = Modifier
-
-                                .height(120.dp)
-                                .width(150.dp),
-                            colors = CardDefaults.cardColors(Color.Yellow)){
-                            Spacer(modifier = Modifier.height(30.dp))
-
-
-                            Row {
-                                Spacer(modifier = Modifier.width(5.dp))
-
-                                Image(painter = painterResource(id = R.drawable.contact) ,
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+                    //C A R D   5
+                    Card {
+                        Column {
+                            Box(modifier = Modifier
+                                .height(150.dp)
+                                .width(180.dp),
+                                contentAlignment = Alignment.Center){
+                                Image(
+                                    painter = painterResource(id = R.drawable.mouse),
                                     contentDescription = "",
-                                    modifier = Modifier.size(80.dp))
-
-                                Spacer(modifier = Modifier.width(5.dp))
-
-                                Column {
-                                    Text(
-                                        text = "Contact",
-                                        fontSize = 15.sp,
-                                        fontFamily = FontFamily.SansSerif,
-                                        modifier = Modifier
-                                            .fillMaxWidth(),
-                                        textAlign = TextAlign.Center,
-
-                                        )
-                                    Text(
-                                        text = "Admin",
-                                        fontSize = 19.sp,
-                                        fontFamily = FontFamily.SansSerif,
-                                        fontWeight = FontWeight.Bold,
-                                        modifier = Modifier
-                                            .fillMaxWidth(),
-                                        textAlign = TextAlign.Center,
-
-                                        )
-                                }
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .fillMaxWidth()
+                                        .size(400.dp)
+                                        .clickable {
+                                            navController.navigate(PRODUCTDETAILS_URL)
+                                        }
+                                )
 
                             }
-
-
-
-
+                            Text(text = "Gaming Mouse",
+                                textAlign = TextAlign.Center,
+                                fontSize = 30.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3
+                            )
                         }
-
-
                     }
+                    Spacer(modifier = Modifier.width(10.dp))
+                    //C A R D   6
+                    Card {
+                        Column {
+                            Box(modifier = Modifier
+                                .height(150.dp)
+                                .width(180.dp),
+                                contentAlignment = Alignment.Center){
+                                Image(
+                                    painter = painterResource(id = R.drawable.nintendo),
+                                    contentDescription = "",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .fillMaxWidth()
+                                        .size(400.dp)
+                                        .clickable {
+                                            navController.navigate(PRODUCTDETAILS_URL)
+                                        }
+                                )
+
+                            }
+                            Text(text = "Nintendo Switch",
+                                textAlign = TextAlign.Center,
+                                fontSize = 30.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+                    //C A R D   7
+                    Card {
+                        Column {
+                            Box(modifier = Modifier
+                                .height(150.dp)
+                                .width(180.dp),
+                                contentAlignment = Alignment.Center){
+                                Image(
+                                    painter = painterResource(id = R.drawable.screen),
+                                    contentDescription = "",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .fillMaxWidth()
+                                        .size(400.dp)
+                                        .clickable {
+                                            navController.navigate(PRODUCTDETAILS_URL)
+                                        }
+                                )
+
+                            }
+                            Text(text = "Gaming Monitor",
+                                textAlign = TextAlign.Center,
+                                fontSize = 30.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3
+                            )
+                        }
+                    }
+
 
 
 
 
                 }
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                //ROW 2
+                Row(modifier = Modifier.padding(start = 5.dp)
+                    .horizontalScroll(rememberScrollState())) {
+
+
+                    //C A R D   1
+                    Card {
+                        Column {
+                            Box(modifier = Modifier
+                                .height(150.dp)
+                                .width(180.dp),
+                                contentAlignment = Alignment.Center){
+                                Image(
+                                    painter = painterResource(id = R.drawable.itachih),
+                                    contentDescription = "",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .fillMaxWidth()
+                                        .size(400.dp)
+                                        .clickable {
+                                            navController.navigate(PRODUCTDETAILS_URL)
+                                        }
+                                )
+
+                            }
+                            Text(text = "Hoodie",
+                                textAlign = TextAlign.Center,
+                                fontSize = 30.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    //C A R D   2
+                    Card {
+                        Column {
+                            Box(modifier = Modifier
+                                .height(150.dp)
+                                .width(180.dp),
+                                contentAlignment = Alignment.Center){
+                                Image(
+                                    painter = painterResource(id = R.drawable.naruto),
+                                    contentDescription = "",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .fillMaxWidth()
+                                        .size(400.dp)
+                                        .clickable {
+                                            navController.navigate(PRODUCTDETAILS_URL)
+                                        }
+                                )
+
+                            }
+                            Text(text = "T-Shirt",
+                                textAlign = TextAlign.Center,
+                                fontSize = 30.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    //C A R D   4
+                    Card {
+                        Column {
+                            Box(modifier = Modifier
+                                .height(150.dp)
+                                .width(180.dp),
+                                contentAlignment = Alignment.Center){
+                                Image(
+                                    painter = painterResource(id = R.drawable.sweatpants),
+                                    contentDescription = "",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .fillMaxWidth()
+                                        .size(400.dp)
+                                        .clickable {
+                                            navController.navigate(PRODUCTDETAILS_URL)
+                                        }
+                                )
+
+                            }
+                            Text(text = "Sweat Pants",
+                                textAlign = TextAlign.Center,
+                                fontSize = 30.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+                    //C A R D   5
+                    Card {
+                        Column {
+                            Box(modifier = Modifier
+                                .height(150.dp)
+                                .width(180.dp),
+                                contentAlignment = Alignment.Center){
+                                Image(
+                                    painter = painterResource(id = R.drawable.sweatshirt),
+                                    contentDescription = "",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .fillMaxWidth()
+                                        .size(400.dp)
+                                        .clickable {
+                                            navController.navigate(PRODUCTDETAILS_URL)
+                                        }
+                                )
+
+                            }
+                            Text(text = "Sweat Shirt",
+                                textAlign = TextAlign.Center,
+                                fontSize = 30.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+                    //C A R D   6
+                    Card {
+                        Column {
+                            Box(modifier = Modifier
+                                .height(150.dp)
+                                .width(180.dp),
+                                contentAlignment = Alignment.Center){
+                                Image(
+                                    painter = painterResource(id = R.drawable.trench),
+                                    contentDescription = "",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .fillMaxWidth()
+                                        .size(400.dp)
+                                        .clickable {
+                                            navController.navigate(PRODUCTDETAILS_URL)
+                                        }
+                                )
+
+                            }
+                            Text(text = "Trench Coat",
+                                textAlign = TextAlign.Center,
+                                fontSize = 30.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+                    //C A R D   7
+                    Card {
+                        Column {
+                            Box(modifier = Modifier
+                                .height(150.dp)
+                                .width(180.dp),
+                                contentAlignment = Alignment.Center){
+                                Image(
+                                    painter = painterResource(id = R.drawable.shirt),
+                                    contentDescription = "",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .fillMaxWidth()
+                                        .size(400.dp)
+                                        .clickable {
+                                            navController.navigate(PRODUCTDETAILS_URL)
+                                        }
+                                )
+
+                            }
+                            Text(text = "Official Shirt",
+                                textAlign = TextAlign.Center,
+                                fontSize = 30.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3
+                            )
+                        }
+                    }
+
+
+
+
+
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+                //ROW 3
+                //ROW 4
+                //ROW 5
+            }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -368,6 +609,13 @@ fun HomeScreen(navController:NavHostController){
 
 
             }
+
+
+
+
+
+
+
         }
 
 
