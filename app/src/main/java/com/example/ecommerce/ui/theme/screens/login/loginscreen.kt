@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.ecommerce.R
+import com.example.ecommerce.data.AuthViewModel
 import com.example.ecommerce.navigation.SIGNUP_URL
 import com.example.ecommerce.ui.theme.Orange3
 

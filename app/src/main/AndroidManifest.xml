@@ -29,7 +29,7 @@
             android:label="@string/title_activity_main"
             android:theme="@style/Theme.Ecommerce" />
         <activity
-            android:name=".ui.theme.screens.productdetails.pruductdetailsscreen"
+            android:name=".ui.theme.screens.productdetails.productdetailsscreen"
             android:exported="false"
             android:label="@string/title_activity_pruductdetailsscreen"
             android:theme="@style/Theme.Ecommerce" />
