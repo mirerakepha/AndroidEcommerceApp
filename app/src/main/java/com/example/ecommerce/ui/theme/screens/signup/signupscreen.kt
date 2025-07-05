@@ -140,11 +140,15 @@ fun SignupScreen(navController:NavHostController){
         )
 
         Spacer(modifier = Modifier.height(30.dp))
-
+        var confirmPassword by remember { mutableStateOf("") }
         val context = LocalContext.current
         val authViewModel = AuthViewModel(navController, context)
         Button(onClick = {
-            authViewModel.signup(name, email, password)
+            authViewModel.signup(
+                name = name,
+                email = email,
+                password = password,
+                confPassword = confirmPassword)
         },
             colors = ButtonDefaults.buttonColors(Color.Magenta),
             shape = RoundedCornerShape(3.dp),

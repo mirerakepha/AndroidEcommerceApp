@@ -45,7 +45,7 @@ class AuthViewModel(
                                 name = name,
                                 email = email,
                                 password = password,
-                                uid = auth.currentUser?.uid ?: ""
+                                id = auth.currentUser?.uid ?: ""
                             )
 
                             database.child("Users").child(auth.currentUser?.uid ?: "")

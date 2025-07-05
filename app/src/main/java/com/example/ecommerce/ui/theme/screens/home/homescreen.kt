@@ -670,8 +670,9 @@ data class BottomNavItem(
 
 
 
-@Composable
+
 @Preview(showBackground = true)
+@Composable
 fun HomeScreenPreview(){
         HomeScreen(navController = rememberNavController())
 

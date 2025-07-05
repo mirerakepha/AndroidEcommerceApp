@@ -16,7 +16,6 @@ import com.example.ecommerce.ui.theme.Orange3
 @Composable
 fun SettingScreen(navController: NavController) {
 
-
     Column(
         modifier = Modifier
             .fillMaxSize()
