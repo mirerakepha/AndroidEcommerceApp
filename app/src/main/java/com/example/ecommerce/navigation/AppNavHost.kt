@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.ecommerce.ui.theme.screens.account.AccountScreen
 import com.example.ecommerce.ui.theme.screens.cart.CartScreen
 import com.example.ecommerce.ui.theme.screens.checkout.CheckoutScreen
 import com.example.ecommerce.ui.theme.screens.home.HomeScreen
@@ -70,6 +71,9 @@ fun AppNavHost(
         }
         composable(PRODUCTDETAILS_URL){
             ProductdetailsScreen(navController = navController)
+        }
+        composable(ACCOUNT_URL){
+            AccountScreen(navController = navController)
         }
         composable(NOTIFICATIONS_URL){
             NotificationScreen(navController = navController)

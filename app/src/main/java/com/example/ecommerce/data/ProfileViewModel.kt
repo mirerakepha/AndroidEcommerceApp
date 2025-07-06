@@ -1,34 +1,111 @@
 package com.example.ecommerce.data
 
-import android.content.Context
 import android.net.Uri
-import android.widget.Toast
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
-class ProfileViewModel {
+class ProfileViewModel : ViewModel() {
+    // User Data
     private val _name = MutableStateFlow("")
-    val name: StateFlow<String> = _name
+    val name: StateFlow<String> = _name.asStateFlow()
 
     private val _email = MutableStateFlow("")
-    val email: StateFlow<String> = _email
+    val email: StateFlow<String> = _email.asStateFlow()
 
     private val _bio = MutableStateFlow("")
-    val bio: StateFlow<String> = _bio
+    val bio: StateFlow<String> = _bio.asStateFlow()
 
-    private val _profileImageUri = MutableStateFlow<Uri?>(null)
-    val profileImageUri: StateFlow<Uri?> = _profileImageUri
+    // Profile Image
+    private val _profileImageUrl = MutableStateFlow<String?>(null)
+    val profileImageUrl: StateFlow<String?> = _profileImageUrl.asStateFlow()
 
-    fun updateName(value: String) { _name.value = value }
-    fun updateEmail(value: String) { _email.value = value }
-    fun updateBio(value: String) { _bio.value = value }
+    // UI State
+    var isLoading by mutableStateOf(false)
+        private set
+    var errorMessage by mutableStateOf<String?>(null)
+        private set
 
-    fun updateProfileImage(uri: Uri?) {
-        _profileImageUri.value = uri
+    private val auth: FirebaseAuth = Firebase.auth
+    private val storage = Firebase.storage
+    private val userId = auth.currentUser?.uid ?: ""
+
+    init {
+        loadUserData()
+        loadProfileImage()
     }
 
-    fun saveProfile(context: Context) {
-        // You could save to DataStore, Room, or SharedPreferences here
-        Toast.makeText(context, "Profile Saved!", Toast.LENGTH_SHORT).show()
+    private fun loadUserData() {
+        auth.currentUser?.let { user ->
+            _name.value = user.displayName ?: ""
+            _email.value = user.email ?: ""
+        }
+    }
+
+    private fun loadProfileImage() {
+        viewModelScope.launch {
+            isLoading = true
+            try {
+                val url = storage.reference
+                    .child("profile_images/$userId.jpg")
+                    .downloadUrl
+                    .await()
+                _profileImageUrl.value = url.toString()
+            } catch (e: Exception) {
+                // No existing image - this is normal for first-time users
+            } finally {
+                isLoading = false
+            }
+        }
+    }
+
+    fun updateName(value: String) { _name.value = value }
+    fun updateBio(value: String) { _bio.value = value }
+
+    fun uploadProfileImage(uri: Uri) {
+        viewModelScope.launch {
+            isLoading = true
+            errorMessage = null
+            try {
+                val ref = storage.reference
+                    .child("profile_images/$userId.jpg")
+
+                ref.putFile(uri).await()
+                _profileImageUrl.value = ref.downloadUrl.await().toString()
+            } catch (e: Exception) {
+                errorMessage = "Upload failed: ${e.message}"
+            } finally {
+                isLoading = false
+            }
+        }
+    }
+
+    fun saveProfile() {
+        viewModelScope.launch {
+            isLoading = true
+            try {
+                auth.currentUser?.updateProfile(
+                    UserProfileChangeRequest.Builder()
+                        .setDisplayName(_name.value)
+                        .build()
+                )?.await()
+            } catch (e: Exception) {
+                errorMessage = "Save failed: ${e.message}"
+            } finally {
+                isLoading = false
+            }
+        }
     }
 }
