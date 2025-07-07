@@ -36,6 +36,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun SplashScreen(navController: NavController) {
 
+    val coroutine = rememberCoroutineScope()
+    coroutine.launch {
+        delay(2000)
+        navController.navigate(LOGIN_URL)
+    }
+
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -44,11 +52,7 @@ fun SplashScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        val coroutine = rememberCoroutineScope()
-        coroutine.launch {
-            delay(2000)
-            navController.navigate(LOGIN_URL)
-        }
+
 
 
 
