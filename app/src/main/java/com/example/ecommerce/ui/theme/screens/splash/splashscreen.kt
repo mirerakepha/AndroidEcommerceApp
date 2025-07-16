@@ -1,6 +1,6 @@
 package com.example.ecommerce.ui.theme.screens.splash
 
-import android.R
+
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,6 +29,8 @@ import com.example.ecommerce.navigation.LOGIN_URL
 import com.example.ecommerce.ui.theme.Orange3
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import com.example.ecommerce.R
+
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
