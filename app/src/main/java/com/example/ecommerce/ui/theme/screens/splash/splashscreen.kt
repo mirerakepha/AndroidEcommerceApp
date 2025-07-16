@@ -1,16 +1,17 @@
 package com.example.ecommerce.ui.theme.screens.splash
 
+import android.R
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.material3.Text
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -24,11 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.ecommerce.R
 import com.example.ecommerce.navigation.LOGIN_URL
-import com.example.ecommerce.ui.theme.EcommerceTheme
 import com.example.ecommerce.ui.theme.Orange3
-import com.example.ecommerce.ui.theme.screens.login.LoginScreen
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

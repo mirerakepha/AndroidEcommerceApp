@@ -74,12 +74,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.ecommerce.R
+
 import com.example.ecommerce.navigation.CART_URL
 import com.example.ecommerce.navigation.NOTIFICATIONS_URL
 import com.example.ecommerce.navigation.PRODUCTDETAILS_URL
 import com.example.ecommerce.navigation.SETTINGS_URL
 import com.example.ecommerce.ui.theme.Orange3
+import com.example.ecommerce.R
 
 
 data class Screen(val title: String, val icon: Int)
