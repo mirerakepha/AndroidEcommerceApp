@@ -2,6 +2,7 @@ package com.example.ecommerce.ui.theme.screens.home
 import android.R.attr.enabled
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -13,25 +14,32 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Face
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.MailOutline
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
@@ -42,6 +50,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.OutlinedTextField
@@ -59,7 +68,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.motionEventSpy
@@ -69,6 +80,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -91,62 +103,83 @@ fun HomeScreen(navController:NavHostController){
 
     var selected by remember { mutableIntStateOf(0) }
     Scaffold(
-
-
-
-
-
+//bottom bar
         bottomBar = {
-            NavigationBar {
-                bottomNavItems.forEachIndexed { index, bottomNavItem ->
-                    NavigationBarItem(
-                        selected = index == selected,
-                        onClick = {
-                            selected = index
-                            navController.navigate(bottomNavItem.route)
-                        },
-                        icon = {
-                            BadgedBox(
-                                badge = {
-                                    if (bottomNavItem.badges != 0) {
-                                        Badge {
-                                            Text(text = bottomNavItem.badges.toString())
+            Box(
+                modifier = Modifier
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                    .clip(RoundedCornerShape(24.dp))
+                    .background(Color.White)
+                    .shadow(8.dp, RoundedCornerShape(24.dp))
+            ) {
+                NavigationBar(
+                    modifier = Modifier
+                        .height(64.dp)
+                        .background(Color.White),
+                    tonalElevation = 0.dp,
+                    containerColor = Color.White
+                ) {
+                    bottomNavItems.forEachIndexed { index, bottomNavItem ->
+                        NavigationBarItem(
+                            selected = index == selected,
+                            onClick = {
+                                selected = index
+                                navController.navigate(bottomNavItem.route)
+                            },
+                            icon = {
+                                BadgedBox(
+                                    badge = {
+                                        if (bottomNavItem.badges != 0) {
+                                            Badge {
+                                                Text(
+                                                    text = bottomNavItem.badges.toString(),
+                                                    fontSize = 8.sp
+                                                )
+                                            }
+                                        } else if (bottomNavItem.hasNews) {
+                                            Badge()
                                         }
-                                    } else if (bottomNavItem.hasNews) {
-                                        Badge()
                                     }
+                                ) {
+                                    Icon(
+                                        imageVector = if (index == selected)
+                                            bottomNavItem.selectedIcon
+                                        else
+                                            bottomNavItem.unselectedIcon,
+                                        contentDescription = bottomNavItem.title,
+                                        modifier = Modifier.size(20.dp)
+                                    )
                                 }
-                            ) {
-                                Icon(imageVector =
-                                    if (index == selected)
-                                        bottomNavItem.selectedIcon
-                                    else
-                                        bottomNavItem.unselectedIcon,
-                                    contentDescription = bottomNavItem.title)
-                            }
-
-                        },
-                        label = {
-                            Text(text = bottomNavItem.title)
-                        })
+                            },
+                            label = {
+                                Text(
+                                    text = bottomNavItem.title,
+                                    fontSize = 10.sp,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            },
+                            alwaysShowLabel = true
+                        )
+                    }
                 }
             }
         },
 
 
-        floatingActionButton = {
+                floatingActionButton = {
             FloatingActionButton(onClick = {CART_URL}) {
                 IconButton(onClick = {
                     navController.navigate(CART_URL)
 
                 }) {
-                    Icon(imageVector = Icons.Default.Add,
-                        contentDescription = "menu")
+                    Icon(imageVector = Icons.Default.ShoppingCart,
+                        contentDescription = "cart")
                 }
             }
         },
         topBar = {
-            TopAppBar(title = { Text(text = "")},
+            TopAppBar(title = { Text(text = "Las Noches")},
                 navigationIcon = {
                     IconButton(onClick = { SETTINGS_URL }) {
                         Icon(imageVector = Icons.Default.Settings,
@@ -160,9 +193,14 @@ fun HomeScreen(navController:NavHostController){
                     }
                 })
         },
-        content = @Composable{
+
+        content =
+            {innerPadding ->
             Column (
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 5.dp)
+                    .padding(innerPadding),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -173,7 +211,7 @@ fun HomeScreen(navController:NavHostController){
      //S E A R C H       B A R
                 OutlinedTextField(value = search,
                     onValueChange = { search = it },
-                    placeholder = { Text(text = "What's your destination?")},
+                    placeholder = { Text(text = "find products")},
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 10.dp, end = 10.dp),
@@ -182,7 +220,9 @@ fun HomeScreen(navController:NavHostController){
                             imageVector = Icons.Default.Search,
                             contentDescription = "search"
                         )
-                    })
+                    },
+                    shape = RoundedCornerShape(30.dp)
+                    )
                 Spacer(modifier = Modifier.height(10.dp))
         //E N D   O F   S E A R C H   B A R
 
@@ -194,10 +234,12 @@ fun HomeScreen(navController:NavHostController){
         //E N D   O F   T O P   R O W
               Spacer(modifier = Modifier.height(10.dp))
 
+
+
             //full page with cards
             Column (modifier = Modifier.verticalScroll(rememberScrollState())){
                 //R O W   1
-                Row(modifier = Modifier.padding(start = 5.dp)
+                Row(modifier = Modifier.padding(start = 20.dp)
                     .horizontalScroll(rememberScrollState())) {
 
 
@@ -224,9 +266,17 @@ fun HomeScreen(navController:NavHostController){
                             }
                             Text(text = "Cockpit",
                                 textAlign = TextAlign.Center,
-                                fontSize = 30.sp,
+                                fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Orange3
+                                color = Orange3,
+                                modifier = Modifier.padding(horizontal = 10.dp)
+                            )
+                            Text(text = "20 $",
+                                textAlign = TextAlign.Center,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3,
+                                modifier = Modifier.padding(10.dp)
                             )
                         }
                     }
@@ -255,9 +305,17 @@ fun HomeScreen(navController:NavHostController){
                             }
                             Text(text = "Gaming Chair",
                                 textAlign = TextAlign.Center,
-                                fontSize = 30.sp,
+                                fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Orange3
+                                color = Orange3,
+                                modifier = Modifier.padding(horizontal = 10.dp)
+                            )
+                            Text(text = "20 $",
+                                textAlign = TextAlign.Center,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3,
+                                modifier = Modifier.padding(10.dp)
                             )
                         }
                     }
@@ -286,9 +344,17 @@ fun HomeScreen(navController:NavHostController){
                             }
                             Text(text = "Gaming Headphones",
                                 textAlign = TextAlign.Center,
-                                fontSize = 30.sp,
+                                fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Orange3
+                                color = Orange3,
+                                modifier = Modifier.padding(horizontal = 10.dp)
+                            )
+                            Text(text = "20 $",
+                                textAlign = TextAlign.Center,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3,
+                                modifier = Modifier.padding(10.dp)
                             )
                         }
                     }
@@ -316,9 +382,17 @@ fun HomeScreen(navController:NavHostController){
                             }
                             Text(text = "Gaming Mouse",
                                 textAlign = TextAlign.Center,
-                                fontSize = 30.sp,
+                                fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Orange3
+                                color = Orange3,
+                                modifier = Modifier.padding(horizontal = 10.dp)
+                            )
+                            Text(text = "20 $",
+                                textAlign = TextAlign.Center,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3,
+                                modifier = Modifier.padding(10.dp)
                             )
                         }
                     }
@@ -346,9 +420,17 @@ fun HomeScreen(navController:NavHostController){
                             }
                             Text(text = "Nintendo Switch",
                                 textAlign = TextAlign.Center,
-                                fontSize = 30.sp,
+                                fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Orange3
+                                color = Orange3,
+                                modifier = Modifier.padding(horizontal = 10.dp)
+                            )
+                            Text(text = "20 $",
+                                textAlign = TextAlign.Center,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3,
+                                modifier = Modifier.padding(10.dp)
                             )
                         }
                     }
@@ -373,12 +455,21 @@ fun HomeScreen(navController:NavHostController){
                                         }
                                 )
 
+
                             }
                             Text(text = "Gaming Monitor",
                                 textAlign = TextAlign.Center,
-                                fontSize = 30.sp,
+                                fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Orange3
+                                color = Orange3,
+                                modifier = Modifier.padding(horizontal = 10.dp)
+                            )
+                            Text(text = "20 $",
+                                textAlign = TextAlign.Center,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3,
+                                modifier = Modifier.padding(10.dp)
                             )
                         }
                     }
@@ -392,7 +483,7 @@ fun HomeScreen(navController:NavHostController){
                 Spacer(modifier = Modifier.height(20.dp))
 
                 //ROW 2
-                Row(modifier = Modifier.padding(start = 5.dp)
+                Row(modifier = Modifier.padding(start = 20.dp)
                     .horizontalScroll(rememberScrollState())) {
 
 
@@ -419,9 +510,17 @@ fun HomeScreen(navController:NavHostController){
                             }
                             Text(text = "Hoodie",
                                 textAlign = TextAlign.Center,
-                                fontSize = 30.sp,
+                                fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Orange3
+                                color = Orange3,
+                                modifier = Modifier.padding(horizontal = 10.dp)
+                            )
+                            Text(text = "20 $",
+                                textAlign = TextAlign.Center,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3,
+                                modifier = Modifier.padding(10.dp)
                             )
                         }
                     }
@@ -450,9 +549,17 @@ fun HomeScreen(navController:NavHostController){
                             }
                             Text(text = "T-Shirt",
                                 textAlign = TextAlign.Center,
-                                fontSize = 30.sp,
+                                fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Orange3
+                                color = Orange3,
+                                modifier = Modifier.padding(horizontal = 10.dp)
+                            )
+                            Text(text = "20 $",
+                                textAlign = TextAlign.Center,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3,
+                                modifier = Modifier.padding(10.dp)
                             )
                         }
                     }
@@ -481,9 +588,10 @@ fun HomeScreen(navController:NavHostController){
                             }
                             Text(text = "Sweat Pants",
                                 textAlign = TextAlign.Center,
-                                fontSize = 30.sp,
+                                fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Orange3
+                                color = Orange3,
+                                modifier = Modifier.padding(horizontal = 10.dp)
                             )
                         }
                     }
@@ -513,7 +621,8 @@ fun HomeScreen(navController:NavHostController){
                                 textAlign = TextAlign.Center,
                                 fontSize = 30.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Orange3
+                                color = Orange3,
+                                modifier = Modifier.padding(horizontal = 10.dp)
                             )
                         }
                     }
@@ -541,9 +650,10 @@ fun HomeScreen(navController:NavHostController){
                             }
                             Text(text = "Trench Coat",
                                 textAlign = TextAlign.Center,
-                                fontSize = 30.sp,
+                                fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Orange3
+                                color = Orange3,
+                                modifier = Modifier.padding(horizontal = 10.dp)
                             )
                         }
                     }
@@ -573,7 +683,8 @@ fun HomeScreen(navController:NavHostController){
                                 textAlign = TextAlign.Center,
                                 fontSize = 30.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Orange3
+                                color = Orange3,
+                                modifier = Modifier.padding(horizontal = 10.dp)
                             )
                         }
                     }
@@ -638,19 +749,28 @@ val bottomNavItems = listOf(
     ),
 
     BottomNavItem(
-        title = "Add Complain",
+        title = "Messages",
         route="add_complaint",
-        selectedIcon=Icons.Filled.Add,
-        unselectedIcon=Icons.Outlined.Add,
+        selectedIcon=Icons.Filled.MailOutline,
+        unselectedIcon=Icons.Outlined.MailOutline,
         hasNews = true,
         badges=0
     ),
 
     BottomNavItem(
-        title = "Admin",
-        route="login",
-        selectedIcon= Icons.Filled.Person,
-        unselectedIcon=Icons.Outlined.Person,
+        title = "Messages",
+        route="add_complaint",
+        selectedIcon=Icons.Filled.MailOutline,
+        unselectedIcon=Icons.Outlined.MailOutline,
+        hasNews = false,
+        badges=0
+    ),
+
+    BottomNavItem(
+        title = "Account",
+        route="account",
+        selectedIcon= Icons.Filled.AccountCircle,
+        unselectedIcon=Icons.Outlined.AccountCircle,
         hasNews = true,
         badges=1
     ),

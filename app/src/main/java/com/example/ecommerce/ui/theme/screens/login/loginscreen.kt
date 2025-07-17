@@ -1,5 +1,6 @@
 package com.example.ecommerce.ui.theme.screens.login
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -47,6 +48,7 @@ import com.example.ecommerce.navigation.SIGNUP_URL
 import com.example.ecommerce.ui.theme.Orange3
 
 
+@SuppressLint("ViewModelConstructorInComposable")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navController:NavHostController){
