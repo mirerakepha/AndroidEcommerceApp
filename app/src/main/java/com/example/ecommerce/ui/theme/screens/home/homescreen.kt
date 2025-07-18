@@ -201,7 +201,7 @@ fun HomeScreen(navController:NavHostController){
                     .fillMaxSize()
                     .padding(horizontal = 5.dp)
                     .padding(innerPadding),
-                verticalArrangement = Arrangement.Center,
+
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 

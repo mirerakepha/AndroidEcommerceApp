@@ -15,7 +15,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class AuthViewModel(
+open class AuthViewModel(
     private val navController: NavController,
     private val context: Context
 ) : ViewModel() {
@@ -71,7 +71,7 @@ class AuthViewModel(
         }
     }
 
-    fun login(email: String, password: String) {
+    open fun login(email: String, password: String) {
         if (email.isBlank() || password.isBlank()) {
             showToast("Email and password cannot be blank")
             return
@@ -100,7 +100,7 @@ class AuthViewModel(
         navController.navigate(LOGIN_URL) // Should navigate to login, not home
     }
 
-    fun isLoggedIn(): Boolean = auth.currentUser != null
+    open fun isLoggedIn(): Boolean = auth.currentUser != null
 
     private fun showToast(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()

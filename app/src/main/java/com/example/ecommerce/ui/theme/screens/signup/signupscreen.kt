@@ -1,5 +1,6 @@
 package com.example.ecommerce.ui.theme.screens.signup
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -47,6 +48,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.ecommerce.data.AuthViewModel
 import com.example.ecommerce.navigation.LOGIN_URL
 
+@SuppressLint("ViewModelConstructorInComposable")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignupScreen(navController:NavHostController){

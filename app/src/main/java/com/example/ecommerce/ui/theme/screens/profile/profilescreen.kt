@@ -32,9 +32,7 @@ fun ProfileScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
             .background(color = Orange3),
-        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
 
     ) {
@@ -43,7 +41,8 @@ fun ProfileScreen(navController: NavController) {
             fontSize = 20.sp,
             textAlign = TextAlign.Start,
             modifier = Modifier
-                .padding(16.dp))
+                .padding(16.dp)
+        )
 
         Spacer(modifier = Modifier.height(10.dp))
 
