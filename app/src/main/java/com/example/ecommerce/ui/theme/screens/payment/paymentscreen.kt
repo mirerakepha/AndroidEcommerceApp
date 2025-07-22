@@ -3,6 +3,7 @@ package com.example.ecommerce.ui.theme.screens.payment
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,6 +24,22 @@ fun PaymentScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
+        //Payment method
+        //paypal....visa....google.....apple
+        Column {
+            //paypal
+            Row {  }
+            //visa
+            Row {  }
+            //google
+            Row {  }
+            //apple
+            Row {  }
+        }
+
+
+        //credit card
+        //total payment amount
     }
 
 

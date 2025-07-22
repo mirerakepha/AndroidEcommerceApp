@@ -78,132 +78,149 @@ fun CartScreen(navController: NavController) {
         modifier = Modifier
             .fillMaxSize()
             .horizontalScroll(rememberScrollState())
-            .background(color = Orange3),
-        verticalArrangement = Arrangement.Center,
+            .background(color = Color.Black),
+
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         //Row 1
-        Card {
-            Box(
-                modifier = Modifier.height(15.dp)
-            ){
-                Row (modifier = Modifier.fillMaxWidth(),){
-                    //image left
-                    Image( painter = painterResource(id = R.drawable.mouse),
-                        contentDescription = "mouse",
-                        modifier = Modifier.size(64.dp)
-                    )
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Card {
+                Box(
+                    modifier = Modifier.height(50.dp)
+                ){
+                    Row (modifier = Modifier.fillMaxWidth(),){
+                        //image left
+                        Image( painter = painterResource(id = R.drawable.mouse),
+                            contentDescription = "mouse",
+                            modifier = Modifier.size(64.dp)
+                        )
 
-                    Spacer(modifier = Modifier.width(10.dp))
+                        Spacer(modifier = Modifier.width(10.dp))
 
 
-                    //text right
-                    Column {
-                        Text(text = "Wireless SVJ lenovo gamepad")
+                        //text right
+                        Column {
+                            Text(text = "Wireless SVJ lenovo gamepad")
 
-                        Spacer(modifier = Modifier.height(5.dp))
+                            Spacer(modifier = Modifier.height(5.dp))
 
-                        Text(text = "$ 15")
+                            Text(text = "$ 15")
+                        }
+
+
                     }
 
-
                 }
-
             }
         }
+
 
 
         //ROW 2
-        Card {
-            Box(
-                modifier = Modifier.height(15.dp)
-            ){
-                Row (modifier = Modifier.fillMaxWidth(),){
-                    //image left
-                    Image( painter = painterResource(id = R.drawable.mouse),
-                        contentDescription = "mouse",
-                        modifier = Modifier.size(64.dp)
-                    )
+        Row {
+            Card {
+                Box(
+                    modifier = Modifier.height(50.dp)
+                ){
+                    Row (modifier = Modifier.fillMaxWidth(),){
+                        //image left
+                        Image( painter = painterResource(id = R.drawable.mouse),
+                            contentDescription = "mouse",
+                            modifier = Modifier.size(64.dp)
+                        )
 
-                    Spacer(modifier = Modifier.width(10.dp))
+                        Spacer(modifier = Modifier.width(10.dp))
 
 
-                    //text right
-                    Column {
-                        Text(text = "Wireless SVJ lenovo gamepad")
+                        //text right
+                        Column {
+                            Text(text = "Wireless SVJ lenovo gamepad")
 
-                        Spacer(modifier = Modifier.height(5.dp))
+                            Spacer(modifier = Modifier.height(5.dp))
 
-                        Text(text = "$ 15")
+                            Text(text = "$ 15")
+                        }
+
+
                     }
 
-
                 }
-
             }
         }
+
 
 
         //ROW 3
-        Card {
-            Box(
-                modifier = Modifier.height(15.dp)
-            ){
-                Row (modifier = Modifier.fillMaxWidth(),){
-                    //image left
-                    Image( painter = painterResource(id = R.drawable.mouse),
-                        contentDescription = "mouse",
-                        modifier = Modifier.size(64.dp)
-                    )
+        Row {
+            Card {
+                Box(
+                    modifier = Modifier.height(50.dp)
+                ){
+                    Row (modifier = Modifier.fillMaxWidth(),){
+                        //image left
+                        Image( painter = painterResource(id = R.drawable.mouse),
+                            contentDescription = "mouse",
+                            modifier = Modifier.size(64.dp)
+                        )
 
-                    Spacer(modifier = Modifier.width(10.dp))
+                        Spacer(modifier = Modifier.width(10.dp))
 
 
-                    //text right
-                    Column {
-                        Text(text = "Wireless SVJ lenovo gamepad")
+                        //text right
+                        Column {
+                            Text(text = "Wireless SVJ lenovo gamepad")
 
-                        Spacer(modifier = Modifier.height(5.dp))
+                            Spacer(modifier = Modifier.height(5.dp))
 
-                        Text(text = "$ 15")
+                            Text(text = "$ 15")
+                        }
+
+
                     }
 
-
                 }
-
             }
         }
+
 
 
         //ROW 4
-        Card {
-            Box(
-                modifier = Modifier.height(15.dp)
-            ){
-                Row (modifier = Modifier.fillMaxWidth(),){
-                    //image left
-                    Image( painter = painterResource(id = R.drawable.mouse),
-                        contentDescription = "mouse",
-                        modifier = Modifier.size(64.dp)
-                    )
+        Row {
+            Card {
 
-                    Spacer(modifier = Modifier.width(10.dp))
+                Box(
+                    modifier = Modifier
+                        .height(50.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Row(modifier = Modifier.fillMaxWidth(),) {
+                        //image left
+                        Image(
+                            painter = painterResource(id = R.drawable.mouse),
+                            contentDescription = "mouse",
+                            modifier = Modifier.size(64.dp)
+                        )
+
+                        Spacer(modifier = Modifier.width(10.dp))
 
 
-                    //text right
-                    Column {
-                        Text(text = "Wireless SVJ lenovo gamepad")
+                        //text right
+                        Column {
+                            Text(text = "Wireless SVJ lenovo gamepad")
 
-                        Spacer(modifier = Modifier.height(5.dp))
+                            Spacer(modifier = Modifier.height(5.dp))
 
-                        Text(text = "$ 15")
+                            Text(text = "$ 15")
+                        }
+
+
                     }
-
 
                 }
 
             }
         }
+
 
         //YOU MAY ALSO LIKE at the bottom
 

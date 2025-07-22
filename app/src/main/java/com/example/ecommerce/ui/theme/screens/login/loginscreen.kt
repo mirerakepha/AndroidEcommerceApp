@@ -1,5 +1,5 @@
 package com.example.ecommerce.ui.theme.screens.login
-import androidx.compose.foundation.Image
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -42,8 +41,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.ecommerce.navigation.SIGNUP_URL
 import com.example.ecommerce.R
+import com.example.ecommerce.data.AuthViewModel
 
 
+@SuppressLint("ViewModelConstructorInComposable")
 @Composable
 fun LoginScreen(navController:NavHostController){
     Column(
@@ -106,10 +107,10 @@ fun LoginScreen(navController:NavHostController){
             trailingIcon = {
                 val icon = if (passwordVisible) {
                     //Download a password show icon
-                    painterResource(id = R.drawable.img1)
+                    painterResource(id = R.drawable.cont)
                 } else {
                     //Download a password hide icon
-                    painterResource(id = R.drawable.img)
+                    painterResource(id = R.drawable.cont)
                 }
                 IconButton(onClick = { togglePasswordVisibility() }) {
                     Icon(painter = icon, contentDescription = null)
@@ -134,7 +135,7 @@ fun LoginScreen(navController:NavHostController){
             Spacer(modifier = Modifier.width(10.dp))
 
             Button(
-                onClick = { authViewModel.adminlogin(email, password) },
+                onClick = { authViewModel.login(email, password) },
                 colors = ButtonDefaults.buttonColors(Color.DarkGray),
                 shape = RoundedCornerShape(5.dp)
             ) {
