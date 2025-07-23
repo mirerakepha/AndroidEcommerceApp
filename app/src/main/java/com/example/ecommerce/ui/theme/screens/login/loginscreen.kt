@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.ecommerce.navigation.SIGNUP_URL
+
 import com.example.ecommerce.R
 import com.example.ecommerce.data.AuthViewModel
 
@@ -74,7 +74,7 @@ fun LoginScreen(navController:NavHostController){
             onValueChange = {email = it},
             label = { Text(text = "Email Address", fontFamily = FontFamily.SansSerif)},
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "")},
+            leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "email")},
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 20.dp, end = 20.dp),
@@ -84,11 +84,9 @@ fun LoginScreen(navController:NavHostController){
         Spacer(modifier = Modifier.height(10.dp))
 
         var passwordVisible by remember { mutableStateOf(false) }
-        // Function to determine visual transformation based on visibility
         val visualTransformation: VisualTransformation =
             if (passwordVisible) VisualTransformation.None
             else PasswordVisualTransformation()
-        // Function to switch the password visibility
         fun togglePasswordVisibility() {
             passwordVisible = !passwordVisible
         }
@@ -98,7 +96,7 @@ fun LoginScreen(navController:NavHostController){
             onValueChange = {password = it},
             label = { Text(text = "Password", fontFamily = FontFamily.SansSerif)},
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "") },
+            leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "password") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 20.dp, end = 20.dp),
@@ -106,11 +104,11 @@ fun LoginScreen(navController:NavHostController){
             visualTransformation = visualTransformation,
             trailingIcon = {
                 val icon = if (passwordVisible) {
-                    //Download a password show icon
-                    painterResource(id = R.drawable.cont)
+
+                    painterResource(id = R.drawable.pwds)
                 } else {
-                    //Download a password hide icon
-                    painterResource(id = R.drawable.cont)
+
+                    painterResource(id = R.drawable.pwdh)
                 }
                 IconButton(onClick = { togglePasswordVisibility() }) {
                     Icon(painter = icon, contentDescription = null)
@@ -124,7 +122,7 @@ fun LoginScreen(navController:NavHostController){
         val authViewModel = AuthViewModel(navController, context)
 
 
-        Row {
+
             Button(
                 onClick = { authViewModel.login(email, password) },
                 colors = ButtonDefaults.buttonColors(Color.DarkGray),
@@ -132,29 +130,15 @@ fun LoginScreen(navController:NavHostController){
             ) {
                 Text(text = "SignIn", fontFamily = FontFamily.SansSerif)
             }
-            Spacer(modifier = Modifier.width(10.dp))
-
-            Button(
-                onClick = { authViewModel.login(email, password) },
-                colors = ButtonDefaults.buttonColors(Color.DarkGray),
-                shape = RoundedCornerShape(5.dp)
-            ) {
-                Text(text = "SignIn as Admin", fontFamily = FontFamily.SansSerif)
-            }
-
-        }
 
 
 
-        Button(
-            onClick = { navController.navigate(SIGNUP_URL) },
-            colors = ButtonDefaults.buttonColors(Color.DarkGray),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 20.dp, end = 20.dp),
-            shape = RoundedCornerShape(5.dp)) {
-            Text(text = "SignUp", fontFamily = FontFamily.SansSerif)
-        }
+
+
+
+
+
+
     }
 
 
@@ -163,8 +147,9 @@ fun LoginScreen(navController:NavHostController){
 
 }
 
-@Composable
+
 @Preview(showBackground = true)
+@Composable
 fun LoginScreenPreview(){
     LoginScreen(navController = rememberNavController())
 
