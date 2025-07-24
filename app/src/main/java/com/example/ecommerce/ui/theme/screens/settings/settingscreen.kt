@@ -143,11 +143,7 @@ fun SettingScreen(navController: NavController) {
                         .height(120.dp)
                         .clip(RoundedCornerShape(16.dp))
                         .background(color = Color.LightGray)
-                        .border(
-                            width = 1.dp,
-                            color = Color.Magenta,
-                            shape = RoundedCornerShape(15.dp)
-                        )
+
                 ) {
                     Column(
                         modifier = Modifier.fillMaxSize()
