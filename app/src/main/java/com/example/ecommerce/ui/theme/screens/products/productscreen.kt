@@ -129,7 +129,8 @@ Box(modifier = Modifier.fillMaxSize()){
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = Color.LightGray)
         ) {
-            Column(modifier = Modifier.fillMaxSize()) {
+            Column(modifier = Modifier.fillMaxSize())
+            {
             //top of reviews
             Button(
                 onClick = {/**/ },
