@@ -165,7 +165,7 @@ fun NotificationScreen(navController: NavController) {
                                 if (label == "Order Updates") {
                                     BadgedBox(badge = {
                                         Badge {
-                                            Text("1", fontSize = 8.sp)
+                                            Text("2", fontSize = 8.sp)
                                         }
                                     }) {
                                         Icon(
