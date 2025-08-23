@@ -15,6 +15,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -42,7 +43,8 @@ fun SignupScreenContent(
     onPasswordChange: (String) -> Unit,
     onConfirmPasswordChange: (String) -> Unit,
     onRegisterClick: () -> Unit,
-    onLoginClick: () -> Unit
+    onLoginClick: () -> Unit,
+    onGoogleClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -139,6 +141,41 @@ fun SignupScreenContent(
                 .fillMaxWidth()
                 .clickable { onLoginClick() }
         )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // Divider with OR
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 40.dp)
+        ) {
+            Divider(modifier = Modifier.weight(1f), color = Color.Gray)
+            Text(" OR ", color = Color.Gray, fontSize = 14.sp)
+            Divider(modifier = Modifier.weight(1f), color = Color.Gray)
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // Google Sign-In
+        OutlinedButton(
+            onClick = onGoogleClick,
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 40.dp),
+            colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White)
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.googlelogo),
+                contentDescription = "Google Sign-In",
+                tint = Color.Unspecified,
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Sign in with Google", color = Color.Black)
+        }
     }
 }
 
@@ -163,12 +200,12 @@ fun SignupScreen(navController: NavHostController, authViewModel: AuthViewModel)
         },
         onLoginClick = {
             navController.navigate(LOGIN_URL)
+        },
+        onGoogleClick = {
+           // authViewModel.signInWithGoogle() // implement inside your AuthViewModel
         }
     )
 }
-
-
-
 
 @Composable
 fun SignupScreen(navController: NavHostController) {
@@ -190,6 +227,7 @@ fun SignupScreenPreview() {
         onPasswordChange = {},
         onConfirmPasswordChange = {},
         onRegisterClick = {},
-        onLoginClick = {}
+        onLoginClick = {},
+        onGoogleClick = {}
     )
 }
