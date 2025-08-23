@@ -268,8 +268,6 @@ data class BottomNavItem(
     val badges :Int
 )
 
-
-
 @Preview(showBackground = true)
 @Composable
 fun NotificationScreenPreview() {

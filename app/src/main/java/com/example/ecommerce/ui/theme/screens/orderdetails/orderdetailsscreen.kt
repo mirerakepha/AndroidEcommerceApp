@@ -23,6 +23,9 @@ fun OrderdetailsScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
+
+
+
     }
 
 

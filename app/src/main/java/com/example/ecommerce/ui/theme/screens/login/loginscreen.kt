@@ -1,83 +1,68 @@
 package com.example.ecommerce.ui.theme.screens.login
+
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-
 import com.example.ecommerce.R
 import com.example.ecommerce.data.AuthViewModel
+import com.example.ecommerce.ui.theme.Orange3
 
 
-@SuppressLint("ViewModelConstructorInComposable")
 @Composable
-fun LoginScreen(navController:NavHostController){
+fun LoginScreenContent(
+    email: String,
+    password: String,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onLoginClick: () -> Unit
+) {
     Column(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(30.dp))
 
-
-
-        Spacer(modifier = Modifier.height(10.dp))
-
         Text(
             text = "Welcome Back",
             fontSize = 40.sp,
+            color = Orange3,
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily.Cursive
         )
-        Spacer(modifier = Modifier.height(10.dp))
 
-        var email by remember { mutableStateOf("") }
-        var password by remember { mutableStateOf("") }
+        Spacer(modifier = Modifier.height(20.dp))
 
         OutlinedTextField(
             value = email,
-            onValueChange = {email = it},
-            label = { Text(text = "Email Address", fontFamily = FontFamily.SansSerif)},
+            onValueChange = onEmailChange,
+            label = { Text("Email Address", fontFamily = FontFamily.SansSerif) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "email")},
+            leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "email") },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 20.dp, end = 20.dp),
+                .padding(horizontal = 20.dp),
             shape = RoundedCornerShape(5.dp)
         )
 
@@ -85,72 +70,82 @@ fun LoginScreen(navController:NavHostController){
 
         var passwordVisible by remember { mutableStateOf(false) }
         val visualTransformation: VisualTransformation =
-            if (passwordVisible) VisualTransformation.None
-            else PasswordVisualTransformation()
-        fun togglePasswordVisibility() {
-            passwordVisible = !passwordVisible
-        }
+            if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
 
         OutlinedTextField(
             value = password,
-            onValueChange = {password = it},
-            label = { Text(text = "Password", fontFamily = FontFamily.SansSerif)},
+            onValueChange = onPasswordChange,
+            label = { Text("Password", fontFamily = FontFamily.SansSerif) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "password") },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 20.dp, end = 20.dp),
+                .padding(horizontal = 20.dp),
             shape = RoundedCornerShape(5.dp),
             visualTransformation = visualTransformation,
             trailingIcon = {
-                val icon = if (passwordVisible) {
+                val icon = if (passwordVisible) painterResource(id = R.drawable.pwds)
+                else painterResource(id = R.drawable.pwdh)
 
-                    painterResource(id = R.drawable.pwds)
-                } else {
-
-                    painterResource(id = R.drawable.pwdh)
-                }
-                IconButton(onClick = { togglePasswordVisibility() }) {
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
                     Icon(painter = icon, contentDescription = null)
                 }
             }
-
         )
 
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Button(
+            onClick = onLoginClick,
+            colors = ButtonDefaults.buttonColors(Orange3),
+            shape = RoundedCornerShape(15.dp),
+            modifier = Modifier.fillMaxWidth()
+                .padding(start = 40.dp, end = 40.dp)
+        ) {
+            Text("Login", fontFamily = FontFamily.SansSerif)
+        }
+
         Spacer(modifier = Modifier.height(10.dp))
-        val context = LocalContext.current
-        val authViewModel = AuthViewModel(navController, context)
-
-
-
-            Button(
-                onClick = { authViewModel.login(email, password) },
-                colors = ButtonDefaults.buttonColors(Color.DarkGray),
-                shape = RoundedCornerShape(5.dp)
-            ) {
-                Text(text = "SignIn", fontFamily = FontFamily.SansSerif)
-            }
-
-
-
-
-
-
-
-
-
+        
+        Text(
+            text = "Dont have an account? Sign up",
+            fontSize = 15.sp,
+            textAlign = TextAlign.Center,
+            color = Color.Blue,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onLoginClick() }
+        )
     }
+}
 
 
+@SuppressLint("ViewModelConstructorInComposable")
+@Composable
+fun LoginScreen(navController: NavHostController, authViewModel: AuthViewModel) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
 
-
-
+    LoginScreenContent(
+        email = email,
+        password = password,
+        onEmailChange = { email = it },
+        onPasswordChange = { password = it },
+        onLoginClick = {
+            authViewModel.login(email, password)
+        }
+    )
 }
 
 
 @Preview(showBackground = true)
 @Composable
-fun LoginScreenPreview(){
-    LoginScreen(navController = rememberNavController())
-
+fun LoginScreenPreview() {
+    LoginScreenContent(
+        email = "kephamirera@gmail.com",
+        password = "",
+        onEmailChange = {},
+        onPasswordChange = {},
+        onLoginClick = {}
+    )
 }

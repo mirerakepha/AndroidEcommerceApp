@@ -25,33 +25,35 @@ import com.example.ecommerce.R
 import com.example.ecommerce.data.ProfileViewModel
 
 @Composable
-fun AccountScreen(navController: NavController) {
-    val viewModel: ProfileViewModel = viewModel()
-
-    val name by viewModel.name.collectAsState()
-    val email by viewModel.email.collectAsState()
-    val bio by viewModel.bio.collectAsState()
-    val profileImageUrl by viewModel.profileImageUrl.collectAsState()
-
-    val imagePicker = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        uri?.let { viewModel.uploadProfileImage(it) }
-    }
-
+fun AccountScreenUI(
+    name: String,
+    email: String,
+    bio: String,
+    profileImageUrl: Any?,
+    isLoading: Boolean,
+    errorMessage: String?,
+    onNameChange: (String) -> Unit = {},
+    onBioChange: (String) -> Unit = {},
+    onSave: () -> Unit = {},
+    onChangeImage: (() -> Unit)? = null
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Profile Picture Section
+        // Profile Pic
         Box(contentAlignment = Alignment.BottomEnd) {
+            val painter = when (profileImageUrl) {
+                is Int -> painterResource(profileImageUrl) // Drawable resource
+                is String -> rememberAsyncImagePainter(profileImageUrl) // URL
+                is Uri -> rememberAsyncImagePainter(profileImageUrl) // Gallery Uri
+                else -> painterResource(R.drawable.emn) // Placeholder avatar
+            }
+
             Image(
-                painter = rememberAsyncImagePainter(
-                    model = profileImageUrl ?: R.drawable.itachih,
-                    error = painterResource(R.drawable.itachih)
-                ),
+                painter = painter,
                 contentDescription = "Profile",
                 modifier = Modifier
                     .size(120.dp)
@@ -59,13 +61,14 @@ fun AccountScreen(navController: NavController) {
                 contentScale = ContentScale.Crop
             )
 
+            // Upload Button (edit icon)
             IconButton(
-                onClick = { imagePicker.launch("image/*") },
+                onClick = { onChangeImage?.invoke() },
                 modifier = Modifier.size(40.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
-                    contentDescription = "Change profile picture",
+                    contentDescription = "Change Profile Pic",
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
@@ -76,7 +79,7 @@ fun AccountScreen(navController: NavController) {
         // Profile Form
         OutlinedTextField(
             value = name,
-            onValueChange = { viewModel.updateName(it) },
+            onValueChange = { onNameChange(it) },
             label = { Text("Name") },
             modifier = Modifier.fillMaxWidth()
         )
@@ -95,7 +98,7 @@ fun AccountScreen(navController: NavController) {
 
         OutlinedTextField(
             value = bio,
-            onValueChange = { viewModel.updateBio(it) },
+            onValueChange = { onBioChange(it) },
             label = { Text("Bio") },
             modifier = Modifier.fillMaxWidth(),
             maxLines = 3
@@ -105,26 +108,62 @@ fun AccountScreen(navController: NavController) {
 
         // Save Button
         Button(
-            onClick = { viewModel.saveProfile() },
+            onClick = onSave,
             modifier = Modifier.fillMaxWidth(),
-            enabled = !viewModel.isLoading
+            enabled = !isLoading
         ) {
             Text("Save Profile")
         }
 
+        Spacer(modifier = Modifier.height(16.dp))
+
         // Loading/Error States
         when {
-            viewModel.isLoading -> CircularProgressIndicator()
-            viewModel.errorMessage != null -> Text(
-                text = viewModel.errorMessage!!,
+            isLoading -> CircularProgressIndicator()
+            errorMessage != null -> Text(
+                text = errorMessage,
                 color = MaterialTheme.colorScheme.error
             )
         }
     }
 }
 
+@Composable
+fun AccountScreen(navController: NavController, viewModel: ProfileViewModel = viewModel()) {
+    val name by viewModel.name.collectAsState()
+    val email by viewModel.email.collectAsState()
+    val bio by viewModel.bio.collectAsState()
+    val profileImageUrl by viewModel.profileImageUrl.collectAsState()
+
+    val imagePicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let { viewModel.uploadProfileImage(it) } // upload new image
+    }
+
+    AccountScreenUI(
+        name = name,
+        email = email,
+        bio = bio,
+        profileImageUrl = profileImageUrl,
+        isLoading = viewModel.isLoading,
+        errorMessage = viewModel.errorMessage,
+        onNameChange = { viewModel.updateName(it) },
+        onBioChange = { viewModel.updateBio(it) },
+        onSave = { viewModel.saveProfile() },
+        onChangeImage = { imagePicker.launch("image/*") } //opens gallery
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 fun AccountScreenPreview() {
-    AccountScreen(navController = rememberNavController())
+    AccountScreenUI(
+        name = "Falcon Webs",
+        email = "kephamirera16@gmail.com",
+        bio = "Some nerdy stuff 🗑️",
+        profileImageUrl = R.drawable.emn, //avatar
+        isLoading = false,
+        errorMessage = null
+    )
 }

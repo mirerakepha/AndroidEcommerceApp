@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.ecommerce.screens.signup.SignupScreen
 import com.example.ecommerce.ui.theme.screens.account.AccountScreen
 import com.example.ecommerce.ui.theme.screens.cart.CartScreen
 import com.example.ecommerce.ui.theme.screens.checkout.CheckoutScreen
@@ -19,7 +20,7 @@ import com.example.ecommerce.ui.theme.screens.productdetails.ProductdetailsScree
 import com.example.ecommerce.ui.theme.screens.products.ProductScreen
 import com.example.ecommerce.ui.theme.screens.profile.ProfileScreen
 import com.example.ecommerce.ui.theme.screens.settings.SettingScreen
-import com.example.ecommerce.ui.theme.screens.signup.SignupScreen
+
 
 import com.example.ecommerce.ui.theme.screens.splash.SplashScreen
 

@@ -109,13 +109,13 @@ fun HomeScreen(navController:NavHostController){
                 modifier = Modifier
                     .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                     .clip(RoundedCornerShape(24.dp))
-                    .background(Color.White)
+                    .background(Color.DarkGray)
                     .shadow(8.dp, RoundedCornerShape(24.dp))
             ) {
                 NavigationBar(
                     modifier = Modifier
                         .height(64.dp)
-                        .background(Color.White),
+                        .background(Color.DarkGray),
                     tonalElevation = 0.dp,
                     containerColor = Color.White
                 ) {
@@ -754,15 +754,15 @@ val bottomNavItems = listOf(
         selectedIcon=Icons.Filled.MailOutline,
         unselectedIcon=Icons.Outlined.MailOutline,
         hasNews = true,
-        badges=0
+        badges=2
     ),
 
     BottomNavItem(
-        title = "Messages",
-        route="add_complaint",
+        title = "Orders",
+        route="orderdetails",
         selectedIcon=Icons.Filled.MailOutline,
         unselectedIcon=Icons.Outlined.MailOutline,
-        hasNews = false,
+        hasNews = true,
         badges=0
     ),
 
@@ -771,8 +771,8 @@ val bottomNavItems = listOf(
         route="account",
         selectedIcon= Icons.Filled.AccountCircle,
         unselectedIcon=Icons.Outlined.AccountCircle,
-        hasNews = true,
-        badges=1
+        hasNews = false,
+        badges=0
     ),
 
 

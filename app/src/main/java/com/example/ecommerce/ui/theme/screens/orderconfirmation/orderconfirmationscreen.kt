@@ -23,6 +23,22 @@ fun OrderconfirmationScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
 
