@@ -80,6 +80,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -93,6 +94,8 @@ import com.example.ecommerce.navigation.PRODUCTDETAILS_URL
 import com.example.ecommerce.navigation.SETTINGS_URL
 import com.example.ecommerce.ui.theme.Orange3
 import com.example.ecommerce.R
+import com.example.ecommerce.navigation.HOME_URL
+import com.example.ecommerce.navigation.ORDERDETAILS_URL
 
 
 data class Screen(val title: String, val icon: Int)
@@ -225,8 +228,105 @@ fun HomeScreen(navController:NavHostController){
                     )
                 Spacer(modifier = Modifier.height(10.dp))
         //E N D   O F   S E A R C H   B A R
+                var selectedCategory by remember { mutableStateOf<String?>(null) }
 
         //T O P   R O W WITH CLICKABLE TEXT
+                Row (modifier = Modifier
+                            .horizontalScroll(rememberScrollState())
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                    ){
+                    //Explore
+                    Text(text = "Explore",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                        textDecoration = if (selectedCategory == "Explore") TextDecoration.Underline else null,
+                        modifier = Modifier.clickable{selectedCategory = "Explore"
+                            navController.navigate(ORDERDETAILS_URL)})
+
+                    Spacer(modifier = Modifier.width(10.dp))
+                    //Back to school
+                    Text(text = "Back to school",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                        textDecoration = if (selectedCategory == "Back to School") TextDecoration.Underline else null,
+                        modifier = Modifier.clickable{selectedCategory = "Back to school"
+                            navController.navigate(ORDERDETAILS_URL)})
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    //Women's
+                    Text(text = "Women's",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                        textDecoration = if (selectedCategory == "Women's") TextDecoration.Underline else null,
+                        modifier = Modifier.clickable{selectedCategory = "Women's"
+                            navController.navigate(ORDERDETAILS_URL)})
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    //Mens
+                    Text(text = "Men's",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                        textDecoration = if (selectedCategory == "Men's") TextDecoration.Underline else null,
+                        modifier = Modifier.clickable{selectedCategory = "Men's"
+                            navController.navigate(ORDERDETAILS_URL)})
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    //Electronics
+                    Text(text = "Electronics",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                        textDecoration = if (selectedCategory == "Electronics") TextDecoration.Underline else null,
+                        modifier = Modifier.clickable{selectedCategory = "Electronics"
+                            navController.navigate(ORDERDETAILS_URL)})
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    //Toys
+                    Text(text = "Toys",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                        textDecoration = if (selectedCategory == "Toys") TextDecoration.Underline else null,
+                        modifier = Modifier.clickable{selectedCategory = "Toys"
+                            navController.navigate(ORDERDETAILS_URL)})
+                    Spacer(modifier = Modifier.width(10.dp))
+
+
+                    //Tools
+                    Text(text = "Tools",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                        textDecoration = if (selectedCategory == "Tools") TextDecoration.Underline else null,
+                        modifier = Modifier.clickable{selectedCategory = "Tools"
+                            navController.navigate(ORDERDETAILS_URL)})
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    //Jewellry
+                    Text(text = "Jewellery",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                        textDecoration = if (selectedCategory == "Jewellery") TextDecoration.Underline else null,
+                        modifier = Modifier.clickable{selectedCategory = "Jewellery"
+                            navController.navigate(ORDERDETAILS_URL)})
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    //Shoes
+                    Text(text = "Shoes",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                        textDecoration = if (selectedCategory == "Shoes") TextDecoration.Underline else null,
+                        modifier = Modifier.clickable{selectedCategory = "Shoes"
+                            navController.navigate(ORDERDETAILS_URL)})
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    //Health
+                    Text(text = "Health",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black,
+                        textDecoration = if (selectedCategory == "Health") TextDecoration.Underline else null,
+                        modifier = Modifier.clickable{selectedCategory = "Health"
+                            navController.navigate(ORDERDETAILS_URL)})
+
+                }
 
 
 
@@ -238,10 +338,263 @@ fun HomeScreen(navController:NavHostController){
 
             //full page with cards
             Column (modifier = Modifier.verticalScroll(rememberScrollState())){
-                //R O W   1
+
+
+                //Super Deals
+                Column {
+                    Text(text = "Super Deals",
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = FontFamily.Cursive)
+                    Spacer(modifier = Modifier.height(5.dp))
+
+                    Row(modifier = Modifier.padding(start = 20.dp)
+                        .horizontalScroll(rememberScrollState())) {
+
+
+                        //C A R D   1
+                        Card {
+                            Column {
+                                Box(modifier = Modifier
+                                    .height(150.dp)
+                                    .width(180.dp),
+                                    contentAlignment = Alignment.Center){
+                                    Image(
+                                        painter = painterResource(id = R.drawable.cockpit),
+                                        contentDescription = "",
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier
+                                            .fillMaxHeight()
+                                            .fillMaxWidth()
+                                            .size(400.dp)
+                                            .clickable {
+                                                navController.navigate(PRODUCTDETAILS_URL)
+                                            }
+                                    )
+
+                                }
+                                Text(text = "Cockpit",
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Orange3,
+                                    modifier = Modifier.padding(horizontal = 10.dp)
+                                )
+                                Text(text = "20 $",
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Orange3,
+                                    modifier = Modifier.padding(10.dp)
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
+
+                        //C A R D   2
+                        Card {
+                            Column {
+                                Box(modifier = Modifier
+                                    .height(150.dp)
+                                    .width(180.dp),
+                                    contentAlignment = Alignment.Center){
+                                    Image(
+                                        painter = painterResource(id = R.drawable.gamechair),
+                                        contentDescription = "",
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier
+                                            .fillMaxHeight()
+                                            .fillMaxWidth()
+                                            .size(400.dp)
+                                            .clickable {
+                                                navController.navigate(PRODUCTDETAILS_URL)
+                                            }
+                                    )
+
+                                }
+                                Text(text = "Gaming Chair",
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Orange3,
+                                    modifier = Modifier.padding(horizontal = 10.dp)
+                                )
+                                Text(text = "20 $",
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Orange3,
+                                    modifier = Modifier.padding(10.dp)
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
+
+                        //C A R D   4
+                        Card {
+                            Column {
+                                Box(modifier = Modifier
+                                    .height(150.dp)
+                                    .width(180.dp),
+                                    contentAlignment = Alignment.Center){
+                                    Image(
+                                        painter = painterResource(id = R.drawable.headphones),
+                                        contentDescription = "",
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier
+                                            .fillMaxHeight()
+                                            .fillMaxWidth()
+                                            .size(400.dp)
+                                            .clickable {
+                                                navController.navigate(PRODUCTDETAILS_URL)
+                                            }
+                                    )
+
+                                }
+                                Text(text = "Gaming Headphones",
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Orange3,
+                                    modifier = Modifier.padding(horizontal = 10.dp)
+                                )
+                                Text(text = "20 $",
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Orange3,
+                                    modifier = Modifier.padding(10.dp)
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
+                        //C A R D   5
+                        Card {
+                            Column {
+                                Box(modifier = Modifier
+                                    .height(150.dp)
+                                    .width(180.dp),
+                                    contentAlignment = Alignment.Center){
+                                    Image(
+                                        painter = painterResource(id = R.drawable.mouse),
+                                        contentDescription = "",
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier
+                                            .fillMaxHeight()
+                                            .fillMaxWidth()
+                                            .size(400.dp)
+                                            .clickable {
+                                                navController.navigate(PRODUCTDETAILS_URL)
+                                            }
+                                    )
+
+                                }
+                                Text(text = "Gaming Mouse",
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Orange3,
+                                    modifier = Modifier.padding(horizontal = 10.dp)
+                                )
+                                Text(text = "20 $",
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Orange3,
+                                    modifier = Modifier.padding(10.dp)
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
+                        //C A R D   6
+                        Card {
+                            Column {
+                                Box(modifier = Modifier
+                                    .height(150.dp)
+                                    .width(180.dp),
+                                    contentAlignment = Alignment.Center){
+                                    Image(
+                                        painter = painterResource(id = R.drawable.nintendo),
+                                        contentDescription = "",
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier
+                                            .fillMaxHeight()
+                                            .fillMaxWidth()
+                                            .size(400.dp)
+                                            .clickable {
+                                                navController.navigate(PRODUCTDETAILS_URL)
+                                            }
+                                    )
+
+                                }
+                                Text(text = "Nintendo Switch",
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Orange3,
+                                    modifier = Modifier.padding(horizontal = 10.dp)
+                                )
+                                Text(text = "20 $",
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Orange3,
+                                    modifier = Modifier.padding(10.dp)
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
+                        //C A R D   7
+                        Card {
+                            Column {
+                                Box(modifier = Modifier
+                                    .height(150.dp)
+                                    .width(180.dp),
+                                    contentAlignment = Alignment.Center){
+                                    Image(
+                                        painter = painterResource(id = R.drawable.screen),
+                                        contentDescription = "",
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier
+                                            .fillMaxHeight()
+                                            .fillMaxWidth()
+                                            .size(400.dp)
+                                            .clickable {
+                                                navController.navigate(PRODUCTDETAILS_URL)
+                                            }
+                                    )
+
+
+                                }
+                                Text(text = "Gaming Monitor",
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Orange3,
+                                    modifier = Modifier.padding(horizontal = 10.dp)
+                                )
+                                Text(text = "20 $",
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Orange3,
+                                    modifier = Modifier.padding(10.dp)
+                                )
+                            }
+                        }
+
+
+
+
+
+                    }
+
+                }
+                Spacer(modifier = Modifier.height(20.dp))
+
+                //Top Brands
                 Row(modifier = Modifier.padding(start = 20.dp)
                     .horizontalScroll(rememberScrollState())) {
-
 
                     //C A R D   1
                     Card {
@@ -251,7 +604,7 @@ fun HomeScreen(navController:NavHostController){
                                 .width(180.dp),
                                 contentAlignment = Alignment.Center){
                                 Image(
-                                    painter = painterResource(id = R.drawable.cockpit),
+                                    painter = painterResource(id = R.drawable.itachih),
                                     contentDescription = "",
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier
@@ -264,7 +617,7 @@ fun HomeScreen(navController:NavHostController){
                                 )
 
                             }
-                            Text(text = "Cockpit",
+                            Text(text = "Hoodie",
                                 textAlign = TextAlign.Center,
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
@@ -290,7 +643,7 @@ fun HomeScreen(navController:NavHostController){
                                 .width(180.dp),
                                 contentAlignment = Alignment.Center){
                                 Image(
-                                    painter = painterResource(id = R.drawable.gamechair),
+                                    painter = painterResource(id = R.drawable.naruto),
                                     contentDescription = "",
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier
@@ -303,7 +656,7 @@ fun HomeScreen(navController:NavHostController){
                                 )
 
                             }
-                            Text(text = "Gaming Chair",
+                            Text(text = "T-Shirt",
                                 textAlign = TextAlign.Center,
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
@@ -329,7 +682,7 @@ fun HomeScreen(navController:NavHostController){
                                 .width(180.dp),
                                 contentAlignment = Alignment.Center){
                                 Image(
-                                    painter = painterResource(id = R.drawable.headphones),
+                                    painter = painterResource(id = R.drawable.sweatpants),
                                     contentDescription = "",
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier
@@ -342,19 +695,12 @@ fun HomeScreen(navController:NavHostController){
                                 )
 
                             }
-                            Text(text = "Gaming Headphones",
+                            Text(text = "Sweat Pants",
                                 textAlign = TextAlign.Center,
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Orange3,
                                 modifier = Modifier.padding(horizontal = 10.dp)
-                            )
-                            Text(text = "20 $",
-                                textAlign = TextAlign.Center,
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Orange3,
-                                modifier = Modifier.padding(10.dp)
                             )
                         }
                     }
@@ -367,7 +713,7 @@ fun HomeScreen(navController:NavHostController){
                                 .width(180.dp),
                                 contentAlignment = Alignment.Center){
                                 Image(
-                                    painter = painterResource(id = R.drawable.mouse),
+                                    painter = painterResource(id = R.drawable.sweatshirt),
                                     contentDescription = "",
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier
@@ -380,19 +726,12 @@ fun HomeScreen(navController:NavHostController){
                                 )
 
                             }
-                            Text(text = "Gaming Mouse",
+                            Text(text = "Sweat Shirt",
                                 textAlign = TextAlign.Center,
-                                fontSize = 15.sp,
+                                fontSize = 30.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Orange3,
                                 modifier = Modifier.padding(horizontal = 10.dp)
-                            )
-                            Text(text = "20 $",
-                                textAlign = TextAlign.Center,
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Orange3,
-                                modifier = Modifier.padding(10.dp)
                             )
                         }
                     }
@@ -405,7 +744,7 @@ fun HomeScreen(navController:NavHostController){
                                 .width(180.dp),
                                 contentAlignment = Alignment.Center){
                                 Image(
-                                    painter = painterResource(id = R.drawable.nintendo),
+                                    painter = painterResource(id = R.drawable.trench),
                                     contentDescription = "",
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier
@@ -418,19 +757,12 @@ fun HomeScreen(navController:NavHostController){
                                 )
 
                             }
-                            Text(text = "Nintendo Switch",
+                            Text(text = "Trench Coat",
                                 textAlign = TextAlign.Center,
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Orange3,
                                 modifier = Modifier.padding(horizontal = 10.dp)
-                            )
-                            Text(text = "20 $",
-                                textAlign = TextAlign.Center,
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Orange3,
-                                modifier = Modifier.padding(10.dp)
                             )
                         }
                     }
@@ -443,7 +775,7 @@ fun HomeScreen(navController:NavHostController){
                                 .width(180.dp),
                                 contentAlignment = Alignment.Center){
                                 Image(
-                                    painter = painterResource(id = R.drawable.screen),
+                                    painter = painterResource(id = R.drawable.shirt),
                                     contentDescription = "",
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier
@@ -455,21 +787,13 @@ fun HomeScreen(navController:NavHostController){
                                         }
                                 )
 
-
                             }
-                            Text(text = "Gaming Monitor",
+                            Text(text = "Official Shirt",
                                 textAlign = TextAlign.Center,
-                                fontSize = 15.sp,
+                                fontSize = 30.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Orange3,
                                 modifier = Modifier.padding(horizontal = 10.dp)
-                            )
-                            Text(text = "20 $",
-                                textAlign = TextAlign.Center,
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Orange3,
-                                modifier = Modifier.padding(10.dp)
                             )
                         }
                     }
@@ -482,7 +806,8 @@ fun HomeScreen(navController:NavHostController){
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                //ROW 2
+
+                //Bundle Deals
                 Row(modifier = Modifier.padding(start = 20.dp)
                     .horizontalScroll(rememberScrollState())) {
 
@@ -696,9 +1021,269 @@ fun HomeScreen(navController:NavHostController){
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))
-                //ROW 3
-                //ROW 4
-                //ROW 5
+
+
+
+                //Big Sales
+                Row(modifier = Modifier.padding(start = 20.dp)
+                    .horizontalScroll(rememberScrollState())) {
+
+
+                    //C A R D   1
+                    Card {
+                        Column {
+                            Box(modifier = Modifier
+                                .height(150.dp)
+                                .width(180.dp),
+                                contentAlignment = Alignment.Center){
+                                Image(
+                                    painter = painterResource(id = R.drawable.itachih),
+                                    contentDescription = "",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .fillMaxWidth()
+                                        .size(400.dp)
+                                        .clickable {
+                                            navController.navigate(PRODUCTDETAILS_URL)
+                                        }
+                                )
+
+                            }
+                            Text(text = "Hoodie",
+                                textAlign = TextAlign.Center,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3,
+                                modifier = Modifier.padding(horizontal = 10.dp)
+                            )
+                            Text(text = "20 $",
+                                textAlign = TextAlign.Center,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3,
+                                modifier = Modifier.padding(10.dp)
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    //C A R D   2
+                    Card {
+                        Column {
+                            Box(modifier = Modifier
+                                .height(150.dp)
+                                .width(180.dp),
+                                contentAlignment = Alignment.Center){
+                                Image(
+                                    painter = painterResource(id = R.drawable.naruto),
+                                    contentDescription = "",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .fillMaxWidth()
+                                        .size(400.dp)
+                                        .clickable {
+                                            navController.navigate(PRODUCTDETAILS_URL)
+                                        }
+                                )
+
+                            }
+                            Text(text = "T-Shirt",
+                                textAlign = TextAlign.Center,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3,
+                                modifier = Modifier.padding(horizontal = 10.dp)
+                            )
+                            Text(text = "20 $",
+                                textAlign = TextAlign.Center,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3,
+                                modifier = Modifier.padding(10.dp)
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    //C A R D   4
+                    Card {
+                        Column {
+                            Box(modifier = Modifier
+                                .height(150.dp)
+                                .width(180.dp),
+                                contentAlignment = Alignment.Center){
+                                Image(
+                                    painter = painterResource(id = R.drawable.sweatpants),
+                                    contentDescription = "",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .fillMaxWidth()
+                                        .size(400.dp)
+                                        .clickable {
+                                            navController.navigate(PRODUCTDETAILS_URL)
+                                        }
+                                )
+
+                            }
+                            Text(text = "Sweat Pants",
+                                textAlign = TextAlign.Center,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3,
+                                modifier = Modifier.padding(horizontal = 10.dp)
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+                    //C A R D   5
+                    Card {
+                        Column {
+                            Box(modifier = Modifier
+                                .height(150.dp)
+                                .width(180.dp),
+                                contentAlignment = Alignment.Center){
+                                Image(
+                                    painter = painterResource(id = R.drawable.sweatshirt),
+                                    contentDescription = "",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .fillMaxWidth()
+                                        .size(400.dp)
+                                        .clickable {
+                                            navController.navigate(PRODUCTDETAILS_URL)
+                                        }
+                                )
+
+                            }
+                            Text(text = "Sweat Shirt",
+                                textAlign = TextAlign.Center,
+                                fontSize = 30.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3,
+                                modifier = Modifier.padding(horizontal = 10.dp)
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+                    //C A R D   6
+                    Card {
+                        Column {
+                            Box(modifier = Modifier
+                                .height(150.dp)
+                                .width(180.dp),
+                                contentAlignment = Alignment.Center){
+                                Image(
+                                    painter = painterResource(id = R.drawable.trench),
+                                    contentDescription = "",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .fillMaxWidth()
+                                        .size(400.dp)
+                                        .clickable {
+                                            navController.navigate(PRODUCTDETAILS_URL)
+                                        }
+                                )
+
+                            }
+                            Text(text = "Trench Coat",
+                                textAlign = TextAlign.Center,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3,
+                                modifier = Modifier.padding(horizontal = 10.dp)
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+                    //C A R D   7
+                    Card {
+                        Column {
+                            Box(modifier = Modifier
+                                .height(150.dp)
+                                .width(180.dp),
+                                contentAlignment = Alignment.Center){
+                                Image(
+                                    painter = painterResource(id = R.drawable.shirt),
+                                    contentDescription = "",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .fillMaxWidth()
+                                        .size(400.dp)
+                                        .clickable {
+                                            navController.navigate(PRODUCTDETAILS_URL)
+                                        }
+                                )
+
+                            }
+                            Text(text = "Official Shirt",
+                                textAlign = TextAlign.Center,
+                                fontSize = 30.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Orange3,
+                                modifier = Modifier.padding(horizontal = 10.dp)
+                            )
+                        }
+                    }
+
+
+
+
+
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+
+                //Rest of the page
+                //only vertical scroll
+
+                Column (modifier = Modifier.fillMaxWidth()){
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Card {
+                            Column {
+                                Box(modifier = Modifier
+                                    .height(150.dp)
+                                    .width(180.dp),
+                                    contentAlignment = Alignment.Center){
+                                    Image(
+                                        painter = painterResource(id = R.drawable.itachih),
+                                        contentDescription = "",
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier
+                                            .fillMaxHeight()
+                                            .fillMaxWidth()
+                                            .size(400.dp)
+                                            .clickable {
+                                                navController.navigate(PRODUCTDETAILS_URL)
+                                            }
+                                    )
+
+                                }
+                                Text(text = "Hoodie",
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Orange3,
+                                    modifier = Modifier.padding(horizontal = 10.dp)
+                                )
+                                Text(text = "20 $",
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Orange3,
+                                    modifier = Modifier.padding(10.dp)
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.width(10.dp))
+                    }
+                }
             }
 
 

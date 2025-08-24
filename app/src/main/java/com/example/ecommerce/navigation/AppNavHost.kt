@@ -20,6 +20,8 @@ import com.example.ecommerce.ui.theme.screens.productdetails.ProductdetailsScree
 import com.example.ecommerce.ui.theme.screens.products.ProductScreen
 import com.example.ecommerce.ui.theme.screens.profile.ProfileScreen
 import com.example.ecommerce.ui.theme.screens.settings.SettingScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.ecommerce.data.AuthViewModel
 
 
 import com.example.ecommerce.ui.theme.screens.splash.SplashScreen
@@ -35,7 +37,8 @@ fun AppNavHost(
         startDestination = startDestination,
         modifier = modifier){
         composable(LOGIN_URL){
-            LoginScreen(navController = navController)
+            val authViewModel: AuthViewModel = viewModel()
+            LoginScreen(navController = navController, authViewModel = TODO())
         }
         composable(SIGNUP_URL){
             SignupScreen(navController = navController)

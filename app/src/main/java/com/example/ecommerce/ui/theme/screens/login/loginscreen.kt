@@ -36,7 +36,8 @@ fun LoginScreenContent(
     password: String,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
-    onLoginClick: () -> Unit
+    onLoginClick: () -> Unit,
+    onGoogleClick: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -116,6 +117,40 @@ fun LoginScreenContent(
                 .fillMaxWidth()
                 .clickable { onLoginClick() }
         )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // Divider with OR
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 40.dp)
+        ) {
+            Divider(modifier = Modifier.weight(1f), color = Color.Gray)
+            Text(" OR ", color = Color.Gray, fontSize = 14.sp)
+            Divider(modifier = Modifier.weight(1f), color = Color.Gray)
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // Google Sign-In
+        OutlinedButton(
+            onClick = onGoogleClick,
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 40.dp),
+            colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White)
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.googlelogo),
+                contentDescription = "Google Sign-In",
+                tint = Color.Unspecified,
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Sign in with Google", color = Color.Black)
+        }
     }
 }
 
@@ -133,6 +168,9 @@ fun LoginScreen(navController: NavHostController, authViewModel: AuthViewModel) 
         onPasswordChange = { password = it },
         onLoginClick = {
             authViewModel.login(email, password)
+        },
+        onGoogleClick = {
+            // authViewModel.signInWithGoogle() // implement inside your AuthViewModel
         }
     )
 }
@@ -146,6 +184,7 @@ fun LoginScreenPreview() {
         password = "",
         onEmailChange = {},
         onPasswordChange = {},
-        onLoginClick = {}
+        onLoginClick = {},
+        onGoogleClick = {}
     )
 }
