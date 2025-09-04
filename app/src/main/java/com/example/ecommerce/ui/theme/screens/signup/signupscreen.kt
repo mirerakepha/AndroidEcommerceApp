@@ -73,7 +73,7 @@ fun SignupScreenContent(
             fontFamily = FontFamily.SansSerif
         )
 
-        Spacer(modifier = Modifier.height(60.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         Text(
             text = "CREATE AN ACCOUNT",
@@ -82,7 +82,7 @@ fun SignupScreenContent(
             fontFamily = FontFamily.SansSerif
         )
 
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         OutlinedTextField(
             value = name,
@@ -93,7 +93,7 @@ fun SignupScreenContent(
             }
         )
 
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(25.dp))
 
         OutlinedTextField(
             value = email,
@@ -105,7 +105,7 @@ fun SignupScreenContent(
             }
         )
 
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(25.dp))
 
         OutlinedTextField(
             value = password,
@@ -117,7 +117,20 @@ fun SignupScreenContent(
             }
         )
 
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(25.dp))
+
+        OutlinedTextField(
+            value = confirmPassword,
+            onValueChange = onPasswordChange,
+            label = { Text("Confirm Password") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            trailingIcon = {
+                Icon(imageVector = Icons.Default.Lock, contentDescription = null, tint = Color.Gray)
+            }
+        )
+
+        Spacer(modifier = Modifier.height(25.dp))
+
 
         Button(
             onClick = onRegisterClick,
