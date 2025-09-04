@@ -26,6 +26,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.ecommerce.R
 import com.example.ecommerce.data.ProfileViewModel
+import com.example.ecommerce.ui.theme.Orange3
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,7 +62,7 @@ fun AccountScreenUI(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(top = 20.dp, start = 30.dp, end = 30.dp),
+                .padding(top = 50.dp, start = 30.dp, end = 30.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Profile Pic
@@ -121,7 +122,7 @@ fun AccountScreenUI(
                 onValueChange = {},
                 label = { Text("Email") },
                 modifier = Modifier.fillMaxWidth(),
-                enabled = false
+                enabled = true
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -141,6 +142,11 @@ fun AccountScreenUI(
                 onClick = onSave,
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !isLoading,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Orange3,
+                    contentColor = Color.White
+                )
+
             ) {
                 Text("Save Profile")
             }

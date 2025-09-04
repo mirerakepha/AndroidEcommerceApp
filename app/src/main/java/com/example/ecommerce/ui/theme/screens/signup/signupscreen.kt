@@ -22,6 +22,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -88,9 +90,7 @@ fun SignupScreenContent(
             value = name,
             onValueChange = onNameChange,
             label = { Text("Username") },
-            trailingIcon = {
-                Icon(imageVector = Icons.Default.Person, contentDescription = null, tint = Color.Gray)
-            }
+            leadingIcon = { Icon(imageVector = Icons.Default.Person, contentDescription = "username") },
         )
 
         Spacer(modifier = Modifier.height(25.dp))
@@ -100,32 +100,51 @@ fun SignupScreenContent(
             onValueChange = onEmailChange,
             label = { Text("Email Address") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            trailingIcon = {
-                Icon(imageVector = Icons.Default.Email, contentDescription = null, tint = Color.Gray)
-            }
+            leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "email") },
         )
 
         Spacer(modifier = Modifier.height(25.dp))
+
+        var passwordVisible by remember { mutableStateOf(false) }
+        val visualTransformation: VisualTransformation =
+            if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
+
 
         OutlinedTextField(
             value = password,
             onValueChange = onPasswordChange,
             label = { Text("Password") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "password") },
+            visualTransformation = visualTransformation,
             trailingIcon = {
-                Icon(imageVector = Icons.Default.Lock, contentDescription = null, tint = Color.Gray)
+                val icon = if (passwordVisible) painterResource(id = R.drawable.pwds)
+                else painterResource(id = R.drawable.pwdh)
+
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(painter = icon, contentDescription = null)
+                }
             }
         )
 
         Spacer(modifier = Modifier.height(25.dp))
+
+
 
         OutlinedTextField(
             value = confirmPassword,
             onValueChange = onPasswordChange,
             label = { Text("Confirm Password") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "confirmPassword") },
+            visualTransformation = visualTransformation,
             trailingIcon = {
-                Icon(imageVector = Icons.Default.Lock, contentDescription = null, tint = Color.Gray)
+                val icon = if (passwordVisible) painterResource(id = R.drawable.pwds)
+                else painterResource(id = R.drawable.pwdh)
+
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(painter = icon, contentDescription = null)
+                }
             }
         )
 

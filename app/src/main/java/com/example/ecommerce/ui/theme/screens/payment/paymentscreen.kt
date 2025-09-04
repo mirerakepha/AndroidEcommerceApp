@@ -2,38 +2,20 @@ package com.example.ecommerce.ui.theme.screens.payment
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,15 +25,16 @@ import androidx.navigation.compose.rememberNavController
 import com.example.ecommerce.R
 import com.example.ecommerce.ui.theme.Orange3
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PaymentScreen(navController: NavController) {
-
+fun PaymentScreen(
+    navController: NavController,
+    totalAmount: Double
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Orange3)
+            .background(color = Color.White)
     ) {
         TopAppBar(
             title = { Text("Payment") },
@@ -64,7 +47,7 @@ fun PaymentScreen(navController: NavController) {
                 }
             },
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Orange3,
+                containerColor = Color.White,
                 titleContentColor = Color.Black,
                 navigationIconContentColor = Color.Black
             )
@@ -74,24 +57,22 @@ fun PaymentScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 16.dp),
-
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             PaymentMethodsRow()
 
             Spacer(modifier = Modifier.height(50.dp))
 
-            Image(
-                painter = painterResource(id = R.drawable.creditcard),
-                contentDescription = "credit card",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .height(200.dp)
-                    .width(350.dp)
-                    .clip(shape = RoundedCornerShape(16.dp))
+
+            CreditCard(
+                cardNumber = "**** **** **** 1234",
+                cardHolder = "Mirera K",
+                expiryDate = "12/25",
+                onClick = { /* Handle card click */ }
             )
 
             Spacer(modifier = Modifier.height(50.dp))
+
 
             Row(
                 modifier = Modifier.width(300.dp),
@@ -99,7 +80,10 @@ fun PaymentScreen(navController: NavController) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(text = "Total")
-                Text(text = "$ 390")
+                Text(
+                    text = "$ ${"%.2f".format(totalAmount)}",
+                    fontWeight = FontWeight.Bold
+                )
             }
 
             Spacer(modifier = Modifier.height(200.dp))
@@ -110,13 +94,82 @@ fun PaymentScreen(navController: NavController) {
                     .height(60.dp)
                     .clip(shape = RoundedCornerShape(20.dp)),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Black,
+                    containerColor = Orange3,
                     contentColor = Color.White
                 ),
                 onClick = { /* Handle confirm order click */ },
-                shape = RectangleShape
+                shape = RoundedCornerShape(20.dp)
             ) {
                 Text(text = "Confirm Order")
+            }
+        }
+    }
+}
+
+@Composable
+fun CreditCard(
+    cardNumber: String,
+    cardHolder: String,
+    expiryDate: String,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .height(200.dp)
+            .width(350.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(
+                brush = Brush.linearGradient(
+                    colors = listOf(Color(0xFFff7e5f), Color(0xFFfeb47b))
+                )
+            )
+            .clickable { onClick() }
+            .padding(20.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "My Bank",
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_chip),
+                    contentDescription = "Chip",
+                    tint = Color.Unspecified,
+                    modifier = Modifier.size(40.dp)
+                )
+            }
+
+            // Card Number
+            Text(
+                text = cardNumber,
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                fontSize = 22.sp,
+                letterSpacing = 2.sp
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column {
+                    Text("Card Holder", color = Color.LightGray, fontSize = 12.sp)
+                    Text(cardHolder, color = Color.Black, fontWeight = FontWeight.Bold)
+                }
+                Column(horizontalAlignment = Alignment.End) {
+                    Text("Expires", color = Color.LightGray, fontSize = 12.sp)
+                    Text(expiryDate, color = Color.Black, fontWeight = FontWeight.Bold)
+                }
             }
         }
     }
@@ -125,7 +178,7 @@ fun PaymentScreen(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 fun PaymentScreenPreview() {
-    PaymentScreen(navController = rememberNavController())
+    PaymentScreen(navController = rememberNavController(), totalAmount = 390.0)
 }
 
 @Composable
@@ -183,8 +236,6 @@ fun PaymentButton(
     logoResId: Int,
     onClick: () -> Unit
 ) {
-
-
     Button(
         onClick = onClick,
         modifier = Modifier
@@ -192,7 +243,7 @@ fun PaymentButton(
             .height(80.dp)
             .padding(4.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color.White,
+            containerColor = Orange3,
             contentColor = Color.Black
         ),
         shape = RoundedCornerShape(8.dp),

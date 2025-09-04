@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -46,6 +47,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.ecommerce.ui.theme.Orange3
 
 
 val CustomPurple = Color(0xFF673AB7)
@@ -63,13 +65,14 @@ fun SettingScreen(navController: NavController) {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = "Back",
+                            tint = Color.Black
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = CustomPurple,
-                    titleContentColor = CustomOrange,
+                    containerColor = Color.White,
+                    titleContentColor = Color.Black,
                     navigationIconContentColor = Color.White
                 )
             )
@@ -81,7 +84,7 @@ fun SettingScreen(navController: NavController) {
                     .fillMaxSize()
                     .fillMaxHeight()
                     .padding(paddingValues)
-                    .background(color = Color.Black)
+                    .background(color = Color.White)
                     .padding(horizontal = 15.dp), //
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -93,10 +96,10 @@ fun SettingScreen(navController: NavController) {
                         .fillMaxWidth() // Take full width within horizontal padding
                         .height(240.dp)
                         .clip(RoundedCornerShape(16.dp))
-                        .background(color = Color.LightGray)
+                        .background(color = Orange3)
                         .border(
                             width = 1.dp,
-                            color = Color.Magenta,
+                            color = Orange3,
                             shape = RoundedCornerShape(15.dp)
                         )
                 ) {
@@ -155,6 +158,10 @@ fun SettingScreen(navController: NavController) {
                                 .height(60.dp)
                                 .border(width = 0.dp, color = Color.Black),
                             shape = RectangleShape,
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Orange3,
+                                contentColor = Color.White
+                            ),
                             onClick = { /**/ }
                         ) {
                             var isDarkModeEnabled by remember { mutableStateOf(false) }
@@ -182,7 +189,11 @@ fun SettingScreen(navController: NavController) {
                                 .height(60.dp)
                                 .border(width = 0.dp, color = Color.Black),
                             onClick = { /* Handle logout */ },
-                            shape = RectangleShape
+                            shape = RectangleShape,
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Orange3,
+                                contentColor = Color.White
+                            )
                         ) {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
@@ -218,7 +229,11 @@ fun SettingsButton(
             .height(60.dp)
             .then(if (showBorder) Modifier.border(width = 1.dp, color = Color.Black) else Modifier),
         onClick = onClick,
-        shape = RectangleShape // Rectangular shape for all buttons
+        shape = RectangleShape, // Rectangular shape for all buttons
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Orange3,
+            contentColor = Color.White
+        )
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
