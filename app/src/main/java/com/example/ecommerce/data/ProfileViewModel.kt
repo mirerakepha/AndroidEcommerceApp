@@ -29,8 +29,8 @@ class ProfileViewModel : ViewModel() {
     val bio: StateFlow<String> = _bio.asStateFlow()
 
     // Profile Image
-    private val _profileImageUrl = MutableStateFlow<String?>(null)
-    val profileImageUrl: StateFlow<String?> = _profileImageUrl.asStateFlow()
+    private val _profileImageUrl = MutableStateFlow<Any?>(null)
+    val profileImageUrl: StateFlow<Any?> = _profileImageUrl.asStateFlow()
 
     // UI State
     var isLoading by mutableStateOf(false)
@@ -64,7 +64,7 @@ class ProfileViewModel : ViewModel() {
                     .await()
                 _profileImageUrl.value = url.toString()
             } catch (e: Exception) {
-                // No existing image - this is normal for first-time users
+                // No existing image for first-time users
             } finally {
                 isLoading = false
             }
@@ -74,7 +74,18 @@ class ProfileViewModel : ViewModel() {
     fun updateName(value: String) { _name.value = value }
     fun updateBio(value: String) { _bio.value = value }
 
-    fun uploadProfileImage(uri: Uri) {
+    /*
+     * Called from UI when a new image is picked.
+     * Shows it immediately, then uploads to Firebase Storage.
+     */
+    fun updateProfileImage(uri: Uri) {
+        // Show the picked image immediately
+        _profileImageUrl.value = uri
+        // Upload to Firebase in background
+        uploadProfileImage(uri)
+    }
+
+    private fun uploadProfileImage(uri: Uri) {
         viewModelScope.launch {
             isLoading = true
             errorMessage = null

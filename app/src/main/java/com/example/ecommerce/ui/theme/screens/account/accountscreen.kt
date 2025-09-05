@@ -51,7 +51,8 @@ fun AccountScreenUI(
                     IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = "Back",
+                            tint = Color.Black
                         )
                     }
                 }
@@ -83,7 +84,6 @@ fun AccountScreenUI(
                     contentScale = ContentScale.Crop
                 )
 
-
                 IconButton(
                     onClick = { onChangeImage?.invoke() },
                     modifier = Modifier.size(40.dp)
@@ -106,7 +106,6 @@ fun AccountScreenUI(
             }
 
             Spacer(modifier = Modifier.height(24.dp))
-
 
             OutlinedTextField(
                 value = name,
@@ -146,7 +145,6 @@ fun AccountScreenUI(
                     containerColor = Orange3,
                     contentColor = Color.White
                 )
-
             ) {
                 Text("Save Profile")
             }
@@ -173,10 +171,11 @@ fun AccountScreen(navController: NavController, viewModel: ProfileViewModel = vi
     val profileImageUrl by viewModel.profileImageUrl.collectAsState()
 
     val imagePicker = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        uri?.let { viewModel.uploadProfileImage(it) }
-    }
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri: Uri? ->
+            uri?.let { viewModel.updateProfileImage(it) }
+        }
+    )
 
     AccountScreenUI(
         name = name,

@@ -22,6 +22,7 @@ import com.example.ecommerce.ui.theme.screens.profile.ProfileScreen
 import com.example.ecommerce.ui.theme.screens.settings.SettingScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ecommerce.data.AuthViewModel
+import com.example.ecommerce.ui.theme.screens.auth.OtpScreen
 
 
 import com.example.ecommerce.ui.theme.screens.splash.SplashScreen
@@ -56,10 +57,21 @@ fun AppNavHost(
             OrderconfirmationScreen(navController = navController)
         }
         composable(PAYMENT_URL){
-            PaymentScreen(navController = navController)
+            PaymentScreen(navController = navController, totalAmount = 390.0)
         }
         composable(PROFILE_URL){
             ProfileScreen(navController = navController)
+        }
+        composable(OTP_URL){
+            OtpScreen(
+                navController = navController,
+                onVerifyOtp = { otp ->
+                    // Handle OTP verification,
+                },
+                onResendOtp = {
+                    // Handle resend,
+                }
+            )
         }
         composable(CART_URL){
             CartScreen(navController = navController)

@@ -1,6 +1,7 @@
 package com.example.ecommerce.ui.theme.screens.login
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -45,7 +46,18 @@ fun LoginScreenContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(5.dp))
+
+        Image(
+            painter = painterResource(id = R.drawable.shopping),
+            contentDescription = null,
+            modifier = Modifier.size(100.dp)
+        )
+
+
+
+        Spacer(modifier = Modifier.height(20.dp))
+
 
         Text(
             text = "Welcome Back",
