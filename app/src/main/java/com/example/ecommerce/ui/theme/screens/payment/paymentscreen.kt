@@ -66,7 +66,7 @@ fun PaymentScreen(
 
             CreditCard(
                 cardNumber = "**** **** **** 1234",
-                cardHolder = "Mirera K",
+                cardHolder = "Jack of all Trades",
                 expiryDate = "12/25",
                 onClick = { /* Handle card click */ }
             )
@@ -136,7 +136,7 @@ fun CreditCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "My Bank",
+                    text = "Bank Card",
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp

@@ -29,6 +29,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.ecommerce.R
 import com.example.ecommerce.data.AuthViewModel
+import com.example.ecommerce.navigation.PHONELOGIN_URL
 import com.example.ecommerce.ui.theme.Orange3
 
 
@@ -39,7 +40,9 @@ fun LoginScreenContent(
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onLoginClick: () -> Unit,
-    onGoogleClick: () -> Unit
+    onGoogleClick: () -> Unit,
+    onOtpClick: () -> Unit
+
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -165,6 +168,27 @@ fun LoginScreenContent(
             Spacer(modifier = Modifier.width(8.dp))
             Text("Sign in with Google", color = Color.Black)
         }
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // OTP Sign-In
+        OutlinedButton(
+            onClick = { PHONELOGIN_URL },
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 40.dp),
+            colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White)
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.pwds), 
+                contentDescription = "OTP Sign-In",
+                tint = Color.Unspecified,
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Sign in with OTP", color = Color.Black)
+        }
     }
 }
 
@@ -185,8 +209,12 @@ fun LoginScreen(navController: NavHostController, authViewModel: AuthViewModel) 
         },
         onGoogleClick = {
             // authViewModel.signInWithGoogle() // implement inside your AuthViewModel
+        },
+        onOtpClick = {
+            navController.navigate("phonelogin")
         }
     )
+
 }
 
 
@@ -199,6 +227,8 @@ fun LoginScreenPreview() {
         onEmailChange = {},
         onPasswordChange = {},
         onLoginClick = {},
-        onGoogleClick = {}
+        onGoogleClick = {},
+        onOtpClick = {}
+        
     )
 }

@@ -23,6 +23,7 @@ import com.example.ecommerce.ui.theme.screens.settings.SettingScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ecommerce.data.AuthViewModel
 import com.example.ecommerce.ui.theme.screens.auth.OtpScreen
+import com.example.ecommerce.ui.theme.screens.auth.PhoneLoginScreen
 
 
 import com.example.ecommerce.ui.theme.screens.splash.SplashScreen
@@ -93,6 +94,14 @@ fun AppNavHost(
         }
         composable(NOTIFICATIONS_URL){
             NotificationScreen(navController = navController)
+        }
+        composable(PHONELOGIN_URL){
+            PhoneLoginScreen(
+                navController = navController,
+                onSendOtp = { phoneOrEmail ->
+                    // Call Firebase / API to send OTP
+                }
+            )
         }
 
     }
