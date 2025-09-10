@@ -53,9 +53,9 @@ fun NotificationScreen(navController: NavController) {
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Orange3,
-                    titleContentColor = Color.White,
-                    navigationIconContentColor = Color.White
+                    containerColor = Color.White,
+                    titleContentColor = Orange3,
+                    navigationIconContentColor = Orange3
                 )
             )
         },
@@ -64,15 +64,15 @@ fun NotificationScreen(navController: NavController) {
                 modifier = Modifier
                     .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                     .clip(RoundedCornerShape(24.dp))
-                    .background(Color.White)
+                    .background(Orange3)
                     .shadow(8.dp, RoundedCornerShape(24.dp))
             ) {
                 NavigationBar(
                     modifier = Modifier
                         .height(64.dp)
-                        .background(Color.White),
+                        .background(Orange3),
                     tonalElevation = 0.dp,
-                    containerColor = Color.White
+                    containerColor = Orange3
                 ) {
                     bottomNavItems.forEachIndexed { index, bottomNavItem ->
                         NavigationBarItem(
@@ -102,7 +102,8 @@ fun NotificationScreen(navController: NavController) {
                                         else
                                             bottomNavItem.unselectedIcon,
                                         contentDescription = bottomNavItem.title,
-                                        modifier = Modifier.size(20.dp)
+                                        modifier = Modifier.size(20.dp),
+                                        tint = Color.White
                                     )
                                 }
                             },
@@ -111,7 +112,8 @@ fun NotificationScreen(navController: NavController) {
                                     text = bottomNavItem.title,
                                     fontSize = 10.sp,
                                     maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
+                                    overflow = TextOverflow.Ellipsis,
+                                    color = Color.White
                                 )
                             },
                             alwaysShowLabel = true
@@ -125,6 +127,7 @@ fun NotificationScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(color = Color.White)
                 .padding(innerPadding)
                 .padding(bottom = 70.dp), // Space for bottom bar
             horizontalAlignment = Alignment.CenterHorizontally
@@ -134,7 +137,7 @@ fun NotificationScreen(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(305.dp)
-                    .clip(shape = RectangleShape)
+                    .clip(shape = RoundedCornerShape(10.dp))
             ) {
                 Column(modifier = Modifier.fillMaxSize()) {
 
@@ -171,7 +174,8 @@ fun NotificationScreen(navController: NavController) {
                                         Icon(
                                             imageVector = Icons.Default.KeyboardArrowRight,
                                             contentDescription = "",
-                                            modifier = Modifier.size(24.dp)
+                                            modifier = Modifier.size(24.dp),
+                                            tint = Color.Black
                                         )
                                     }
                                 } else {
@@ -195,6 +199,7 @@ fun NotificationScreen(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(100.dp)
+                    .clip(shape = RoundedCornerShape(10.dp))
                     .background(color = Color.LightGray)
             ) {
                 Column {

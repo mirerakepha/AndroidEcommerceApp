@@ -151,6 +151,18 @@ fun AccountScreenUI(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            Button(
+                onClick = onSave,
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !isLoading,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Blue,
+                    contentColor = Color.White
+                )
+            ) {
+                Text("Start a store")
+            }
+
             // Loading/Error States
             when {
                 isLoading -> CircularProgressIndicator()
@@ -176,6 +188,7 @@ fun AccountScreen(navController: NavController, viewModel: ProfileViewModel = vi
             uri?.let { viewModel.updateProfileImage(it) }
         }
     )
+
 
     AccountScreenUI(
         name = name,

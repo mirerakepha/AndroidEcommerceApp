@@ -86,6 +86,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 
 import com.example.ecommerce.navigation.CART_URL
@@ -115,16 +116,20 @@ fun HomeScreen(navController:NavHostController){
                     .background(Color.DarkGray)
                     .shadow(8.dp, RoundedCornerShape(24.dp))
             ) {
+
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentRoute = navBackStackEntry?.destination?.route
+
                 NavigationBar(
                     modifier = Modifier
                         .height(64.dp)
                         .background(Color.DarkGray),
                     tonalElevation = 0.dp,
-                    containerColor = Color.White
+                    containerColor = Orange3
                 ) {
                     bottomNavItems.forEachIndexed { index, bottomNavItem ->
                         NavigationBarItem(
-                            selected = index == selected,
+                            selected = currentRoute == "home",
                             onClick = {
                                 selected = index
                                 navController.navigate(bottomNavItem.route)
@@ -150,7 +155,8 @@ fun HomeScreen(navController:NavHostController){
                                         else
                                             bottomNavItem.unselectedIcon,
                                         contentDescription = bottomNavItem.title,
-                                        modifier = Modifier.size(20.dp)
+                                        modifier = Modifier.size(20.dp),
+                                        tint = Color.White
                                     )
                                 }
                             },
@@ -159,7 +165,8 @@ fun HomeScreen(navController:NavHostController){
                                     text = bottomNavItem.title,
                                     fontSize = 10.sp,
                                     maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
+                                    overflow = TextOverflow.Ellipsis,
+                                    color = Color.White
                                 )
                             },
                             alwaysShowLabel = true
@@ -186,13 +193,13 @@ fun HomeScreen(navController:NavHostController){
                 navigationIcon = {
                     IconButton(onClick = { SETTINGS_URL }) {
                         Icon(imageVector = Icons.Default.Settings,
-                            contentDescription = "settings")
+                            contentDescription = "settings", tint = Orange3)
                     }
                 },
                 actions = {
                     IconButton(onClick = { NOTIFICATIONS_URL }) {
                         Icon(imageVector = Icons.Default.Notifications,
-                            contentDescription = "notification icon")
+                            contentDescription = "notification icon", tint = Orange3)
                     }
                 })
         },
