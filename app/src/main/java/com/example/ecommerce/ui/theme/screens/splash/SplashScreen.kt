@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,7 +22,6 @@ import com.example.ecommerce.navigation.LOGIN_URL
 import com.example.ecommerce.navigation.HOME_URL
 import com.example.ecommerce.ui.theme.Orange3
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
@@ -31,7 +29,7 @@ fun SplashScreen(
     navController: NavController,
     isUserLoggedIn: () -> Boolean = { false } // pass in your auth check here
 ) {
-    val coroutine = rememberCoroutineScope()
+
 
     LaunchedEffect(Unit) {
         delay(2000)
