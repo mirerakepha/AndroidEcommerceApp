@@ -29,6 +29,7 @@ import androidx.navigation.NavHostController
 import com.example.ecommerce.R
 import com.example.ecommerce.data.AuthViewModel
 import com.example.ecommerce.navigation.PHONELOGIN_URL
+import com.example.ecommerce.navigation.SIGNUP_URL
 import com.example.ecommerce.ui.theme.Orange3
 
 
@@ -125,13 +126,13 @@ fun LoginScreenContent(
         Spacer(modifier = Modifier.height(10.dp))
         
         Text(
-            text = "Dont have an account? Sign up",
+            text = "Don't have an account? Sign up",
             fontSize = 15.sp,
             textAlign = TextAlign.Center,
             color = Color.Blue,
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onLoginClick() }
+                .clickable { SIGNUP_URL }
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -210,7 +211,7 @@ fun LoginScreen(navController: NavHostController, authViewModel: AuthViewModel) 
             // authViewModel.signInWithGoogle() // implement inside your AuthViewModel
         },
         onOtpClick = {
-            navController.navigate("phonelogin")
+            navController.navigate("phone_login")
         }
     )
 

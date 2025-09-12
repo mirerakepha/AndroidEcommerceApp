@@ -36,6 +36,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.ecommerce.R
 import com.example.ecommerce.data.CartViewModel
 import com.example.ecommerce.models.CartItem
+import com.example.ecommerce.navigation.ORDERCONFIRMATION_URL
 import com.example.ecommerce.ui.theme.Orange3
 
 @Composable
@@ -156,7 +157,7 @@ fun ProductScreen(
                     .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                listOf("S", "M", "L", "XL").forEach { size ->
+                listOf("S", "M", "L", "XL", "4XL").forEach { size ->
                     Box(
                         modifier = Modifier
                             .size(45.dp)
@@ -203,6 +204,8 @@ fun ProductScreen(
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
+
+
             OutlinedButton(
                 onClick = {
                     cartViewModel.addToCart(product)
@@ -211,7 +214,7 @@ fun ProductScreen(
                 modifier = Modifier
                     .weight(1f)
                     .height(50.dp),
-                shape = RoundedCornerShape(10.dp)
+                shape = RoundedCornerShape(30.dp)
             ) {
                 Text("Add to Cart", fontSize = 16.sp)
             }
@@ -219,11 +222,11 @@ fun ProductScreen(
             Spacer(modifier = Modifier.width(16.dp))
 
             Button(
-                onClick = { /* TODO: Buy now logic */ },
+                onClick = { ORDERCONFIRMATION_URL },
                 modifier = Modifier
                     .weight(1f)
                     .height(50.dp),
-                shape = RoundedCornerShape(10.dp),
+                shape = RoundedCornerShape(30.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Orange3)
             ) {
                 Text("Buy Now", fontSize = 16.sp, fontWeight = FontWeight.Bold)

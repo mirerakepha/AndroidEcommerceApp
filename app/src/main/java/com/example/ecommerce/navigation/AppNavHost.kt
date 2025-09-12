@@ -39,7 +39,7 @@ fun AppNavHost(
         startDestination = startDestination,
         modifier = modifier){
         composable(LOGIN_URL){
-            val authViewModel: AuthViewModel = viewModel()
+
             LoginScreen(navController = navController, authViewModel = TODO())
         }
         composable(SIGNUP_URL){
