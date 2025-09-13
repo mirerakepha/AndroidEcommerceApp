@@ -206,7 +206,13 @@ fun LoginScreen(navController: NavHostController, authViewModel: AuthViewModel) 
         onEmailChange = { email = it },
         onPasswordChange = { password = it },
         onLoginClick = {
-            authViewModel.login(email, password)
+            authViewModel.login(email, password) { success, message ->
+                if (success) {
+                    navController.navigate("home_screen")
+                } else {
+                    println("Login failed: $message")
+                }
+            }
         },
         onGoogleClick = {
             // authViewModel.signInWithGoogle() // implement inside your AuthViewModel

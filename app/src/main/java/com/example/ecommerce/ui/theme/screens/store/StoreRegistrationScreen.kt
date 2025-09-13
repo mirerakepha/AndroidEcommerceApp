@@ -1,6 +1,5 @@
 package com.example.ecommerce.screens.store
 
-import android.R.string
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,7 +8,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
@@ -18,7 +16,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -29,12 +26,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.ecommerce.R
 import com.example.ecommerce.data.AuthViewModel
+import com.example.ecommerce.navigation.DASHBOARD_URL
 import com.example.ecommerce.navigation.STORELOGIN_URL
 import com.example.ecommerce.ui.theme.Orange3
-
 
 @Composable
 fun StoreRegistrationScreenContent(
@@ -50,11 +48,9 @@ fun StoreRegistrationScreenContent(
     onLoginClick: () -> Unit,
     onGoogleClick: () -> Unit
 ) {
-    // Track password visibility for both fields
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
 
-    // Validate if passwords match
     val passwordsMatch = password == confirmPassword && confirmPassword.isNotEmpty()
     val passwordError = if (confirmPassword.isNotEmpty() && !passwordsMatch) "Passwords do not match" else null
 
@@ -88,7 +84,7 @@ fun StoreRegistrationScreenContent(
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = "START A STORE ",
+            text = "START A STORE",
             fontSize = 25.sp,
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily.SansSerif
@@ -99,12 +95,12 @@ fun StoreRegistrationScreenContent(
         OutlinedTextField(
             value = name,
             onValueChange = onNameChange,
-            label = { Text("StoreName") },
-            leadingIcon = { Icon(imageVector = Icons.Default.Person, contentDescription = "username") },
+            label = { Text("Store Name") },
+            leadingIcon = { Icon(imageVector = Icons.Default.Person, contentDescription = "storeName") },
             modifier = Modifier.fillMaxWidth(0.8f)
         )
 
-        Spacer(modifier = Modifier.height(25.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         OutlinedTextField(
             value = email,
@@ -115,9 +111,8 @@ fun StoreRegistrationScreenContent(
             modifier = Modifier.fillMaxWidth(0.8f)
         )
 
-        Spacer(modifier = Modifier.height(25.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
-        // Password field
         OutlinedTextField(
             value = password,
             onValueChange = onPasswordChange,
@@ -129,16 +124,14 @@ fun StoreRegistrationScreenContent(
             trailingIcon = {
                 val icon = if (passwordVisible) painterResource(id = R.drawable.pwds)
                 else painterResource(id = R.drawable.pwdh)
-
                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
                     Icon(painter = icon, contentDescription = null)
                 }
             }
         )
 
-        Spacer(modifier = Modifier.height(25.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
-        // Confirm Password field with validation
         OutlinedTextField(
             value = confirmPassword,
             onValueChange = onConfirmPasswordChange,
@@ -150,7 +143,6 @@ fun StoreRegistrationScreenContent(
             trailingIcon = {
                 val icon = if (confirmPasswordVisible) painterResource(id = R.drawable.pwds)
                 else painterResource(id = R.drawable.pwdh)
-
                 IconButton(onClick = { confirmPasswordVisible = !confirmPasswordVisible }) {
                     Icon(painter = icon, contentDescription = null)
                 }
@@ -158,23 +150,18 @@ fun StoreRegistrationScreenContent(
             isError = passwordError != null,
             supportingText = {
                 if (passwordError != null) {
-                    Text(
-                        text = passwordError,
-                        color = Color.Red,
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                    Text(text = passwordError, color = Color.Red, modifier = Modifier.fillMaxWidth())
                 }
             }
         )
 
-        Spacer(modifier = Modifier.height(25.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         Button(
             onClick = onRegisterClick,
             colors = ButtonDefaults.buttonColors(Orange3),
             shape = RoundedCornerShape(15.dp),
-            modifier = Modifier
-                .fillMaxWidth(0.8f),
+            modifier = Modifier.fillMaxWidth(0.8f),
             enabled = passwordsMatch && name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()
         ) {
             Text("Register")
@@ -185,8 +172,8 @@ fun StoreRegistrationScreenContent(
         Text(
             text = "Already have a store? Login",
             fontSize = 15.sp,
-            textAlign = TextAlign.Center,
             color = Color.Blue,
+            textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onLoginClick() }
@@ -194,7 +181,6 @@ fun StoreRegistrationScreenContent(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Divider with OR
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -208,7 +194,6 @@ fun StoreRegistrationScreenContent(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Google Sign-In
         OutlinedButton(
             onClick = onGoogleClick,
             shape = RoundedCornerShape(10.dp),
@@ -230,7 +215,7 @@ fun StoreRegistrationScreenContent(
 }
 
 @Composable
-fun StoreRegistrationScreen(navController: NavHostController, authViewModel: AuthViewModel) {
+fun StoreRegistrationScreen(navController: NavHostController, authViewModel: AuthViewModel = viewModel()) {
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -247,23 +232,20 @@ fun StoreRegistrationScreen(navController: NavHostController, authViewModel: Aut
         onConfirmPasswordChange = { confirmPassword = it },
         onRegisterClick = {
             if (password == confirmPassword) {
-                authViewModel.store_registration(name, email, password, confirmPassword)
+                authViewModel.storeRegistration(name, email, password, confirmPassword) { success, message ->
+                    if (success) {
+                        navController.navigate(DASHBOARD_URL)
+                    } else {
+                        println("Store registration failed: $message")
+                    }
+                }
+            } else {
+                println("Passwords do not match")
             }
         },
-        onLoginClick = {
-            navController.navigate(STORELOGIN_URL)
-        },
-        onGoogleClick = {
-            // authViewModel.signInWithGoogle() // implement inside your AuthViewModel
-        }
+        onLoginClick = { navController.navigate(STORELOGIN_URL) },
+        onGoogleClick = { /* TODO: Google Sign-in */ }
     )
-}
-
-@Composable
-fun StoreRegistrationScreen(navController: NavHostController) {
-    val context = LocalContext.current
-    val vm = remember(navController, context) { AuthViewModel(navController, context) }
-    StoreRegistrationScreen(navController = navController, authViewModel = vm)
 }
 
 @Preview(showBackground = true)

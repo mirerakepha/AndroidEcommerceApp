@@ -1,6 +1,5 @@
 package com.example.ecommerce.screens.signup
 
-import android.R.string
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,7 +8,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
@@ -32,9 +30,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.ecommerce.R
 import com.example.ecommerce.data.AuthViewModel
+import com.example.ecommerce.navigation.HOME_URL
 import com.example.ecommerce.navigation.LOGIN_URL
 import com.example.ecommerce.ui.theme.Orange3
-
 
 @Composable
 fun SignupScreenContent(
@@ -50,11 +48,9 @@ fun SignupScreenContent(
     onLoginClick: () -> Unit,
     onGoogleClick: () -> Unit
 ) {
-    // Track password visibility for both fields
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
 
-    // Validate if passwords match
     val passwordsMatch = password == confirmPassword && confirmPassword.isNotEmpty()
     val passwordError = if (confirmPassword.isNotEmpty() && !passwordsMatch) "Passwords do not match" else null
 
@@ -88,7 +84,7 @@ fun SignupScreenContent(
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = "CREATE AN ACCOUNT ",
+            text = "CREATE AN ACCOUNT",
             fontSize = 25.sp,
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily.SansSerif
@@ -96,6 +92,7 @@ fun SignupScreenContent(
 
         Spacer(modifier = Modifier.height(20.dp))
 
+        // Name
         OutlinedTextField(
             value = name,
             onValueChange = onNameChange,
@@ -106,6 +103,7 @@ fun SignupScreenContent(
 
         Spacer(modifier = Modifier.height(25.dp))
 
+        // Email
         OutlinedTextField(
             value = email,
             onValueChange = onEmailChange,
@@ -117,7 +115,7 @@ fun SignupScreenContent(
 
         Spacer(modifier = Modifier.height(25.dp))
 
-        // Password field
+        // Password
         OutlinedTextField(
             value = password,
             onValueChange = onPasswordChange,
@@ -138,7 +136,7 @@ fun SignupScreenContent(
 
         Spacer(modifier = Modifier.height(25.dp))
 
-        // Confirm Password field with validation
+        // Confirm Password
         OutlinedTextField(
             value = confirmPassword,
             onValueChange = onConfirmPasswordChange,
@@ -173,8 +171,7 @@ fun SignupScreenContent(
             onClick = onRegisterClick,
             colors = ButtonDefaults.buttonColors(Orange3),
             shape = RoundedCornerShape(15.dp),
-            modifier = Modifier
-                .fillMaxWidth(0.8f),
+            modifier = Modifier.fillMaxWidth(0.8f),
             enabled = passwordsMatch && name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()
         ) {
             Text("Register")
@@ -189,7 +186,7 @@ fun SignupScreenContent(
             color = Color.Blue,
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { LOGIN_URL }
+                .clickable { onLoginClick() }
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -212,9 +209,7 @@ fun SignupScreenContent(
         OutlinedButton(
             onClick = onGoogleClick,
             shape = RoundedCornerShape(10.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 40.dp),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp),
             colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White)
         ) {
             Icon(
@@ -246,24 +241,23 @@ fun SignupScreen(navController: NavHostController, authViewModel: AuthViewModel)
         onPasswordChange = { password = it },
         onConfirmPasswordChange = { confirmPassword = it },
         onRegisterClick = {
-            if (password == confirmPassword) {
-                authViewModel.signup(name, email, password, confirmPassword)
+            authViewModel.signup(name, email, password, confirmPassword) { success, message ->
+                if (success) {
+                    navController.navigate(HOME_URL)
+                } else {
+                    println("Signup failed: $message")
+                }
             }
         },
-        onLoginClick = {
-            navController.navigate(LOGIN_URL)
-        },
-        onGoogleClick = {
-            // authViewModel.signInWithGoogle() // implement inside your AuthViewModel
-        }
+        onLoginClick = { navController.navigate(LOGIN_URL) },
+        onGoogleClick = { /* implement Google Sign-In here */ }
     )
 }
 
 @Composable
 fun SignupScreen(navController: NavHostController) {
-    val context = LocalContext.current
-    val vm = remember(navController, context) { AuthViewModel(navController, context) }
-    SignupScreen(navController = navController, authViewModel = vm)
+    val authViewModel = remember { AuthViewModel() } // default constructor
+    SignupScreen(navController = navController, authViewModel = authViewModel)
 }
 
 @Preview(showBackground = true)

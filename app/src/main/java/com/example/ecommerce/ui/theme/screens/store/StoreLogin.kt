@@ -207,7 +207,13 @@ fun StoreLoginScreen(navController: NavHostController, authViewModel: AuthViewMo
         onEmailChange = { email = it },
         onPasswordChange = { password = it },
         onLoginClick = {
-            authViewModel.store_login(email, password)
+            authViewModel.storeLogin(email, password) { success, message ->
+                if (success) {
+                    navController.navigate("dashboard")
+                } else {
+                    println("Login failed: $message")
+                }
+            }
         },
         onGoogleClick = {
             // authViewModel.signInWithGoogle() // implement inside your AuthViewModel

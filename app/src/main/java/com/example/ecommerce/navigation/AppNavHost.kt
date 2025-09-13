@@ -22,6 +22,7 @@ import com.example.ecommerce.ui.theme.screens.profile.ProfileScreen
 import com.example.ecommerce.ui.theme.screens.settings.SettingScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ecommerce.data.AuthViewModel
+import com.example.ecommerce.screens.store.StoreRegistrationScreen
 import com.example.ecommerce.ui.theme.screens.auth.OtpScreen
 import com.example.ecommerce.ui.theme.screens.auth.PhoneLoginScreen
 
@@ -30,7 +31,6 @@ import com.example.ecommerce.ui.theme.screens.splash.SplashScreen
 import com.example.ecommerce.ui.theme.screens.store.AddProductScreen
 import com.example.ecommerce.ui.theme.screens.store.DashboardScreen
 import com.example.ecommerce.ui.theme.screens.store.StoreLoginScreen
-import com.example.ecommerce.ui.theme.screens.store.StoreRegistrationScreen
 
 @Composable
 fun AppNavHost(
@@ -123,7 +123,7 @@ fun AppNavHost(
             AddProductScreen(navController = navController)
         }
         composable(STORELOGIN_URL){
-            StoreLoginScreen(navController = navController)
+            StoreLoginScreen(navController = navController, authViewModel = TODO())
         }
 
     }
