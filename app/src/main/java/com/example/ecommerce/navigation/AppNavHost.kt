@@ -13,7 +13,7 @@ import com.example.ecommerce.ui.theme.screens.checkout.CheckoutScreen
 import com.example.ecommerce.ui.theme.screens.home.HomeScreen
 import com.example.ecommerce.ui.theme.screens.login.LoginScreen
 import com.example.ecommerce.ui.theme.screens.notifications.NotificationScreen
-import com.example.ecommerce.ui.theme.screens.orderconfirmation.OrderconfirmationScreen
+import com.example.ecommerce.ui.theme.screens.orderconfirmation.OrderConfirmationScreen
 import com.example.ecommerce.ui.theme.screens.orderdetails.OrderdetailsScreen
 import com.example.ecommerce.ui.theme.screens.payment.PaymentScreen
 import com.example.ecommerce.ui.theme.screens.productdetails.ProductdetailsScreen
@@ -27,6 +27,10 @@ import com.example.ecommerce.ui.theme.screens.auth.PhoneLoginScreen
 
 
 import com.example.ecommerce.ui.theme.screens.splash.SplashScreen
+import com.example.ecommerce.ui.theme.screens.store.AddProductScreen
+import com.example.ecommerce.ui.theme.screens.store.DashboardScreen
+import com.example.ecommerce.ui.theme.screens.store.StoreLoginScreen
+import com.example.ecommerce.ui.theme.screens.store.StoreRegistrationScreen
 
 @Composable
 fun AppNavHost(
@@ -55,7 +59,7 @@ fun AppNavHost(
             OrderdetailsScreen(navController = navController)
         }
         composable(ORDERCONFIRMATION_URL){
-            OrderconfirmationScreen(navController = navController)
+            OrderConfirmationScreen(navController = navController)
         }
         composable(PAYMENT_URL){
             PaymentScreen(navController = navController, totalAmount = 390.0)
@@ -102,6 +106,24 @@ fun AppNavHost(
                     // Call Firebase / API to send OTP
                 }
             )
+        }
+        composable(DASHBOARD_URL){
+            DashboardScreen(
+                navController = navController,
+                storeName = "My Store",
+                onAddProductClick = {
+                    navController.navigate(ADDPRODUCT_URL)
+                }
+            )
+        }
+        composable(STOREREGISTRATION_URL){
+            StoreRegistrationScreen(navController = navController)
+        }
+        composable(ADDPRODUCT_URL){
+            AddProductScreen(navController = navController)
+        }
+        composable(STORELOGIN_URL){
+            StoreLoginScreen(navController = navController)
         }
 
     }

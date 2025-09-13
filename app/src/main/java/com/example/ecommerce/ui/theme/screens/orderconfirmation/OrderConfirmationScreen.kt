@@ -31,6 +31,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -44,11 +45,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ecommerce.R
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.ecommerce.ui.theme.Orange3
@@ -81,17 +84,44 @@ fun OrderConfirmationScreen(navController: NavController) {
             )
         },
         bottomBar = {
-            Button(
-                onClick = { /* Handle order placement */ },
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
-                    .height(50.dp),
-                colors = ButtonDefaults.buttonColors(Orange3)
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("KSh 328 - Place Order", color = Color.White, fontSize = 16.sp)
+
+                IconButton(
+                    onClick = { /* Handle icon click */ },
+                    modifier = Modifier.size(50.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.store),
+                        contentDescription = "Cart",
+                        tint = Orange3,
+                        modifier = Modifier.size(28.dp)
+                    )
+                }
+
+
+                Button(
+                    onClick = { /* Handle order placement */ },
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(50.dp)
+                        .padding(start = 12.dp),
+                    colors = ButtonDefaults.buttonColors(Orange3)
+                ) {
+                    Text(
+                        text = "KSh 328 - Place Order",
+                        color = Color.White,
+                        fontSize = 16.sp
+                    )
+                }
             }
         }
+
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -101,6 +131,7 @@ fun OrderConfirmationScreen(navController: NavController) {
                 .verticalScroll(rememberScrollState())
         ) {
             // Address Section
+
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -118,7 +149,7 @@ fun OrderConfirmationScreen(navController: NavController) {
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            "Kepha Mirera 19387373",
+                            "Absolute Batman 19387373",
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp
                         )
@@ -201,7 +232,7 @@ fun OrderConfirmationScreen(navController: NavController) {
                     "Via OKAVA KENYA LTD",
                     "+254 | Enter your M-PESA No.",
                     "Ask a friend to help pay",
-                    "More Payment Options ✓"
+                    "More Payment Options "
                 ).forEach { option ->
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(
@@ -238,7 +269,7 @@ fun OrderConfirmationScreen(navController: NavController) {
                 }
 
                 Text(
-                    "Ships from Spokimaur/Molongo, arrives in Dedan Kimanthi within 3-9 workdays.",
+                    "Ships from Stark Industries, arrives in Gotham within 3-9 workdays.",
                     fontSize = 12.sp,
                     color = Color.Gray,
                     modifier = Modifier.padding(start = 28.dp, top = 4.dp)
