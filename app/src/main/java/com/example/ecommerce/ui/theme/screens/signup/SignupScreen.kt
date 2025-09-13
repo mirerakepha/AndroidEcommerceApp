@@ -1,5 +1,6 @@
 package com.example.ecommerce.screens.signup
 
+import android.R.string
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -8,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
@@ -29,9 +31,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.ecommerce.R
-import com.example.ecommerce.navigation.LOGIN_URL
 import com.example.ecommerce.data.AuthViewModel
+import com.example.ecommerce.navigation.LOGIN_URL
 import com.example.ecommerce.ui.theme.Orange3
+
 
 @Composable
 fun SignupScreenContent(
@@ -47,6 +50,14 @@ fun SignupScreenContent(
     onLoginClick: () -> Unit,
     onGoogleClick: () -> Unit
 ) {
+    // Track password visibility for both fields
+    var passwordVisible by remember { mutableStateOf(false) }
+    var confirmPasswordVisible by remember { mutableStateOf(false) }
+
+    // Validate if passwords match
+    val passwordsMatch = password == confirmPassword && confirmPassword.isNotEmpty()
+    val passwordError = if (confirmPassword.isNotEmpty() && !passwordsMatch) "Passwords do not match" else null
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -77,7 +88,7 @@ fun SignupScreenContent(
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = "CREATE AN ACCOUNT",
+            text = "CREATE AN ACCOUNT ",
             fontSize = 25.sp,
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily.SansSerif
@@ -90,6 +101,7 @@ fun SignupScreenContent(
             onValueChange = onNameChange,
             label = { Text("Username") },
             leadingIcon = { Icon(imageVector = Icons.Default.Person, contentDescription = "username") },
+            modifier = Modifier.fillMaxWidth(0.8f)
         )
 
         Spacer(modifier = Modifier.height(25.dp))
@@ -100,22 +112,20 @@ fun SignupScreenContent(
             label = { Text("Email Address") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "email") },
+            modifier = Modifier.fillMaxWidth(0.8f)
         )
 
         Spacer(modifier = Modifier.height(25.dp))
 
-        var passwordVisible by remember { mutableStateOf(false) }
-        val visualTransformation: VisualTransformation =
-            if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
-
-
+        // Password field
         OutlinedTextField(
             value = password,
             onValueChange = onPasswordChange,
             label = { Text("Password") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "password") },
-            visualTransformation = visualTransformation,
+            modifier = Modifier.fillMaxWidth(0.8f),
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
                 val icon = if (passwordVisible) painterResource(id = R.drawable.pwds)
                 else painterResource(id = R.drawable.pwdh)
@@ -128,35 +138,44 @@ fun SignupScreenContent(
 
         Spacer(modifier = Modifier.height(25.dp))
 
-
-
+        // Confirm Password field with validation
         OutlinedTextField(
             value = confirmPassword,
-            onValueChange = onPasswordChange,
+            onValueChange = onConfirmPasswordChange,
             label = { Text("Confirm Password") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "confirmPassword") },
-            visualTransformation = visualTransformation,
+            modifier = Modifier.fillMaxWidth(0.8f),
+            visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
-                val icon = if (passwordVisible) painterResource(id = R.drawable.pwds)
+                val icon = if (confirmPasswordVisible) painterResource(id = R.drawable.pwds)
                 else painterResource(id = R.drawable.pwdh)
 
-                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                IconButton(onClick = { confirmPasswordVisible = !confirmPasswordVisible }) {
                     Icon(painter = icon, contentDescription = null)
+                }
+            },
+            isError = passwordError != null,
+            supportingText = {
+                if (passwordError != null) {
+                    Text(
+                        text = passwordError,
+                        color = Color.Red,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             }
         )
 
         Spacer(modifier = Modifier.height(25.dp))
-
 
         Button(
             onClick = onRegisterClick,
             colors = ButtonDefaults.buttonColors(Orange3),
             shape = RoundedCornerShape(15.dp),
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 40.dp, end = 40.dp)
+                .fillMaxWidth(0.8f),
+            enabled = passwordsMatch && name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()
         ) {
             Text("Register")
         }
@@ -164,13 +183,13 @@ fun SignupScreenContent(
         Spacer(modifier = Modifier.height(10.dp))
 
         Text(
-            text = "Already have an account? Login",
+            text = "Already have an Account? Login",
             fontSize = 15.sp,
             textAlign = TextAlign.Center,
             color = Color.Blue,
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onLoginClick() }
+                .clickable { LOGIN_URL }
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -227,13 +246,15 @@ fun SignupScreen(navController: NavHostController, authViewModel: AuthViewModel)
         onPasswordChange = { password = it },
         onConfirmPasswordChange = { confirmPassword = it },
         onRegisterClick = {
-            authViewModel.signup(name, email, password, confirmPassword)
+            if (password == confirmPassword) {
+                authViewModel.signup(name, email, password, confirmPassword)
+            }
         },
         onLoginClick = {
             navController.navigate(LOGIN_URL)
         },
         onGoogleClick = {
-           // authViewModel.signInWithGoogle() // implement inside your AuthViewModel
+            // authViewModel.signInWithGoogle() // implement inside your AuthViewModel
         }
     )
 }
@@ -250,7 +271,7 @@ fun SignupScreen(navController: NavHostController) {
 fun SignupScreenPreview() {
     SignupScreenContent(
         name = "Kepha Mirera",
-        email = "kephamirera@.com",
+        email = "batman@gmail.com",
         password = "12345678",
         confirmPassword = "12345678",
         onNameChange = {},

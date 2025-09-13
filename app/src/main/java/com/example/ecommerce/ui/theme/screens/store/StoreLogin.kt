@@ -1,73 +1,236 @@
 package com.example.ecommerce.ui.theme.screens.store
 
+import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.example.ecommerce.R
+import com.example.ecommerce.data.AuthViewModel
+import com.example.ecommerce.navigation.PHONELOGIN_URL
+import com.example.ecommerce.navigation.SIGNUP_URL
+import com.example.ecommerce.navigation.STOREREGISTRATION_URL
+import com.example.ecommerce.ui.theme.Orange3
+
 
 @Composable
-fun StoreLoginScreen(
-    navController: NavController,
-    onLogin: (String, String) -> Unit = { _, _ -> }
-) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+fun StoreLoginScreenContent(
+    email: String,
+    password: String,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onLoginClick: () -> Unit,
+    onGoogleClick: () -> Unit,
+    onOtpClick: () -> Unit
 
+) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text("Store Login", style = MaterialTheme.typography.headlineMedium)
+        Spacer(modifier = Modifier.height(5.dp))
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Image(
+            painter = painterResource(id = R.drawable.shopping),
+            contentDescription = null,
+            modifier = Modifier.size(100.dp)
+        )
+
+
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+
+        Text(
+            text = "Welcome Back",
+            fontSize = 40.sp,
+            color = Orange3,
+            fontWeight = FontWeight.Bold,
+            fontFamily = FontFamily.Cursive
+        )
+
+        Spacer(modifier = Modifier.height(50.dp))
 
         OutlinedTextField(
             value = email,
-            onValueChange = { email = it },
-            label = { Text("Email") },
-            modifier = Modifier.fillMaxWidth()
+            onValueChange = onEmailChange,
+            label = { Text("Email Address", fontFamily = FontFamily.SansSerif) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "email") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            shape = RoundedCornerShape(5.dp)
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(10.dp))
+
+        var passwordVisible by remember { mutableStateOf(false) }
+        val visualTransformation: VisualTransformation =
+            if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
 
         OutlinedTextField(
             value = password,
-            onValueChange = { password = it },
-            label = { Text("Password") },
-            modifier = Modifier.fillMaxWidth()
+            onValueChange = onPasswordChange,
+            label = { Text("Password", fontFamily = FontFamily.SansSerif) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "password") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            shape = RoundedCornerShape(5.dp),
+            visualTransformation = visualTransformation,
+            trailingIcon = {
+                val icon = if (passwordVisible) painterResource(id = R.drawable.pwds)
+                else painterResource(id = R.drawable.pwdh)
+
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(painter = icon, contentDescription = null)
+                }
+            }
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         Button(
-            onClick = { onLogin(email, password) },
+            onClick = onLoginClick,
+            colors = ButtonDefaults.buttonColors(Orange3),
+            shape = RoundedCornerShape(15.dp),
             modifier = Modifier.fillMaxWidth()
+                .padding(start = 40.dp, end = 40.dp)
         ) {
-            Text("Login")
+            Text("Login", fontFamily = FontFamily.SansSerif)
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(10.dp))
 
-        TextButton(
-            onClick = {
-                // Navigate to registration if store not yet created
-                navController.navigate("storeRegistration")
-            },
-            modifier = Modifier.fillMaxWidth()
+
+        Text(
+            text = "Don't have a store? Create",
+            fontSize = 15.sp,
+            textAlign = TextAlign.Center,
+            color = Color.Blue,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { STOREREGISTRATION_URL }
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // Divider with OR
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 40.dp)
         ) {
-            Text("Don’t have a store? Register here")
+            Divider(modifier = Modifier.weight(1f), color = Color.Gray)
+            Text(" OR ", color = Color.Gray, fontSize = 14.sp)
+            Divider(modifier = Modifier.weight(1f), color = Color.Gray)
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // Google Sign-In
+        OutlinedButton(
+            onClick = onGoogleClick,
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 40.dp),
+            colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White)
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.googlelogo),
+                contentDescription = "Google Sign-In",
+                tint = Color.Unspecified,
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Sign in with Google", color = Color.Black)
+        }
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // OTP Sign-In
+        OutlinedButton(
+            onClick = { PHONELOGIN_URL },
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 40.dp),
+            colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White)
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.pwds),
+                contentDescription = "OTP Sign-In",
+                tint = Color.Unspecified,
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Sign in with OTP", color = Color.Black)
         }
     }
 }
 
+
+@SuppressLint("ViewModelConstructorInComposable")
+@Composable
+fun StoreLoginScreen(navController: NavHostController, authViewModel: AuthViewModel) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
+    StoreLoginScreenContent(
+        email = email,
+        password = password,
+        onEmailChange = { email = it },
+        onPasswordChange = { password = it },
+        onLoginClick = {
+            authViewModel.store_login(email, password)
+        },
+        onGoogleClick = {
+            // authViewModel.signInWithGoogle() // implement inside your AuthViewModel
+        },
+        onOtpClick = {
+            navController.navigate("phone_login")
+        }
+    )
+
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun StoreLoginScreenPreview() {
-    StoreLoginScreen(navController = rememberNavController())
+    StoreLoginScreenContent(
+        email = "kephamirera@gmail.com",
+        password = "",
+        onEmailChange = {},
+        onPasswordChange = {},
+        onLoginClick = {},
+        onGoogleClick = {},
+        onOtpClick = {}
+
+    )
 }

@@ -124,7 +124,8 @@ fun LoginScreenContent(
         }
 
         Spacer(modifier = Modifier.height(10.dp))
-        
+
+
         Text(
             text = "Don't have an account? Sign up",
             fontSize = 15.sp,

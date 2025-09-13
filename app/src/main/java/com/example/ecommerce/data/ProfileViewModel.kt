@@ -9,6 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,7 +42,10 @@ class ProfileViewModel : ViewModel() {
 
     private val auth: FirebaseAuth = Firebase.auth
     private val storage = Firebase.storage
-    private val userId = auth.currentUser?.uid ?: ""
+    private val db = Firebase.firestore
+
+    private val userId: String?
+        get() = auth.currentUser?.uid
 
     init {
         loadUserData()
@@ -48,25 +53,41 @@ class ProfileViewModel : ViewModel() {
     }
 
     private fun loadUserData() {
-        auth.currentUser?.let { user ->
-            _name.value = user.displayName ?: ""
-            _email.value = user.email ?: ""
+        viewModelScope.launch {
+            isLoading = true
+            try {
+                auth.currentUser?.let { user ->
+                    _name.value = user.displayName ?: ""
+                    _email.value = user.email ?: ""
+                }
+
+                userId?.let { uid ->
+                    val doc = db.collection("users").document(uid).get().await()
+                    if (doc.exists()) {
+                        _bio.value = doc.getString("bio") ?: ""
+                        _profileImageUrl.value = doc.getString("profileImageUrl")
+                    }
+                }
+            } catch (e: Exception) {
+                errorMessage = "Failed to load profile: ${e.message}"
+            } finally {
+                isLoading = false
+            }
         }
     }
 
     private fun loadProfileImage() {
         viewModelScope.launch {
-            isLoading = true
             try {
-                val url = storage.reference
-                    .child("profile_images/$userId.jpg")
-                    .downloadUrl
-                    .await()
-                _profileImageUrl.value = url.toString()
-            } catch (e: Exception) {
-                // No existing image for first-time users
-            } finally {
-                isLoading = false
+                userId?.let { uid ->
+                    val url = storage.reference
+                        .child("profile_images/$uid.jpg")
+                        .downloadUrl
+                        .await()
+                    _profileImageUrl.value = url.toString()
+                }
+            } catch (_: Exception) {
+                // No existing image is fine
             }
         }
     }
@@ -74,14 +95,8 @@ class ProfileViewModel : ViewModel() {
     fun updateName(value: String) { _name.value = value }
     fun updateBio(value: String) { _bio.value = value }
 
-    /*
-     * Called from UI when a new image is picked.
-     * Shows it immediately, then uploads to Firebase Storage.
-     */
     fun updateProfileImage(uri: Uri) {
-        // Show the picked image immediately
-        _profileImageUrl.value = uri
-        // Upload to Firebase in background
+        _profileImageUrl.value = uri // show immediately
         uploadProfileImage(uri)
     }
 
@@ -90,11 +105,18 @@ class ProfileViewModel : ViewModel() {
             isLoading = true
             errorMessage = null
             try {
-                val ref = storage.reference
-                    .child("profile_images/$userId.jpg")
+                userId?.let { uid ->
+                    val ref = storage.reference.child("profile_images/$uid.jpg")
+                    ref.putFile(uri).await()
+                    val downloadUrl = ref.downloadUrl.await().toString()
 
-                ref.putFile(uri).await()
-                _profileImageUrl.value = ref.downloadUrl.await().toString()
+                    _profileImageUrl.value = downloadUrl
+
+                    // Save download URL to Firestore
+                    db.collection("users").document(uid)
+                        .set(mapOf("profileImageUrl" to downloadUrl), SetOptions.merge())
+                        .await()
+                }
             } catch (e: Exception) {
                 errorMessage = "Upload failed: ${e.message}"
             } finally {
@@ -106,12 +128,28 @@ class ProfileViewModel : ViewModel() {
     fun saveProfile() {
         viewModelScope.launch {
             isLoading = true
+            errorMessage = null
             try {
-                auth.currentUser?.updateProfile(
-                    UserProfileChangeRequest.Builder()
-                        .setDisplayName(_name.value)
-                        .build()
-                )?.await()
+                userId?.let { uid ->
+                    // Update Firebase Auth displayName
+                    auth.currentUser?.updateProfile(
+                        UserProfileChangeRequest.Builder()
+                            .setDisplayName(_name.value)
+                            .build()
+                    )?.await()
+
+                    // Save bio + name + imageUrl to Firestore
+                    db.collection("users").document(uid)
+                        .set(
+                            mapOf(
+                                "name" to _name.value,
+                                "bio" to _bio.value,
+                                "profileImageUrl" to _profileImageUrl.value
+                            ),
+                            SetOptions.merge()
+                        )
+                        .await()
+                }
             } catch (e: Exception) {
                 errorMessage = "Save failed: ${e.message}"
             } finally {

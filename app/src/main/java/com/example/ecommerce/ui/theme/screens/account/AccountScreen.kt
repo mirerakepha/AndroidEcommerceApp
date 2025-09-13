@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -25,7 +26,10 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.ecommerce.R
+import com.example.ecommerce.data.AuthViewModel
 import com.example.ecommerce.data.ProfileViewModel
+import com.example.ecommerce.navigation.HOME_URL
+import com.example.ecommerce.navigation.STOREREGISTRATION_URL
 import com.example.ecommerce.ui.theme.Orange3
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,11 +41,13 @@ fun AccountScreenUI(
     profileImageUrl: Any?,
     isLoading: Boolean,
     errorMessage: String?,
-    onNameChange: (String) -> Unit = {},
-    onBioChange: (String) -> Unit = {},
-    onSave: () -> Unit = {},
-    onChangeImage: (() -> Unit)? = null,
-    onBackClick: () -> Unit = {}
+    onNameChange: (String) -> Unit,
+    onBioChange: (String) -> Unit,
+    onSave: () -> Unit,
+    onChangeImage: () -> Unit,
+    onBackClick: () -> Unit,
+    onLogoutClick: () -> Unit,
+    onStartStoreClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -49,11 +55,12 @@ fun AccountScreenUI(
                 title = { Text("My Account") },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back",
-                            tint = Color.Black
-                        )
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.Black)
+                    }
+                },
+                actions = {
+                    IconButton(onClick = onLogoutClick) {
+                        Icon(Icons.Default.ExitToApp, contentDescription = "Logout", tint = Color.Red)
                     }
                 }
             )
@@ -63,16 +70,16 @@ fun AccountScreenUI(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(top = 50.dp, start = 30.dp, end = 30.dp),
+                .padding(30.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Profile Pic
+            // Profile picture
             Box(contentAlignment = Alignment.BottomEnd) {
                 val painter = when (profileImageUrl) {
-                    is Int -> painterResource(profileImageUrl) // Drawable resource
-                    is String -> rememberAsyncImagePainter(profileImageUrl) // URL
-                    is Uri -> rememberAsyncImagePainter(profileImageUrl) // Gallery Uri
-                    else -> painterResource(R.drawable.emn) // Placeholder avatar
+                    is Int -> painterResource(profileImageUrl)
+                    is String -> rememberAsyncImagePainter(profileImageUrl)
+                    is Uri -> rememberAsyncImagePainter(profileImageUrl)
+                    else -> painterResource(R.drawable.emn)
                 }
 
                 Image(
@@ -85,7 +92,7 @@ fun AccountScreenUI(
                 )
 
                 IconButton(
-                    onClick = { onChangeImage?.invoke() },
+                    onClick = onChangeImage,
                     modifier = Modifier.size(40.dp)
                 ) {
                     Box(
@@ -95,12 +102,7 @@ fun AccountScreenUI(
                             .background(Color.White),
                         contentAlignment = Alignment.Center
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Edit,
-                            contentDescription = "Change Profile Pic",
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(20.dp)
-                        )
+                        Icon(Icons.Default.Edit, contentDescription = "Change Profile", tint = MaterialTheme.colorScheme.primary)
                     }
                 }
             }
@@ -109,7 +111,7 @@ fun AccountScreenUI(
 
             OutlinedTextField(
                 value = name,
-                onValueChange = { onNameChange(it) },
+                onValueChange = onNameChange,
                 label = { Text("Name") },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -121,14 +123,14 @@ fun AccountScreenUI(
                 onValueChange = {},
                 label = { Text("Email") },
                 modifier = Modifier.fillMaxWidth(),
-                enabled = true
+                enabled = false
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
                 value = bio,
-                onValueChange = { onBioChange(it) },
+                onValueChange = onBioChange,
                 label = { Text("Bio") },
                 modifier = Modifier.fillMaxWidth(),
                 maxLines = 3
@@ -136,15 +138,11 @@ fun AccountScreenUI(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Save Button
             Button(
                 onClick = onSave,
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !isLoading,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Orange3,
-                    contentColor = Color.White
-                )
+                colors = ButtonDefaults.buttonColors(containerColor = Orange3, contentColor = Color.White)
             ) {
                 Text("Save Profile")
             }
@@ -152,56 +150,57 @@ fun AccountScreenUI(
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = onSave,
+                onClick = onStartStoreClick,
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !isLoading,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Blue,
-                    contentColor = Color.White
-                )
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Blue, contentColor = Color.White)
             ) {
                 Text("Start a store")
             }
 
-            // Loading/Error States
-            when {
-                isLoading -> CircularProgressIndicator()
-                errorMessage != null -> Text(
-                    text = errorMessage,
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
+            if (isLoading) CircularProgressIndicator()
+            if (errorMessage != null) Text(text = errorMessage, color = MaterialTheme.colorScheme.error)
         }
     }
 }
 
 @Composable
-fun AccountScreen(navController: NavController, viewModel: ProfileViewModel = viewModel()) {
-    val name by viewModel.name.collectAsState()
-    val email by viewModel.email.collectAsState()
-    val bio by viewModel.bio.collectAsState()
-    val profileImageUrl by viewModel.profileImageUrl.collectAsState()
+fun AccountScreen(
+    navController: NavController,
+    profileViewModel: ProfileViewModel = viewModel(),
+    authViewModel: AuthViewModel = viewModel()
+) {
+    val name by profileViewModel.name.collectAsState()
+    val email by profileViewModel.email.collectAsState()
+    val bio by profileViewModel.bio.collectAsState()
+    val profileImageUrl by profileViewModel.profileImageUrl.collectAsState()
 
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
-        onResult = { uri: Uri? ->
-            uri?.let { viewModel.updateProfileImage(it) }
-        }
+        onResult = { uri: Uri? -> uri?.let { profileViewModel.updateProfileImage(it) } }
     )
-
 
     AccountScreenUI(
         name = name,
         email = email,
         bio = bio,
         profileImageUrl = profileImageUrl,
-        isLoading = viewModel.isLoading,
-        errorMessage = viewModel.errorMessage,
-        onNameChange = { viewModel.updateName(it) },
-        onBioChange = { viewModel.updateBio(it) },
-        onSave = { viewModel.saveProfile() },
+        isLoading = profileViewModel.isLoading,
+        errorMessage = profileViewModel.errorMessage,
+        onNameChange = { profileViewModel.updateName(it) },
+        onBioChange = { profileViewModel.updateBio(it) },
+        onSave = { profileViewModel.saveProfile() },
         onChangeImage = { imagePicker.launch("image/*") },
-        onBackClick = { navController.popBackStack() }
+        onBackClick = { navController.popBackStack() },
+        onLogoutClick = {
+            authViewModel.logout()
+            navController.navigate(HOME_URL) {
+                popUpTo(0) { inclusive = true }
+            }
+        },
+        onStartStoreClick = {
+            navController.navigate(STOREREGISTRATION_URL)
+        }
     )
 }
 
@@ -216,6 +215,12 @@ fun AccountScreenPreview() {
         profileImageUrl = R.drawable.emn,
         isLoading = false,
         errorMessage = null,
-        onBackClick = { navController.popBackStack() }
+        onNameChange = {},
+        onBioChange = {},
+        onSave = {},
+        onChangeImage = {},
+        onBackClick = {},
+        onLogoutClick = {},
+        onStartStoreClick = {}
     )
 }
