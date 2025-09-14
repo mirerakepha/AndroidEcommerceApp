@@ -230,7 +230,7 @@ fun StoreLoginScreen(navController: NavHostController, authViewModel: AuthViewMo
 @Composable
 fun StoreLoginScreenPreview() {
     StoreLoginScreenContent(
-        email = "kephamirera@gmail.com",
+        email = "batman@gmail.com",
         password = "",
         onEmailChange = {},
         onPasswordChange = {},

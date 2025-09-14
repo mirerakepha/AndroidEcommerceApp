@@ -252,7 +252,7 @@ fun StoreRegistrationScreen(navController: NavHostController, authViewModel: Aut
 @Composable
 fun StoreRegistrationScreenPreview() {
     StoreRegistrationScreenContent(
-        name = "LooMora",
+        name = "Gotham",
         email = "batman@gmail.com",
         password = "12345678",
         confirmPassword = "12345678",

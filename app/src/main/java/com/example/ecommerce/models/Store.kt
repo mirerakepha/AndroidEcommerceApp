@@ -1,10 +1,14 @@
 package com.example.ecommerce.models
 
 data class Store(
-    val id: String = "",              //  storeId
-    val name: String = "",            // Store name
-    val ownerName: String = "",       // Owner’s name
-    val contact: String = "",         // Phone/email
-    val logoUrl: String? = null,      // Store logo image
+    val id: String = "",
+    val name: String = "",
+    val bannerUrl: String = "",
+    val location: String = "",
+    val address: String = "",
+    val contactInfo: String = "",
+    val zipcode: String = "",
+    val description: String = "",
+    val logoUrl: String? = null,
     val createdAt: Long = System.currentTimeMillis()
 )

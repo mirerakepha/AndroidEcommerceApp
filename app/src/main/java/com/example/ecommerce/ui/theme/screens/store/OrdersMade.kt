@@ -12,14 +12,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.ecommerce.models.Order
 import com.example.ecommerce.ui.theme.Orange3
-
-data class Order(
-    val id: String,
-    val customerName: String,
-    val productName: String,
-    val status: String // Pending or Delivered
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,22 +43,24 @@ fun OrdersMadeScreen(
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
+            // Pending Orders
             Text("Pending Orders", style = MaterialTheme.typography.titleMedium, color = Orange3)
             Spacer(modifier = Modifier.height(8.dp))
 
             LazyColumn(modifier = Modifier.weight(1f)) {
-                items(orders.filter { it.status == "Pending" }) { order ->
+                items(orders.filter { it.status.equals("pending", ignoreCase = true) }) { order ->
                     OrderCard(order)
                 }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text("Delivered Orders", style = MaterialTheme.typography.titleMedium, color = Orange3)
+            // Delivered / Shipped Orders
+            Text("Signed-off Orders", style = MaterialTheme.typography.titleMedium, color = Orange3)
             Spacer(modifier = Modifier.height(8.dp))
 
             LazyColumn(modifier = Modifier.weight(1f)) {
-                items(orders.filter { it.status == "Delivered" }) { order ->
+                items(orders.filter { it.status.equals("shipped", ignoreCase = true) }) { order ->
                     OrderCard(order)
                 }
             }
@@ -82,11 +78,13 @@ fun OrderCard(order: Order) {
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Text("Order ID: ${order.id}", style = MaterialTheme.typography.bodyMedium)
-            Text("Customer: ${order.customerName}")
-            Text("Product: ${order.productName}")
+            Text("Buyer ID: ${order.buyerId}")
+            Text("Product ID: ${order.productId}")
+            Text("Quantity: ${order.quantity}")
+            Text("Total Price: $${order.totalPrice}")
             Text(
                 "Status: ${order.status}",
-                color = if (order.status == "Pending")
+                color = if (order.status.equals("pending", ignoreCase = true))
                     MaterialTheme.colorScheme.error
                 else
                     Orange3
@@ -95,11 +93,12 @@ fun OrderCard(order: Order) {
     }
 }
 
+// Temporary fake data for preview
 fun sampleOrders(): List<Order> = listOf(
-    Order("001", "Alice", "Shoes", "Pending"),
-    Order("002", "Bob", "Laptop", "Delivered"),
-    Order("003", "Chris", "Watch", "Pending"),
-    Order("004", "Diana", "Bag", "Delivered")
+    Order(id = "001", productId = "P001", buyerId = "B001", storeId = "S001", quantity = 2, totalPrice = 200.0, status = "pending"),
+    Order(id = "002", productId = "P002", buyerId = "B002", storeId = "S001", quantity = 1, totalPrice = 1200.0, status = "shipped"),
+    Order(id = "003", productId = "P003", buyerId = "B003", storeId = "S001", quantity = 3, totalPrice = 90.0, status = "pending"),
+    Order(id = "004", productId = "P004", buyerId = "B004", storeId = "S001", quantity = 1, totalPrice = 450.0, status = "shipped")
 )
 
 @Preview(showBackground = true)

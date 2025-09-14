@@ -20,10 +20,11 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import androidx.compose.ui.viewinterop.AndroidView
+import com.example.ecommerce.models.Order
 
 data class Sale(
     val id: String,
-    val date: String, // For simplicity, just a string (e.g., "2025-09-10")
+    val date: String,
     val amount: Double
 )
 
@@ -32,8 +33,10 @@ data class Sale(
 fun SalesMadeScreen(
     navController: NavController,
     storeName: String,
-    sales: List<Sale> = sampleSales()
+    orders: List<Order>
 ) {
+    // derive sales from delivered orders
+    val sales = ordersToSales(orders)
     val totalAmount = sales.sumOf { it.amount }
 
     Scaffold(
@@ -121,11 +124,25 @@ fun SalesMadeScreen(
     }
 }
 
-fun sampleSales(): List<Sale> = listOf(
-    Sale("S001", "2025-09-01", 250.0),
-    Sale("S002", "2025-09-02", 500.0),
-    Sale("S003", "2025-09-03", 120.0),
-    Sale("S004", "2025-09-04", 700.0)
+
+  //Convert delivered orders into sales
+
+fun ordersToSales(orders: List<Order>): List<Sale> {
+    return orders.filter { it.status.equals("delivered", ignoreCase = true) }
+        .map { order ->
+            Sale(
+                id = "SALE-${order.id}",
+                date = order.createdAt.toString(), // format timestamp if needed
+                amount = order.totalPrice
+            )
+        }
+}
+
+// sample preview data
+fun sampleOrdersForSales(): List<Order> = listOf(
+    Order(id = "001", productId = "P001", buyerId = "B001", storeId = "S001", quantity = 2, totalPrice = 500.0, status = "delivered"),
+    Order(id = "002", productId = "P002", buyerId = "B002", storeId = "S001", quantity = 1, totalPrice = 300.0, status = "pending"),
+    Order(id = "003", productId = "P003", buyerId = "B003", storeId = "S001", quantity = 1, totalPrice = 200.0, status = "delivered")
 )
 
 @Preview(showBackground = true)
@@ -135,6 +152,6 @@ fun PreviewSalesMadeScreen() {
     SalesMadeScreen(
         navController = navController,
         storeName = "Finest Fibres",
-        sales = sampleSales()
+        orders = sampleOrdersForSales()
     )
 }

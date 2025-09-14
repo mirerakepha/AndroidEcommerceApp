@@ -17,7 +17,13 @@ const val SETTINGS_URL = "settings"
 const val NOTIFICATIONS_URL = "notifications"
 const val ACCOUNT_URL = "account"
 const val PHONELOGIN_URL = "phone_login"
+
+//store
 const val DASHBOARD_URL = "dashboard"
 const val ADDPRODUCT_URL = "add_product"
 const val STOREREGISTRATION_URL = "store_registration"
 const val STORELOGIN_URL = "store_login"
+const val ORDERSMADE_URL = "orders_made"
+const val SALESMADE_URL = "sales_made"
+const val STOREPROFILE_URL = "store_profile"
+const val CUSTSTORE_URL = "cust_store"
