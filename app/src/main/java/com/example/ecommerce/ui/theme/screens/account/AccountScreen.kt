@@ -151,7 +151,7 @@ fun AccountScreenUI(
 
             Button(
                 onClick = onStartStoreClick,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.width(250.dp),
                 enabled = !isLoading,
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Blue, contentColor = Color.White)
             ) {
@@ -209,9 +209,9 @@ fun AccountScreen(
 fun AccountScreenPreview() {
     val navController = rememberNavController()
     AccountScreenUI(
-        name = "Falcon Webs",
-        email = "kephamirera16@gmail.com",
-        bio = "Some nerdy stuff 🗑️",
+        name = "BatMan",
+        email = "batman@gmail.com",
+        bio = "Here to save Gotham \uD83E\uDD87",
         profileImageUrl = R.drawable.emn,
         isLoading = false,
         errorMessage = null,

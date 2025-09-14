@@ -122,18 +122,19 @@ fun HomeScreen(navController: NavHostController) {
 
     // Filter products based on search and category
     LaunchedEffect(search, selectedCategory, products) {
-        filteredProducts = if (search.isNotEmpty()) {
-            products.filter { product ->
-                product.name.contains(search, ignoreCase = true) ||
-                        product.description.contains(search, ignoreCase = true) ||
-                        product.category.contains(search, ignoreCase = true)
-            }
-        } else if (selectedCategory != null) {
-            products.filter { it.category == selectedCategory }
-        } else {
-            products
+        filteredProducts = products.filter { product ->
+            val matchesSearch = search.isEmpty() ||
+                    product.name.contains(search, ignoreCase = true) ||
+                    product.description.contains(search, ignoreCase = true) ||
+                    (product.category?.contains(search, ignoreCase = true) == true)
+
+            val matchesCategory = selectedCategory == null ||
+                    product.category.equals(selectedCategory, ignoreCase = true)
+
+            matchesSearch && matchesCategory
         }
     }
+
 
     Scaffold(
         bottomBar = {

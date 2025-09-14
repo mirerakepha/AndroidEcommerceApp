@@ -97,6 +97,10 @@ dependencies {
     // Coil
     implementation(libs.coil.compose)
 
+    // MPAndroidChart for line graph
+    implementation(libs.mpandroidchart)
+
+
     // Lifecycle & Activity
     implementation("androidx.activity:activity-ktx:1.9.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
