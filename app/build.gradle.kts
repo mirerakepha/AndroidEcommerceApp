@@ -59,6 +59,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.accompanist.systemuicontroller)
+
     // Core & Lifecycle
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -78,6 +80,7 @@ dependencies {
     implementation(libs.firebase.database.ktx)
     implementation(libs.firebase.storage.ktx)
     implementation(libs.firebase.firestore.ktx)
+
 
     // Classic Views
     implementation(libs.appcompat)

@@ -19,11 +19,6 @@ material3 = "1.2.1"
 # Navigation
 navigation = "2.9.0"
 
-# Firebase
-firebaseAuthKtx = "23.2.1"
-firebaseDatabaseKtx = "21.0.0"
-firebaseStorageKtx = "21.0.0"
-firebaseFirestoreKtx = "25.1.1"
 
 # Testing
 junit = "4.13.2"
@@ -34,6 +29,8 @@ espressoCore = "3.5.1"
 material = "1.11.0"
 
 [libraries]
+accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version = "0.36.0" }
+
 # chart
 mpandroidchart = { module = "com.github.PhilJay:MPAndroidChart", version = "3.1.0" }
 
@@ -51,12 +48,11 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "compose" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 
-# Firebase
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version = "32.2.0" }
-firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
-firebase-database-ktx = { group = "com.google.firebase", name = "firebase-database-ktx", version.ref = "firebaseDatabaseKtx" }
-firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
-firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
+firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx" }
+firebase-database-ktx = { group = "com.google.firebase", name = "firebase-database-ktx" }
+firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx" }
+firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx" }
 
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }

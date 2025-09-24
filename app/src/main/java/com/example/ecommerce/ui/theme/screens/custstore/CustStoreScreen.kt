@@ -41,7 +41,7 @@ fun CustStoreScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(store.name, color = Orange3) },
+                title = { Text("Store", color = Orange3) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Orange3)
