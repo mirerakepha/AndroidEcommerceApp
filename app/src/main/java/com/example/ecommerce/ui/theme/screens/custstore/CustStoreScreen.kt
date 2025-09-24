@@ -12,15 +12,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.rememberAsyncImagePainter
-import com.example.ecommerce.models.Store
 import com.example.ecommerce.models.Rating
+import com.example.ecommerce.models.Store
 import com.example.ecommerce.ui.theme.Orange3
 import kotlin.math.roundToInt
+import com.example.ecommerce.R // For default drawable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -31,11 +32,7 @@ fun CustStoreScreen(
     isUserLoggedIn: Boolean,
     onRateStore: (Float) -> Unit
 ) {
-    // Calculate average rating
-    val avgRating = if (ratings.isNotEmpty()) {
-        ratings.map { it.value }.average().toFloat()
-    } else 0f
-
+    val avgRating = if (ratings.isNotEmpty()) ratings.map { it.value }.average().toFloat() else 0f
     var userRating by remember { mutableStateOf(0f) }
 
     Scaffold(
@@ -56,21 +53,25 @@ fun CustStoreScreen(
                 .verticalScroll(rememberScrollState())
                 .fillMaxSize()
         ) {
-            // Banner
-            if (store.bannerUrl.isNotEmpty()) {
-                Image(
-                    painter = rememberAsyncImagePainter(store.bannerUrl),
-                    contentDescription = "${store.name} banner",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp), // quarter of screen approx
-                    contentScale = ContentScale.Crop
-                )
+            // Banner with fallback
+            val bannerPainter = if (store.bannerUrl.isNotEmpty()) {
+                androidx.compose.ui.res.painterResource(id = R.drawable.shopping)
+                // Replace with rememberAsyncImagePainter(store.bannerUrl) if loading remote
+            } else {
+                painterResource(id = R.drawable.shopping)
             }
+
+            Image(
+                painter = bannerPainter,
+                contentDescription = "${store.name} banner",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+                contentScale = ContentScale.Crop
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Store name
             Text(
                 text = store.name,
                 style = MaterialTheme.typography.headlineSmall,
@@ -80,7 +81,7 @@ fun CustStoreScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Ratings summary
+            // Ratings row
             Row(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -89,9 +90,7 @@ fun CustStoreScreen(
                     Icon(
                         imageVector = Icons.Default.Star,
                         contentDescription = "Star",
-                        tint = if (index < avgRating.roundToInt()) Orange3 else MaterialTheme.colorScheme.onSurface.copy(
-                            alpha = 0.3f
-                        )
+                        tint = if (index < avgRating.roundToInt()) Orange3 else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
                     )
                 }
                 Spacer(modifier = Modifier.width(8.dp))
@@ -112,7 +111,6 @@ fun CustStoreScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // About
             if (store.description.isNotEmpty()) {
                 Text(
                     text = "About Store",
@@ -128,7 +126,6 @@ fun CustStoreScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Rate store section (only if logged in)
             if (isUserLoggedIn) {
                 Text(
                     text = "Rate this store",
@@ -146,9 +143,7 @@ fun CustStoreScreen(
                             Icon(
                                 imageVector = Icons.Default.Star,
                                 contentDescription = "Rate ${index + 1}",
-                                tint = if (index < userRating) Orange3 else MaterialTheme.colorScheme.onSurface.copy(
-                                    alpha = 0.3f
-                                )
+                                tint = if (index < userRating) Orange3 else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
                             )
                         }
                     }
@@ -215,7 +210,7 @@ fun CustStoreScreenPreview() {
     val sampleRatings = listOf(
         Rating(userId = "u1", storeId = "store1", value = 4f),
         Rating(userId = "u2", storeId = "store1", value = 5f),
-        Rating(userId = "u3", storeId = "store1", value = 3.5f),
+        Rating(userId = "u3", storeId = "store1", value = 3.5f)
     )
 
     CustStoreScreen(

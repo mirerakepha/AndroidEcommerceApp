@@ -55,7 +55,7 @@ fun AppNavHost(
             SplashScreen(navController = navController)
         }
         composable(SETTINGS_URL) {
-            SettingScreen(navController = navController)
+            SettingScreen(navController = navController, themeState = TODO())
         }
         composable(ORDERDETAILS_URL) {
             OrderdetailsScreen(navController = navController)

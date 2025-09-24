@@ -1,10 +1,12 @@
 package com.example.ecommerce.ui.theme.screens.login
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -15,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -28,9 +31,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.ecommerce.R
 import com.example.ecommerce.data.AuthViewModel
-import com.example.ecommerce.navigation.PHONELOGIN_URL
-import com.example.ecommerce.navigation.SIGNUP_URL
+import com.example.ecommerce.navigation.*
 import com.example.ecommerce.ui.theme.Orange3
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextFieldDefaults
 
 
 @Composable
@@ -41,11 +46,15 @@ fun LoginScreenContent(
     onPasswordChange: (String) -> Unit,
     onLoginClick: () -> Unit,
     onGoogleClick: () -> Unit,
-    onOtpClick: () -> Unit
-
+    onOtpClick: () -> Unit,
+    onSignUpClick: () -> Unit
 ) {
+    val colors = MaterialTheme.colorScheme
+
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colors.background),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -57,10 +66,7 @@ fun LoginScreenContent(
             modifier = Modifier.size(100.dp)
         )
 
-
-
         Spacer(modifier = Modifier.height(20.dp))
-
 
         Text(
             text = "Welcome Back",
@@ -81,7 +87,15 @@ fun LoginScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
-            shape = RoundedCornerShape(5.dp)
+            shape = RoundedCornerShape(5.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Orange3,
+                unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                focusedLabelColor = Orange3,
+                unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -106,59 +120,81 @@ fun LoginScreenContent(
                 else painterResource(id = R.drawable.pwdh)
 
                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Icon(painter = icon, contentDescription = null)
+                    Icon(
+                        painter = icon,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
-            }
+            },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                cursorColor = Orange3,
+                focusedLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                unfocusedLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                focusedTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                unfocusedTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                focusedBorderColor = Orange3,
+                unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                focusedLabelColor = Orange3,
+                unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(
             onClick = onLoginClick,
-            colors = ButtonDefaults.buttonColors(Orange3),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Orange3,
+                contentColor = colors.onPrimary
+            ),
             shape = RoundedCornerShape(15.dp),
-            modifier = Modifier.fillMaxWidth()
-                .padding(start = 40.dp, end = 40.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 40.dp)
         ) {
             Text("Login", fontFamily = FontFamily.SansSerif)
         }
 
         Spacer(modifier = Modifier.height(10.dp))
 
-
         Text(
             text = "Don't have an account? Sign up",
             fontSize = 15.sp,
             textAlign = TextAlign.Center,
-            color = Color.Blue,
+            color = colors.primary,
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { SIGNUP_URL }
+                .clickable { onSignUpClick() }
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // Divider with OR
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp)
         ) {
-            Divider(modifier = Modifier.weight(1f), color = Color.Gray)
-            Text(" OR ", color = Color.Gray, fontSize = 14.sp)
-            Divider(modifier = Modifier.weight(1f), color = Color.Gray)
+            Divider(modifier = Modifier.weight(1f), color = colors.onBackground.copy(alpha = 0.2f))
+            Text(" OR ", color = colors.onBackground.copy(alpha = 0.7f), fontSize = 14.sp)
+            Divider(modifier = Modifier.weight(1f), color = colors.onBackground.copy(alpha = 0.2f))
         }
+
         Spacer(modifier = Modifier.height(10.dp))
 
-        // Google Sign-In
         OutlinedButton(
             onClick = onGoogleClick,
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp),
-            colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White)
+            colors = ButtonDefaults.outlinedButtonColors(
+                containerColor = colors.surface,
+                contentColor = colors.onSurface
+            )
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.googlelogo),
@@ -167,38 +203,58 @@ fun LoginScreenContent(
                 modifier = Modifier.size(20.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Sign in with Google", color = Color.Black)
+            Text("Sign in with Google", color = colors.onSurface)
         }
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // OTP Sign-In
         OutlinedButton(
-            onClick = { PHONELOGIN_URL },
+            onClick = onOtpClick,
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp),
-            colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White)
+            colors = ButtonDefaults.outlinedButtonColors(
+                containerColor = colors.surface,
+                contentColor = colors.onSurface
+            )
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.pwds), 
+                painter = painterResource(id = R.drawable.pwds),
                 contentDescription = "OTP Sign-In",
                 tint = Color.Unspecified,
                 modifier = Modifier.size(20.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Sign in with OTP", color = Color.Black)
+            Text("Sign in with OTP", color = colors.onSurface)
         }
     }
 }
-
 
 @SuppressLint("ViewModelConstructorInComposable")
 @Composable
 fun LoginScreen(navController: NavHostController, authViewModel: AuthViewModel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        authViewModel.initializeGoogleSignIn(context)
+    }
+
+    val googleSignInLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        authViewModel.handleGoogleSignInResult(result) { success, message ->
+            if (success) {
+                navController.navigate(HOME_URL) {
+                    popUpTo(LOGIN_URL) { inclusive = true }
+                }
+            } else {
+                println("Google sign-in failed: $message")
+            }
+        }
+    }
 
     LoginScreenContent(
         email = email,
@@ -208,22 +264,26 @@ fun LoginScreen(navController: NavHostController, authViewModel: AuthViewModel) 
         onLoginClick = {
             authViewModel.login(email, password) { success, message ->
                 if (success) {
-                    navController.navigate("home_screen")
+                    navController.navigate(HOME_URL) {
+                        popUpTo(LOGIN_URL) { inclusive = true }
+                    }
                 } else {
                     println("Login failed: $message")
                 }
             }
         },
         onGoogleClick = {
-            // authViewModel.signInWithGoogle() // implement inside your AuthViewModel
+            val signInIntent = authViewModel.getGoogleSignInIntent()
+            googleSignInLauncher.launch(signInIntent)
+        },
+        onSignUpClick = {
+            navController.navigate(SIGNUP_URL)
         },
         onOtpClick = {
-            navController.navigate("phone_login")
+            navController.navigate(PHONELOGIN_URL)
         }
     )
-
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -235,7 +295,7 @@ fun LoginScreenPreview() {
         onPasswordChange = {},
         onLoginClick = {},
         onGoogleClick = {},
-        onOtpClick = {}
-        
+        onOtpClick = {},
+        onSignUpClick = {}
     )
 }

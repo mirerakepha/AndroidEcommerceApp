@@ -1,8 +1,17 @@
 package com.example.ecommerce.data
 
+import android.content.Context
+import android.content.Intent
+import androidx.activity.result.ActivityResult
 import androidx.lifecycle.ViewModel
 import com.example.ecommerce.models.User
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
+import com.example.ecommerce.R
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
@@ -14,6 +23,7 @@ class AuthViewModel : ViewModel() {
 
     private val auth: FirebaseAuth = Firebase.auth
     private val database: DatabaseReference = Firebase.database.reference
+    private lateinit var googleSignInClient: GoogleSignInClient
 
     // Tracks whether a user is logged in
     private val _authState = MutableStateFlow(auth.currentUser != null)
@@ -27,6 +37,82 @@ class AuthViewModel : ViewModel() {
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage = _errorMessage.asStateFlow()
 
+    // Initialize Google Sign-In
+    fun initializeGoogleSignIn(context: Context) {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getWebClientId(context))
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(context, gso)
+    }
+
+    // Get Google Sign-In intent
+    fun getGoogleSignInIntent(): Intent {
+        return googleSignInClient.signInIntent
+    }
+
+    // Handle Google Sign-In result
+    fun handleGoogleSignInResult(result: ActivityResult, onResult: (Boolean, String?) -> Unit) {
+        _isLoading.value = true
+        _errorMessage.value = null
+
+        try {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            val account = task.getResult(ApiException::class.java)
+            val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+
+            auth.signInWithCredential(credential)
+                .addOnCompleteListener { authTask ->
+                    _isLoading.value = false
+                    if (authTask.isSuccessful) {
+                        // Save user to database
+                        val firebaseUser = auth.currentUser
+                        firebaseUser?.let { user ->
+                            val userData = User(
+                                name = user.displayName ?: "",
+                                email = user.email ?: "",
+                                userId = user.uid
+                            )
+
+                            database.child("Users").child(user.uid)
+                                .setValue(userData)
+                                .addOnCompleteListener { dbTask ->
+                                    if (dbTask.isSuccessful) {
+                                        _authState.value = true
+                                        onResult(true, null)
+                                    } else {
+                                        onResult(false, "Failed to save user data")
+                                    }
+                                }
+                        }
+                    } else {
+                        onResult(false, authTask.exception?.message ?: "Google sign-in failed")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    _isLoading.value = false
+                    onResult(false, exception.message ?: "Google sign-in failed")
+                }
+        } catch (e: ApiException) {
+            _isLoading.value = false
+            onResult(false, "Google sign-in failed: ${e.statusCode}")
+        }
+    }
+
+    // Sign out with Google
+    fun signOut() {
+        auth.signOut()
+        googleSignInClient.signOut().addOnCompleteListener {
+            _authState.value = false
+            _errorMessage.value = null
+        }
+    }
+
+    // Get web client ID from resources
+    private fun getWebClientId(context: Context): String {
+        return context.getString(R.string.default_web_client_id)
+    }
 
     fun signup(
         name: String,
@@ -86,7 +172,6 @@ class AuthViewModel : ViewModel() {
         onResult: (Boolean, String?) -> Unit
     ) = signup(name, email, password, confPassword, onResult)
 
-
     fun login(
         email: String,
         password: String,
@@ -122,13 +207,13 @@ class AuthViewModel : ViewModel() {
         onResult: (Boolean, String?) -> Unit
     ) = login(email, password, onResult)
 
-
     fun logout() {
         auth.signOut()
-        _authState.value = false
-        _errorMessage.value = null
+        googleSignInClient.signOut().addOnCompleteListener {
+            _authState.value = false
+            _errorMessage.value = null
+        }
     }
-
 
     fun isLoggedIn(): Boolean = auth.currentUser != null
     fun getCurrentUserId(): String? = auth.currentUser?.uid

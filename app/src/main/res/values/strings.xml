@@ -6,4 +6,5 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_pruductdetailsscreen">pruductdetailsscreen</string>
     <string name="title_activity_accountscreen">accountscreen</string>
+    <string name="default_web_client_id">433755577207-2q98b0l21fqt9c51v6ugf8o4scq0rnma.apps.googleusercontent.com</string>
 </resources>

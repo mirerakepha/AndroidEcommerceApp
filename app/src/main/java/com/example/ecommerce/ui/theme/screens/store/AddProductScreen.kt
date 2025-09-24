@@ -97,7 +97,7 @@ fun AddProductScreen(
             ) {
                 if (selectedImageUri != null) {
                     Image(
-                        painter = painterResource(id = R.drawable.cart), // placeholder
+                        painter = painterResource(id = R.drawable.cart),
                         contentDescription = "Product Image",
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop

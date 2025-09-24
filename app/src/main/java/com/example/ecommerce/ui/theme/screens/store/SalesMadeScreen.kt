@@ -11,17 +11,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.ecommerce.models.Order
 import com.example.ecommerce.ui.theme.Orange3
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import androidx.compose.ui.viewinterop.AndroidView
-import com.example.ecommerce.models.Order
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 
+// Data class representing a sale
 data class Sale(
     val id: String,
     val date: String,
@@ -35,7 +37,7 @@ fun SalesMadeScreen(
     storeName: String,
     orders: List<Order>
 ) {
-    // derive sales from delivered orders
+    // Filter delivered orders and convert to sales
     val sales = ordersToSales(orders)
     val totalAmount = sales.sumOf { it.amount }
 
@@ -96,53 +98,91 @@ fun SalesMadeScreen(
 
             Text("Sales Over Time", style = MaterialTheme.typography.titleMedium)
 
-            AndroidView(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(250.dp),
-                factory = { context ->
-                    LineChart(context).apply {
-                        val entries = sales.mapIndexed { index, sale ->
-                            Entry(index.toFloat(), sale.amount.toFloat())
-                        }
-                        val dataSet = LineDataSet(entries, "Sales").apply {
-                            color = Color.BLUE
-                            valueTextColor = Color.BLACK
-                            lineWidth = 2f
-                            setCircleColor(Color.RED)
-                        }
-                        this.data = LineData(dataSet)
+            if (sales.isNotEmpty()) {
+                AndroidView(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(250.dp)
+                        .padding(vertical = 8.dp),
+                    factory = { context ->
+                        LineChart(context).apply {
+                            val entries = sales.mapIndexed { index, sale ->
+                                Entry(index.toFloat(), sale.amount.toFloat())
+                            }
 
-                        xAxis.position = XAxis.XAxisPosition.BOTTOM
-                        axisRight.isEnabled = false
-                        description.isEnabled = false
-                        invalidate()
+                            val dataSet = LineDataSet(entries, "Sales").apply {
+                                color = Color.GREEN
+                                valueTextColor = Color.BLACK
+                                lineWidth = 2f
+                                setCircleColor(Color.RED)
+                                circleRadius = 3f
+                                setDrawValues(true)
+                            }
+
+                            this.data = LineData(dataSet)
+
+                            xAxis.position = XAxis.XAxisPosition.BOTTOM
+                            xAxis.granularity = 1f
+                            xAxis.valueFormatter = IndexAxisValueFormatter(sales.map { it.date })
+                            axisRight.isEnabled = false
+                            description.isEnabled = false
+                            legend.isEnabled = true
+
+                            invalidate()
+                        }
                     }
-                }
-            )
+                )
+            } else {
+                Text(
+                    "No sales data available",
+                    modifier = Modifier.padding(vertical = 16.dp)
+                )
+            }
         }
     }
 }
 
-
-  //Convert delivered orders into sales
-
+// Convert delivered orders into sales
 fun ordersToSales(orders: List<Order>): List<Sale> {
     return orders.filter { it.status.equals("delivered", ignoreCase = true) }
         .map { order ->
             Sale(
                 id = "SALE-${order.id}",
-                date = order.createdAt.toString(), // format timestamp if needed
+                date = order.createdAt.toString(), // You can format timestamps if needed
                 amount = order.totalPrice
             )
         }
 }
 
-// sample preview data
+// Sample orders for preview
 fun sampleOrdersForSales(): List<Order> = listOf(
-    Order(id = "001", productId = "P001", buyerId = "B001", storeId = "S001", quantity = 2, totalPrice = 500.0, status = "delivered"),
-    Order(id = "002", productId = "P002", buyerId = "B002", storeId = "S001", quantity = 1, totalPrice = 300.0, status = "pending"),
-    Order(id = "003", productId = "P003", buyerId = "B003", storeId = "S001", quantity = 1, totalPrice = 200.0, status = "delivered")
+    Order(
+        id = "001",
+        productId = "P001",
+        buyerId = "B001",
+        storeId = "S001",
+        quantity = 2,
+        totalPrice = 500.0,
+        status = "delivered"
+    ),
+    Order(
+        id = "002",
+        productId = "P002",
+        buyerId = "B002",
+        storeId = "S001",
+        quantity = 1,
+        totalPrice = 300.0,
+        status = "pending"
+    ),
+    Order(
+        id = "003",
+        productId = "P003",
+        buyerId = "B003",
+        storeId = "S001",
+        quantity = 1,
+        totalPrice = 200.0,
+        status = "delivered"
+    )
 )
 
 @Preview(showBackground = true)

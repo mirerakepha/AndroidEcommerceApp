@@ -1,6 +1,8 @@
 package com.example.ecommerce.ui.theme.screens.products
 
 import android.widget.Toast
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -36,6 +38,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.ecommerce.R
 import com.example.ecommerce.data.CartViewModel
 import com.example.ecommerce.models.CartItem
+import com.example.ecommerce.navigation.CUSTSTORE_URL
 import com.example.ecommerce.navigation.ORDERCONFIRMATION_URL
 import com.example.ecommerce.ui.theme.Orange3
 
@@ -204,6 +207,26 @@ fun ProductScreen(
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
+
+            OutlinedButton(
+                onClick = { navController.navigate(CUSTSTORE_URL) },
+                modifier = Modifier
+                    .height(50.dp)
+                    .width(50.dp)
+                    .clip(CircleShape),
+                shape = CircleShape,
+                contentPadding = PaddingValues(0.dp),
+                border = BorderStroke(2.dp, Orange3)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.store),
+                    contentDescription = "Store Icon",
+                    colorFilter = ColorFilter.tint(Orange3),
+                    modifier = Modifier
+                        .size(24.dp)
+                )
+            }
+            Spacer(modifier = Modifier.width(16.dp))
 
 
             OutlinedButton(

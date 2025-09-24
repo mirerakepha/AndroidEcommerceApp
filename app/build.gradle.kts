@@ -71,8 +71,14 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
+    implementation(libs.androidx.material3) // <-- Material 3
     implementation(libs.androidx.navigation.compose.jvmstubs)
+
+    implementation("androidx.compose.material3:material3:1.3.1")
+    implementation("androidx.compose.ui:ui:1.5.0")
+    implementation("androidx.compose.foundation:foundation:1.5.0")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.5.0")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.5.0")
 
     // Firebase
     implementation(platform(libs.firebase.bom))
@@ -80,7 +86,7 @@ dependencies {
     implementation(libs.firebase.database.ktx)
     implementation(libs.firebase.storage.ktx)
     implementation(libs.firebase.firestore.ktx)
-
+    implementation(libs.google.auth)
 
     // Classic Views
     implementation(libs.appcompat)
@@ -102,7 +108,7 @@ dependencies {
 
     // MPAndroidChart for line graph
     implementation(libs.mpandroidchart)
-
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
     // Lifecycle & Activity
     implementation("androidx.activity:activity-ktx:1.9.2")

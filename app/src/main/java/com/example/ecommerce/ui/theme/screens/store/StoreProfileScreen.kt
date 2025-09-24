@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -25,6 +26,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.ecommerce.models.Store
 import com.example.ecommerce.ui.theme.Orange3
+import com.example.ecommerce.R // Default drawable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,7 +35,6 @@ fun StoreProfileScreen(
     store: Store,
     onSave: (Store) -> Unit = {}
 ) {
-    // Editable states
     var bannerUri by remember { mutableStateOf<Uri?>(null) }
     var name by remember { mutableStateOf(store.name) }
     var location by remember { mutableStateOf(store.location) }
@@ -42,7 +43,6 @@ fun StoreProfileScreen(
     var contact by remember { mutableStateOf(store.contactInfo) }
     var description by remember { mutableStateOf(store.description) }
 
-    // Image picker
     val imagePickerLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             bannerUri = uri
@@ -69,7 +69,7 @@ fun StoreProfileScreen(
                             bannerUrl = bannerUri?.toString() ?: store.bannerUrl
                         )
                         onSave(updatedStore)
-                        navController.popBackStack() // Go back after saving
+                        navController.popBackStack()
                     }) {
                         Icon(Icons.Default.Check, contentDescription = "Save", tint = Orange3)
                     }
@@ -83,7 +83,6 @@ fun StoreProfileScreen(
                 .verticalScroll(rememberScrollState())
                 .fillMaxSize()
         ) {
-            // Banner image picker
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -92,22 +91,22 @@ fun StoreProfileScreen(
                     .clickable { imagePickerLauncher.launch("image/*") },
                 contentAlignment = Alignment.Center
             ) {
-                val painter = rememberAsyncImagePainter(bannerUri ?: store.bannerUrl)
-                if (bannerUri != null || store.bannerUrl.isNotEmpty()) {
-                    Image(
-                        painter = painter,
-                        contentDescription = "Store Banner",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                } else {
-                    Text("Tap to select banner image", color = Color.DarkGray)
+                val painter = when {
+                    bannerUri != null -> rememberAsyncImagePainter(bannerUri)
+                    store.bannerUrl.isNotEmpty() -> rememberAsyncImagePainter(store.bannerUrl)
+                    else -> painterResource(id = R.drawable.shopping)
                 }
+
+                Image(
+                    painter = painter,
+                    contentDescription = "Store Banner",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Editable fields
             EditableField(label = "Store Name", value = name, onValueChange = { name = it })
             EditableField(label = "Location", value = location, onValueChange = { location = it })
             EditableField(label = "Address", value = address, onValueChange = { address = it })
