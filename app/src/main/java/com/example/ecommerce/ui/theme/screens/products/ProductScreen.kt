@@ -65,7 +65,7 @@ fun ProductScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.background )
                 .verticalScroll(rememberScrollState())
                 .padding(bottom = 70.dp) // space for bottom bar
         ) {

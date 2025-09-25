@@ -34,7 +34,7 @@ fun PaymentScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.White)
+            .background(MaterialTheme.colorScheme.background )
     ) {
         TopAppBar(
             title = { Text("Payment") },

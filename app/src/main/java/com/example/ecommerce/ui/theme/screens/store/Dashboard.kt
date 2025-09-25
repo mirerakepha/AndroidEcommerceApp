@@ -1,6 +1,7 @@
 package com.example.ecommerce.ui.theme.screens.store
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -107,6 +108,7 @@ fun DashboardScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(16.dp)
+                .background(MaterialTheme.colorScheme.background )
                 .fillMaxSize()
         ) {
             Text(

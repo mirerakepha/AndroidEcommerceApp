@@ -1,6 +1,8 @@
 package com.example.ecommerce.ui.theme.screens.custstore
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -11,6 +13,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,7 +25,8 @@ import com.example.ecommerce.models.Rating
 import com.example.ecommerce.models.Store
 import com.example.ecommerce.ui.theme.Orange3
 import kotlin.math.roundToInt
-import com.example.ecommerce.R // For default drawable
+import com.example.ecommerce.R
+import com.example.ecommerce.navigation.CHATSPLASH_URL
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,25 +55,52 @@ fun CustStoreScreen(
         Column(
             modifier = Modifier
                 .padding(innerPadding)
+                .background(MaterialTheme.colorScheme.background )
                 .verticalScroll(rememberScrollState())
                 .fillMaxSize()
         ) {
+
+            Box(
+                modifier = Modifier.fillMaxWidth()
+            ){
+
+
             // Banner with fallback
-            val bannerPainter = if (store.bannerUrl.isNotEmpty()) {
-                androidx.compose.ui.res.painterResource(id = R.drawable.shopping)
-                // Replace with rememberAsyncImagePainter(store.bannerUrl) if loading remote
-            } else {
-                painterResource(id = R.drawable.shopping)
+                val bannerPainter = if (store.bannerUrl.isNotEmpty()) {
+                    painterResource(id = R.drawable.shopping)
+                    // Replace with rememberAsyncImagePainter(store.bannerUrl) if loading remote
+                } else {
+                    painterResource(id = R.drawable.boti)
+                }
+
+                Image(
+                    painter = bannerPainter,
+                    contentDescription = "${store.name} banner",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp),
+                    contentScale = ContentScale.Crop
+                )
+
+                //message us on-top of the image
+
+                FloatingActionButton(
+                    onClick = { navController.navigate(CHATSPLASH_URL) },
+                    containerColor = Orange3,
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(16.dp)
+                        .size(56.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.messageus),
+                        contentDescription = "chat",
+                        modifier = Modifier.size(24.dp),
+                        colorFilter = ColorFilter.tint(Color.White)
+                    )
+                }
             }
 
-            Image(
-                painter = bannerPainter,
-                contentDescription = "${store.name} banner",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp),
-                contentScale = ContentScale.Crop
-            )
 
             Spacer(modifier = Modifier.height(16.dp))
 

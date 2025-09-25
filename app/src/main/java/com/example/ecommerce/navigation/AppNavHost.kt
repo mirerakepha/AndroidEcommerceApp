@@ -33,6 +33,9 @@ import com.example.ecommerce.ui.theme.screens.store.StoreLoginScreen
 import com.example.ecommerce.ui.theme.screens.store.StoreProfileScreen
 import com.example.ecommerce.models.Store
 import com.example.ecommerce.models.Rating
+import com.example.ecommerce.ui.theme.screens.chat.ChatHistoryScreen
+import com.example.ecommerce.ui.theme.screens.chat.ChatSplashScreen
+import com.example.ecommerce.ui.theme.screens.chat.InChatScreen
 
 @Composable
 fun AppNavHost(
@@ -53,6 +56,15 @@ fun AppNavHost(
         }
         composable(SPLASH_URL) {
             SplashScreen(navController = navController)
+        }
+        composable(CHATSPLASH_URL) {
+            ChatSplashScreen(navController = navController)
+        }
+        composable(CHATHISTORY_URL) {
+            ChatHistoryScreen(navController = navController)
+        }
+        composable(INCHART_URL) {
+            InChatScreen(navController = navController)
         }
         composable(SETTINGS_URL) {
             SettingScreen(navController = navController, themeState = TODO())

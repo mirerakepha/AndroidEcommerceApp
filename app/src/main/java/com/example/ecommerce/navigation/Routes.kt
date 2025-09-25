@@ -27,3 +27,8 @@ const val ORDERSMADE_URL = "orders_made"
 const val SALESMADE_URL = "sales_made"
 const val STOREPROFILE_URL = "store_profile"
 const val CUSTSTORE_URL = "cust_store"
+
+//chat
+const val CHATSPLASH_URL = "chat_splash"
+const val INCHART_URL = "in_chart"
+const val CHATHISTORY_URL = "chat_history"

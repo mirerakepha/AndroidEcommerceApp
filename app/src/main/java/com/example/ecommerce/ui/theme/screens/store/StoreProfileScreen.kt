@@ -80,6 +80,7 @@ fun StoreProfileScreen(
         Column(
             modifier = Modifier
                 .padding(innerPadding)
+                .background(MaterialTheme.colorScheme.background )
                 .verticalScroll(rememberScrollState())
                 .fillMaxSize()
         ) {
@@ -94,7 +95,7 @@ fun StoreProfileScreen(
                 val painter = when {
                     bannerUri != null -> rememberAsyncImagePainter(bannerUri)
                     store.bannerUrl.isNotEmpty() -> rememberAsyncImagePainter(store.bannerUrl)
-                    else -> painterResource(id = R.drawable.shopping)
+                    else -> painterResource(id = R.drawable.lap)
                 }
 
                 Image(

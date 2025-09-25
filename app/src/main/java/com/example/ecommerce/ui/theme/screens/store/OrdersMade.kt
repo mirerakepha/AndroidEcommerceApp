@@ -1,5 +1,6 @@
 package com.example.ecommerce.ui.theme.screens.store
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -41,6 +42,7 @@ fun OrdersMadeScreen(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background )
                 .padding(16.dp)
         ) {
             // Pending Orders

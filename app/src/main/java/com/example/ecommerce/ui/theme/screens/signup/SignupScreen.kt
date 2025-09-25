@@ -1,6 +1,7 @@
 package com.example.ecommerce.screens.signup
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -28,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.ecommerce.R
 import com.example.ecommerce.data.AuthViewModel
 import com.example.ecommerce.navigation.HOME_URL
@@ -36,6 +38,7 @@ import com.example.ecommerce.ui.theme.Orange3
 
 @Composable
 fun SignupScreenContent(
+    navController: NavHostController,
     name: String,
     email: String,
     password: String,
@@ -57,6 +60,7 @@ fun SignupScreenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background )
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -168,7 +172,12 @@ fun SignupScreenContent(
         Spacer(modifier = Modifier.height(25.dp))
 
         Button(
-            onClick = onRegisterClick,
+            onClick = {
+                onRegisterClick()
+                navController.navigate("login") {
+                    popUpTo("register") { inclusive = true }
+                }
+            },
             colors = ButtonDefaults.buttonColors(Orange3),
             shape = RoundedCornerShape(15.dp),
             modifier = Modifier.fillMaxWidth(0.8f),
@@ -232,6 +241,7 @@ fun SignupScreen(navController: NavHostController, authViewModel: AuthViewModel)
     var confirmPassword by remember { mutableStateOf("") }
 
     SignupScreenContent(
+        navController = navController,
         name = name,
         email = email,
         password = password,
@@ -264,6 +274,7 @@ fun SignupScreen(navController: NavHostController) {
 @Composable
 fun SignupScreenPreview() {
     SignupScreenContent(
+        navController = rememberNavController(),
         name = "Kepha Mirera",
         email = "batman@gmail.com",
         password = "12345678",
