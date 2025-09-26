@@ -6,7 +6,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.ecommerce.screens.signup.SignupScreen
 import com.example.ecommerce.ui.theme.screens.account.AccountScreen
 import com.example.ecommerce.ui.theme.screens.cart.CartScreen
 import com.example.ecommerce.ui.theme.screens.checkout.CheckoutScreen
@@ -21,8 +20,6 @@ import com.example.ecommerce.ui.theme.screens.products.ProductScreen
 import com.example.ecommerce.ui.theme.screens.profile.ProfileScreen
 import com.example.ecommerce.ui.theme.screens.settings.SettingScreen
 import com.example.ecommerce.screens.store.StoreRegistrationScreen
-import com.example.ecommerce.ui.theme.screens.auth.OtpScreen
-import com.example.ecommerce.ui.theme.screens.auth.PhoneLoginScreen
 import com.example.ecommerce.ui.theme.screens.custstore.CustStoreScreen
 import com.example.ecommerce.ui.theme.screens.splash.SplashScreen
 import com.example.ecommerce.ui.theme.screens.store.AddProductScreen
@@ -36,6 +33,12 @@ import com.example.ecommerce.models.Rating
 import com.example.ecommerce.ui.theme.screens.chat.ChatHistoryScreen
 import com.example.ecommerce.ui.theme.screens.chat.ChatSplashScreen
 import com.example.ecommerce.ui.theme.screens.chat.InChatScreen
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.ecommerce.data.AuthViewModel
+import com.example.ecommerce.ui.theme.rememberThemeState
+import com.example.ecommerce.ui.theme.screens.otp.OtpScreen
+import com.example.ecommerce.ui.theme.screens.phonelogin.PhoneLoginScreen
+import com.example.ecommerce.ui.theme.screens.signup.SignupScreen
 
 @Composable
 fun AppNavHost(
@@ -49,7 +52,8 @@ fun AppNavHost(
         modifier = modifier
     ) {
         composable(LOGIN_URL) {
-            LoginScreen(navController = navController, authViewModel = TODO())
+            val authViewModel: AuthViewModel = hiltViewModel()
+            LoginScreen(navController = navController, authViewModel = authViewModel)
         }
         composable(SIGNUP_URL) {
             SignupScreen(navController = navController)
@@ -67,7 +71,8 @@ fun AppNavHost(
             InChatScreen(navController = navController)
         }
         composable(SETTINGS_URL) {
-            SettingScreen(navController = navController, themeState = TODO())
+            val themeState = rememberThemeState()
+            SettingScreen(navController = navController, themeState = themeState)
         }
         composable(ORDERDETAILS_URL) {
             OrderdetailsScreen(navController = navController)
@@ -137,7 +142,8 @@ fun AppNavHost(
             AddProductScreen(navController = navController)
         }
         composable(STORELOGIN_URL) {
-            StoreLoginScreen(navController = navController, authViewModel = TODO())
+            val authViewModel: AuthViewModel = hiltViewModel()
+            StoreLoginScreen(navController = navController, authViewModel = authViewModel)
         }
         composable(ORDERSMADE_URL) {
             OrdersMadeScreen(navController = navController)

@@ -1,6 +1,8 @@
 package com.example.ecommerce.ui.theme.screens.store
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,6 +18,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -29,6 +32,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.ecommerce.R
 import com.example.ecommerce.data.AuthViewModel
+import com.example.ecommerce.navigation.HOME_URL
+import com.example.ecommerce.navigation.LOGIN_URL
 import com.example.ecommerce.navigation.PHONELOGIN_URL
 import com.example.ecommerce.navigation.SIGNUP_URL
 import com.example.ecommerce.navigation.STOREREGISTRATION_URL
@@ -201,6 +206,24 @@ fun StoreLoginScreenContent(
 fun StoreLoginScreen(navController: NavHostController, authViewModel: AuthViewModel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        authViewModel.initializeGoogleSignIn(context)
+    }
+    val googleSignInLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        authViewModel.handleGoogleSignInResult(result) { success, message ->
+            if (success) {
+                navController.navigate(HOME_URL) {
+                    popUpTo(LOGIN_URL) { inclusive = true }
+                }
+            } else {
+                println("Google sign-in failed: $message")
+            }
+        }
+    }
 
     StoreLoginScreenContent(
         email = email,
@@ -216,8 +239,8 @@ fun StoreLoginScreen(navController: NavHostController, authViewModel: AuthViewMo
                 }
             }
         },
-        onGoogleClick = {
-            // authViewModel.signInWithGoogle() // implement inside your AuthViewModel
+        onGoogleClick = {val signInIntent = authViewModel.getGoogleSignInIntent()
+                googleSignInLauncher.launch(signInIntent)
         },
         onOtpClick = {
             navController.navigate("phone_login")

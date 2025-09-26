@@ -1,5 +1,7 @@
-package com.example.ecommerce.screens.signup
+package com.example.ecommerce.ui.theme.screens.signup
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -239,6 +241,25 @@ fun SignupScreen(navController: NavHostController, authViewModel: AuthViewModel)
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        authViewModel.initializeGoogleSignIn(context)
+    }
+    val googleSignInLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        authViewModel.handleGoogleSignInResult(result) { success, message ->
+            if (success) {
+                navController.navigate(HOME_URL) {
+                    popUpTo(LOGIN_URL) { inclusive = true }
+                }
+            } else {
+                println("Google sign-in failed: $message")
+            }
+        }
+    }
+
 
     SignupScreenContent(
         navController = navController,
@@ -260,7 +281,8 @@ fun SignupScreen(navController: NavHostController, authViewModel: AuthViewModel)
             }
         },
         onLoginClick = { navController.navigate(LOGIN_URL) },
-        onGoogleClick = { /* implement Google Sign-In here */ }
+        onGoogleClick = { val signInIntent = authViewModel.getGoogleSignInIntent()
+            googleSignInLauncher.launch(signInIntent)}
     )
 }
 

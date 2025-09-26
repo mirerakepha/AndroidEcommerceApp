@@ -2,6 +2,7 @@ package com.example.ecommerce.ui.theme.screens.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -12,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import com.example.ecommerce.data.AuthViewModel
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,7 +24,9 @@ import com.example.ecommerce.ui.theme.ThemeState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingScreen(navController: NavController, themeState: ThemeState) {
+fun SettingScreen(navController: NavController,
+                  themeState: ThemeState,
+                  authViewModel: AuthViewModel? = null) {
 
     var isDarkModeEnabled by remember { mutableStateOf(themeState.isDarkTheme) }
 
@@ -116,46 +120,56 @@ fun SettingScreen(navController: NavController, themeState: ThemeState) {
                                 containerColor = Orange3,
                                 contentColor = MaterialTheme.colorScheme.onPrimary
                             ),
-                            onClick = {
-                                themeState.toggleTheme()
-                                isDarkModeEnabled = themeState.isDarkTheme
-                            }
+                            onClick = { themeState.toggleTheme() }
                         ) {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Text("Dark Mode")
+                                Text(
+                                    "Dark Mode",
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
                                 Switch(
-                                    checked = isDarkModeEnabled,
-                                    onCheckedChange = {
-                                        themeState.toggleTheme()
-                                        isDarkModeEnabled = themeState.isDarkTheme
-                                    }
+                                    checked = themeState.isDarkTheme,
+                                    onCheckedChange = { themeState.toggleTheme() },
+                                    colors = SwitchDefaults.colors(
+                                        checkedThumbColor = Orange3,
+                                        checkedTrackColor = Orange3.copy(alpha = 0.5f),
+                                        uncheckedThumbColor = MaterialTheme.colorScheme.outline,
+                                        uncheckedTrackColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+                                    )
                                 )
                             }
                         }
 
-                        // Log Out Button
+
                         Button(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(60.dp)
-                                .border(width = 0.dp, color = Color.Black),
+                                .height(60.dp),
                             shape = RoundedCornerShape(0.dp),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Orange3,
                                 contentColor = MaterialTheme.colorScheme.onPrimary
                             ),
-                            onClick = { /* TODO: Logout logic */ }
+                            onClick = {
+                                authViewModel?.logout()
+                                navController.navigate("login") {
+                                    popUpTo(0) { inclusive = true }
+                                }
+                            }
                         ) {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Text("Log Out")
+                                Text(
+                                    "Log Out",
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
                                 Icon(
                                     imageVector = Icons.Default.ExitToApp,
                                     contentDescription = "Log Out Icon"
@@ -206,5 +220,8 @@ fun SettingsButton(
 @Preview(showBackground = true, widthDp = 360, heightDp = 700)
 @Composable
 fun SettingScreenPreview() {
-    SettingScreen(navController = rememberNavController(), themeState = com.example.ecommerce.ui.theme.rememberThemeState())
+    SettingScreen(
+        navController = rememberNavController(),
+        authViewModel = null,
+        themeState = com.example.ecommerce.ui.theme.rememberThemeState())
 }

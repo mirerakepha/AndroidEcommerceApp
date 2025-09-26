@@ -60,7 +60,6 @@ fun EcommerceThemeWithSystemBars(
         )
     }
 
-    // Apply Material3 theme
     EcommerceTheme(darkTheme = isDarkTheme) {
         content()
     }
@@ -82,7 +81,7 @@ fun EcommerceApp(themeState: ThemeState) {
             HomeScreen(navController)
         }
         composable("settings") {
-            SettingScreen(navController, themeState)
+            SettingScreen(navController, themeState, authViewModel)
         }
     }
 }

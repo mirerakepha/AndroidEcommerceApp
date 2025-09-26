@@ -1,4 +1,4 @@
-package com.example.ecommerce.ui.theme.screens.auth
+package com.example.ecommerce.ui.theme.screens.phonelogin
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
