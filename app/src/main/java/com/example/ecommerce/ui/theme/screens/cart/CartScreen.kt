@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,12 +25,14 @@ import com.example.ecommerce.navigation.CHECKOUT_URL
 import com.example.ecommerce.ui.theme.Orange3
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.filled.ArrowBack
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CartScreen(
     navController: NavController,
-    cartViewModel: CartViewModel = hiltViewModel()
+    cartViewModel: CartViewModel
 ) {
     // Access cart items directly (no `by`)
     val cartItems = cartViewModel.cartItems
@@ -65,8 +66,10 @@ fun CartScreen(
                     contentColor = Color.Black
                 )
             ) {
+
+                //Button with the calculated total amount
                 Text(
-                    "Checkout ($${String.format("%.2f", total)})",
+                    "Checkout ($${"%.2f".format(Locale.US, total)})",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -144,8 +147,3 @@ fun CartItemRow(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun CartScreenPreview() {
-    CartScreen(navController = rememberNavController())
-}

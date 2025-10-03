@@ -34,29 +34,38 @@ import com.example.ecommerce.ui.theme.screens.chat.ChatHistoryScreen
 import com.example.ecommerce.ui.theme.screens.chat.ChatSplashScreen
 import com.example.ecommerce.ui.theme.screens.chat.InChatScreen
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import com.example.ecommerce.data.AuthViewModel
 import com.example.ecommerce.ui.theme.rememberThemeState
 import com.example.ecommerce.ui.theme.screens.otp.OtpScreen
 import com.example.ecommerce.ui.theme.screens.phonelogin.PhoneLoginScreen
 import com.example.ecommerce.ui.theme.screens.signup.SignupScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.ecommerce.data.CartViewModel
 
 @Composable
 fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = SPLASH_URL
 ) {
+    val authViewModel: AuthViewModel = viewModel()
+    val startDestination = if (authViewModel.isLoggedIn()) {
+        HOME_URL
+    } else {
+        LOGIN_URL
+    }
     NavHost(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier
     ) {
         composable(LOGIN_URL) {
-            val authViewModel: AuthViewModel = hiltViewModel()
+            val authViewModel: AuthViewModel = viewModel()
             LoginScreen(navController = navController, authViewModel = authViewModel)
         }
         composable(SIGNUP_URL) {
-            SignupScreen(navController = navController)
+            val authViewModel: AuthViewModel = viewModel()
+            SignupScreen(navController = navController, authViewModel = authViewModel)
         }
         composable(SPLASH_URL) {
             SplashScreen(navController = navController)
@@ -98,7 +107,8 @@ fun AppNavHost(
             )
         }
         composable(CART_URL) {
-            CartScreen(navController = navController)
+            val cartViewModel: CartViewModel = viewModel()
+            CartScreen(navController = navController, cartViewModel = cartViewModel)
         }
         composable(HOME_URL) {
             HomeScreen(navController = navController)
@@ -152,11 +162,30 @@ fun AppNavHost(
             SalesMadeScreen(
                 navController = navController,
                 storeName = "Finest Fibres",
-                orders = TODO()
+                orders = emptyList()
             )
         }
         composable(STOREPROFILE_URL) {
-            StoreProfileScreen(navController = navController, store = TODO())
+            val sampleStore = Store(
+                id = "store1",
+                name = "My Store",
+                bannerUrl = "",
+                location = "Nairobi",
+                address = "123 Market Street",
+                contactInfo = "+254 712 345678",
+                zipcode = "00100",
+                description = "Edit your store information here"
+            )
+
+            StoreProfileScreen(
+                navController = navController,
+                store = sampleStore,
+                onSave = { updatedStore ->
+                    // Handle store updates here
+                    // You can call a ViewModel function to save to Firebase
+                    println("Store updated: ${updatedStore.name}")
+                }
+            )
         }
 
         //Customer store screen with storeId argument

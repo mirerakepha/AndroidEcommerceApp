@@ -5,13 +5,13 @@ import android.content.Intent
 import androidx.activity.result.ActivityResult
 import androidx.lifecycle.ViewModel
 import com.example.ecommerce.models.User
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.example.ecommerce.R
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
@@ -23,17 +23,15 @@ class AuthViewModel : ViewModel() {
 
     private val auth: FirebaseAuth = Firebase.auth
     private val database: DatabaseReference = Firebase.database.reference
-    private lateinit var googleSignInClient: GoogleSignInClient
+    private var googleSignInClient: GoogleSignInClient? = null
 
-    // Tracks whether a user is logged in
+    // State tracking
     private val _authState = MutableStateFlow(auth.currentUser != null)
     val authState = _authState.asStateFlow()
 
-    // Tracks loading state
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
-    // Tracks error messages
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage = _errorMessage.asStateFlow()
 
@@ -48,9 +46,7 @@ class AuthViewModel : ViewModel() {
     }
 
     // Get Google Sign-In intent
-    fun getGoogleSignInIntent(): Intent {
-        return googleSignInClient.signInIntent
-    }
+    fun getGoogleSignInIntent(): Intent? = googleSignInClient?.signInIntent
 
     // Handle Google Sign-In result
     fun handleGoogleSignInResult(result: ActivityResult, onResult: (Boolean, String?) -> Unit) {
@@ -60,13 +56,19 @@ class AuthViewModel : ViewModel() {
         try {
             val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
             val account = task.getResult(ApiException::class.java)
+
+            if (account == null) {
+                _isLoading.value = false
+                onResult(false, "Google sign-in failed: null account")
+                return
+            }
+
             val credential = GoogleAuthProvider.getCredential(account.idToken, null)
 
             auth.signInWithCredential(credential)
                 .addOnCompleteListener { authTask ->
                     _isLoading.value = false
                     if (authTask.isSuccessful) {
-                        // Save user to database
                         val firebaseUser = auth.currentUser
                         firebaseUser?.let { user ->
                             val userData = User(
@@ -85,7 +87,7 @@ class AuthViewModel : ViewModel() {
                                         onResult(false, "Failed to save user data")
                                     }
                                 }
-                        }
+                        } ?: onResult(false, "No Firebase user found")
                     } else {
                         onResult(false, authTask.exception?.message ?: "Google sign-in failed")
                     }
@@ -103,17 +105,18 @@ class AuthViewModel : ViewModel() {
     // Sign out with Google
     fun signOut() {
         auth.signOut()
-        googleSignInClient.signOut().addOnCompleteListener {
+        googleSignInClient?.signOut()?.addOnCompleteListener {
             _authState.value = false
             _errorMessage.value = null
         }
     }
 
-    // Get web client ID from resources
+    // Get web client ID
     private fun getWebClientId(context: Context): String {
         return context.getString(R.string.default_web_client_id)
     }
 
+    // Email/password signup
     fun signup(
         name: String,
         email: String,
@@ -147,7 +150,6 @@ class AuthViewModel : ViewModel() {
                                 _authState.value = true
                                 onResult(true, null)
                             } else {
-                                // Rollback Firebase Auth user if DB write fails
                                 auth.currentUser?.delete()?.addOnCompleteListener {
                                     onResult(false, dbTask.exception?.message ?: "Failed to save user data")
                                 }
@@ -209,7 +211,7 @@ class AuthViewModel : ViewModel() {
 
     fun logout() {
         auth.signOut()
-        googleSignInClient.signOut().addOnCompleteListener {
+        googleSignInClient?.signOut()?.addOnCompleteListener {
             _authState.value = false
             _errorMessage.value = null
         }

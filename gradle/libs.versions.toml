@@ -5,7 +5,7 @@ coil = "2.6.0"
 google-services = "4.4.2"
 
 #google sign in
-google-auth = "20.7.0"
+googlePlayServicesAuth = "21.2.0"
 
 # AndroidX Core & Lifecycle
 coreKtx = "1.10.1"
@@ -57,7 +57,8 @@ firebase-database-ktx = { group = "com.google.firebase", name = "firebase-databa
 firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx" }
 firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx" }
 
-google-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "google-auth" }
+
+google-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "googlePlayServicesAuth" }
 
 
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }

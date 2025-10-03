@@ -36,6 +36,7 @@ import com.example.ecommerce.R
 import com.example.ecommerce.data.AuthViewModel
 import com.example.ecommerce.navigation.HOME_URL
 import com.example.ecommerce.navigation.LOGIN_URL
+import com.example.ecommerce.navigation.SIGNUP_URL
 import com.example.ecommerce.ui.theme.Orange3
 
 @Composable
@@ -62,7 +63,7 @@ fun SignupScreenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background )
+            .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -98,7 +99,7 @@ fun SignupScreenContent(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Name
+        // Username
         OutlinedTextField(
             value = name,
             onValueChange = onNameChange,
@@ -173,13 +174,9 @@ fun SignupScreenContent(
 
         Spacer(modifier = Modifier.height(25.dp))
 
+        // Register button
         Button(
-            onClick = {
-                onRegisterClick()
-                navController.navigate("login") {
-                    popUpTo("register") { inclusive = true }
-                }
-            },
+            onClick = onRegisterClick,
             colors = ButtonDefaults.buttonColors(Orange3),
             shape = RoundedCornerShape(15.dp),
             modifier = Modifier.fillMaxWidth(0.8f),
@@ -209,9 +206,9 @@ fun SignupScreenContent(
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp)
         ) {
-            Divider(modifier = Modifier.weight(1f), color = Color.Gray)
+            HorizontalDivider(modifier = Modifier.weight(1f), color = Color.Gray)
             Text(" OR ", color = Color.Gray, fontSize = 14.sp)
-            Divider(modifier = Modifier.weight(1f), color = Color.Gray)
+            HorizontalDivider(modifier = Modifier.weight(1f), color = Color.Gray)
         }
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -220,7 +217,9 @@ fun SignupScreenContent(
         OutlinedButton(
             onClick = onGoogleClick,
             shape = RoundedCornerShape(10.dp),
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 40.dp),
             colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White)
         ) {
             Icon(
@@ -236,16 +235,19 @@ fun SignupScreenContent(
 }
 
 @Composable
-fun SignupScreen(navController: NavHostController, authViewModel: AuthViewModel) {
+fun SignupScreen(navController: NavHostController, authViewModel: AuthViewModel = AuthViewModel()) {
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     val context = LocalContext.current
 
+    // Initialize Google sign-in
     LaunchedEffect(Unit) {
         authViewModel.initializeGoogleSignIn(context)
     }
+
+    // Google sign-in launcher
     val googleSignInLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -260,7 +262,6 @@ fun SignupScreen(navController: NavHostController, authViewModel: AuthViewModel)
         }
     }
 
-
     SignupScreenContent(
         navController = navController,
         name = name,
@@ -274,39 +275,22 @@ fun SignupScreen(navController: NavHostController, authViewModel: AuthViewModel)
         onRegisterClick = {
             authViewModel.signup(name, email, password, confirmPassword) { success, message ->
                 if (success) {
-                    navController.navigate(HOME_URL)
+                    navController.navigate(HOME_URL) {
+                        popUpTo(SIGNUP_URL) { inclusive = true }
+                    }
                 } else {
                     println("Signup failed: $message")
                 }
             }
         },
         onLoginClick = { navController.navigate(LOGIN_URL) },
-        onGoogleClick = { val signInIntent = authViewModel.getGoogleSignInIntent()
-            googleSignInLauncher.launch(signInIntent)}
+        onGoogleClick = {
+            authViewModel.getGoogleSignInIntent()?.let { intent ->
+                googleSignInLauncher.launch(intent)
+            } ?: run {
+                println("Google Sign-In not initialized")
+            }
+        }
     )
 }
 
-@Composable
-fun SignupScreen(navController: NavHostController) {
-    val authViewModel = remember { AuthViewModel() } // default constructor
-    SignupScreen(navController = navController, authViewModel = authViewModel)
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SignupScreenPreview() {
-    SignupScreenContent(
-        navController = rememberNavController(),
-        name = "Kepha Mirera",
-        email = "batman@gmail.com",
-        password = "12345678",
-        confirmPassword = "12345678",
-        onNameChange = {},
-        onEmailChange = {},
-        onPasswordChange = {},
-        onConfirmPasswordChange = {},
-        onRegisterClick = {},
-        onLoginClick = {},
-        onGoogleClick = {}
-    )
-}

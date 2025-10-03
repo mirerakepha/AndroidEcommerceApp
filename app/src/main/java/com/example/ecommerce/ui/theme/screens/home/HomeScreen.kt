@@ -86,6 +86,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalFocusManager
+import com.example.ecommerce.navigation.HOME_URL
 import kotlinx.coroutines.tasks.await
 
 data class Screen(val title: String, val icon: Int)
@@ -103,7 +104,7 @@ fun HomeScreen(navController: NavHostController) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
-    // Fetch products from Firestore
+    // Fetch products from Firestore db
     LaunchedEffect(Unit) {
         try {
             val db = Firebase.firestore
@@ -157,7 +158,7 @@ fun HomeScreen(navController: NavHostController) {
                 ) {
                     bottomNavItems.forEachIndexed { index, bottomNavItem ->
                         NavigationBarItem(
-                            selected = currentRoute == "home",
+                            selected = currentRoute == HOME_URL,
                             onClick = {
                                 selected = index
                                 navController.navigate(bottomNavItem.route)
@@ -203,16 +204,26 @@ fun HomeScreen(navController: NavHostController) {
                 }
             }
         },
+
         floatingActionButton = {
-            FloatingActionButton(onClick = { navController.navigate(CART_URL) }) {
-                IconButton(onClick = { navController.navigate(CART_URL) }) {
-                    Icon(
-                        imageVector = Icons.Default.ShoppingCart,
-                        contentDescription = "cart"
-                    )
+            FloatingActionButton(
+                onClick = {
+                    navController.navigate(CART_URL) {
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
+                        }
+                        launchSingleTop = true   // Don’t create a new cart if it’s already on top
+                        restoreState = true      // Restore old cart state if it exists
+                    }
                 }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ShoppingCart,
+                    contentDescription = "cart"
+                )
             }
         },
+
         topBar = {
             TopAppBar(
                 title = { Text(text = "Las Noches") },

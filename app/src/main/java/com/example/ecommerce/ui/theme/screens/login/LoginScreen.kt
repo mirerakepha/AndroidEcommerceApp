@@ -25,7 +25,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -36,6 +35,7 @@ import com.example.ecommerce.ui.theme.Orange3
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextFieldDefaults
+import coil.util.CoilUtils.result
 
 
 @Composable
@@ -273,8 +273,11 @@ fun LoginScreen(navController: NavHostController, authViewModel: AuthViewModel) 
             }
         },
         onGoogleClick = {
-            val signInIntent = authViewModel.getGoogleSignInIntent()
-            googleSignInLauncher.launch(signInIntent)
+            authViewModel.getGoogleSignInIntent()?.let { intent ->
+                googleSignInLauncher.launch(intent)
+            } ?: run {
+                println("Google Sign-In not initialized")
+            }
         },
         onSignUpClick = {
             navController.navigate(SIGNUP_URL)
@@ -282,20 +285,5 @@ fun LoginScreen(navController: NavHostController, authViewModel: AuthViewModel) 
         onOtpClick = {
             navController.navigate(PHONELOGIN_URL)
         }
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    LoginScreenContent(
-        email = "kephamirera@gmail.com",
-        password = "",
-        onEmailChange = {},
-        onPasswordChange = {},
-        onLoginClick = {},
-        onGoogleClick = {},
-        onOtpClick = {},
-        onSignUpClick = {}
     )
 }

@@ -239,8 +239,12 @@ fun StoreLoginScreen(navController: NavHostController, authViewModel: AuthViewMo
                 }
             }
         },
-        onGoogleClick = {val signInIntent = authViewModel.getGoogleSignInIntent()
-                googleSignInLauncher.launch(signInIntent)
+        onGoogleClick = {
+            authViewModel.getGoogleSignInIntent()?.let { intent ->
+                googleSignInLauncher.launch(intent)
+            } ?: run {
+                println("Google Sign-In not initialized")
+            }
         },
         onOtpClick = {
             navController.navigate("phone_login")

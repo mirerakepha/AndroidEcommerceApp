@@ -1,6 +1,8 @@
 package com.example.ecommerce.data
 
 import android.net.Uri
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -52,6 +54,7 @@ class ProfileViewModel : ViewModel() {
         loadProfileImage()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun loadUserData() {
         viewModelScope.launch {
             isLoading = true
