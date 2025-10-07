@@ -2,12 +2,24 @@
 🛒 LAS NOCHES E-Commerce App
 </h1>
 
-<p align="left" style="font-size: 16px; line-height: 1.6; color: #333;">
-<strong>LAS NOCHES</strong> is a modern and user-friendly Android eCommerce application designed to make buying and selling products seamless. The app allows users to <strong>browse products in real-time</strong>, with instant updates whenever products are added, updated, or removed. Built using <strong>Firebase</strong>, it provides secure authentication, real-time database syncing, and cloud storage for media assets. Users can also <strong>create and manage their own stores</strong>, giving sellers the ability to showcase products effortlessly. With a clean interface, smooth navigation, and integrated features like Google Sign-In and OTP login, LAS NOCHES aims to provide a robust shopping and selling experience right on your Android device.
+<p align="center">
+<strong>LAS NOCHES</strong> is a modern and user-friendly <b>Android eCommerce application</b> designed to make buying and selling seamless.
 </p>
 
 ---
-<h3 align="left">Customer Side<h3/>
+
+## ✨ Features
+
+- 🔥 **Real-Time Browsing** – Products update instantly when added, modified, or removed.  
+- 🔑 **Secure Authentication** – Supports Email/Password, Google Sign-In, and OTP login.  
+- ☁️ **Powered by Firebase** – Real-time database syncing & cloud storage for product media.  
+- 🏬 **Store Management** – Users can create and manage their own stores.  
+- 🎨 **Modern UI** – Clean interface with smooth navigation.  
+- 📦 **Buyer & Seller Modes** – Customers shop easily, sellers manage products effortlessly.  
+
+---
+
+## 📱 Customer Side
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/c89be5ad-08d3-4c40-99d0-a8677f98dfa9" width="180" style="margin:5px;" />
@@ -23,11 +35,11 @@
   <img src="https://github.com/user-attachments/assets/ece1d108-59a6-45ea-b49b-36cc5b471530" width="180" style="margin:5px;" />
   <img src="https://github.com/user-attachments/assets/617daea2-cae2-4467-b485-ea413d77a5e3" width="180" style="margin:5px;" />
   <img src="https://github.com/user-attachments/assets/f11aac9d-6764-4135-875e-664eac61700f" width="180" style="margin:5px;" />
-
 </p>
 
 ---
-<h3 align="left">Store Side<h3/>
+
+## 🏬 Store Side
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/4d3add3e-2cb8-4d65-a9ce-4ea524d460cc" width="180" style="margin:5px;" />
